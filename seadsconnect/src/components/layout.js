@@ -31,7 +31,7 @@ const Layout = ({ children }) => (
           <footer>
             © {new Date().getFullYear()}, Built by
             {` `}
-            <a href="https://www.soe.ucsc.edu/people/mantey">Mantey Gang</a>
+            <a href="https://www.soe.ucsc.edu/people/mantey">The Mantey Gang</a>
           </footer>
         </div>
       </>
