@@ -7,6 +7,7 @@ import SEO from "../components/seo"
 
 import Rectangle from 'react-rectangle'
 
+
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -43,8 +44,8 @@ export default class Login extends Component {
 	        				autoFocus
 	        				type="email" 
 	        				placeholder="Enter email"
-	        				value={this.state.email}
-	        				onChange={this.handleChange}
+	        				//value={this.state.email}
+	        				//onChange={this.handleChange}
 	        			/>
 	        		</FormGroup>
 
@@ -69,7 +70,7 @@ export default class Login extends Component {
 	        	</form>
 	        </Form>
 
-     	</div>
+     		</div>
      	</Layout>
 
   	);
