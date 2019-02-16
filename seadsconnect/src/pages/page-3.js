@@ -5,7 +5,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 import { FirebaseContext } from '../components/Firebase'
-import { Button, Col, Row, Form } from "react-bootstrap";
+import { Button, Col, Row, Form } from "react-bootstrap"
 
 const INITIAL_STATE = {
     email: "",
@@ -15,7 +15,8 @@ const INITIAL_STATE = {
     city: "",
     stateLoc: "",
     zip: "",
-    ohmConnect: false
+    ohmConnect: false,
+    error: null,
 };
 
 
@@ -24,7 +25,6 @@ const SignUpPage = () => (
     {firebase => <SignUpForm firebase={firebase} />}
   </FirebaseContext.Consumer>
 );
-
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class SignUpForm extends Component {
   validateForm() {
     return this.state.email.length > 0    && this.state.password.length > 0 &&
            this.state.address.length > 0  && this.state.city.length > 0     &&
-          this.state.zip.length > 0;  
+           this.state.zip.length > 0;  
   }
 
   validatePassword() {
@@ -51,14 +51,10 @@ class SignUpForm extends Component {
     });
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
-  }
-
   onSubmit = event => {
     const { email, password, address, city, stateLoc, zip } = this.state;
 
-    this.props.firebase
+      this.props.firebase
       .doCreateuserWithEmailAndPassword(email, password)
       .then(authUser => {
         this.setState({...INITIAL_STATE});
@@ -71,6 +67,20 @@ class SignUpForm extends Component {
   };
 
   render() {
+
+    const {
+      email,
+      password,
+      passwordConfirm,
+      address,
+      city,
+      stateLoc,
+      zip,
+      ohmConnect,
+      error,
+    } = this.state;
+
+
     return (
 
       <form onSubmit={this.onSubmit}> 
@@ -84,7 +94,7 @@ class SignUpForm extends Component {
                     autoFocus
                       type="email" 
                       placeholder="Enter email"
-                      value={this.state.email}
+                      value={email}
                       onChange={this.handleChange}
                   />
                 </Form.Group>
@@ -94,7 +104,7 @@ class SignUpForm extends Component {
                   <Form.Control 
                     type="password"
                     placeholder="Enter Password"
-                    value={this.state.password}
+                    value={password}
                     onChange={this.handleChange} 
                   />
                 </Form.Group>
@@ -104,7 +114,7 @@ class SignUpForm extends Component {
                   <Form.Control 
                     type="password" 
                     placeholder="Confirm Password"
-                    value={this.state.passwordConfirm}
+                    value={passwordConfirm}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
@@ -116,7 +126,7 @@ class SignUpForm extends Component {
                   <Form.Control 
                     type="address" 
                     placeholder="Enter Adress" 
-                    value={this.state.address}
+                    value={address}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
@@ -128,7 +138,7 @@ class SignUpForm extends Component {
                   <Form.Control 
                     type="City" 
                     placeholder="City"
-                    value={this.state.city}
+                    value={city}
                     onChange={this.handleChange} 
                   />
                 </Form.Group>
@@ -188,7 +198,7 @@ class SignUpForm extends Component {
                       <option value="WV">West Virginia</option>
                       <option value="WI">Wisconsin</option>
                       <option value="WY">Wyoming</option>
-                      value={this.state.stateLoc}
+                      value={stateLoc}
                       onChange={this.handleChange}
                     </Form.Control>
                 </Form.Group>
@@ -196,7 +206,7 @@ class SignUpForm extends Component {
                 <Form.Group as={Col} controlId="zip">
                   <Form.Label>Zip Code</Form.Label>
                   <Form.Control 
-                    value={this.state.zip || "Choose..."}
+                    value={zip || "Choose..."}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
@@ -213,7 +223,9 @@ class SignUpForm extends Component {
                   disabled={!this.validateForm() || !this.validatePassword()}
                 >
                   Create Account
-                </Button> 
+                </Button>
+
+                {error && <p>{error.message}</p>} 
 
             </Form>
           </div>
@@ -223,5 +235,6 @@ class SignUpForm extends Component {
   }
 }
 
-
 export default SignUpPage;
+
+export { SignUpForm };

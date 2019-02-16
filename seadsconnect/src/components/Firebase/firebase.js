@@ -1,4 +1,4 @@
-import app from 'firebase/app'
+import app from 'firebase/app';
 import 'firebase/auth';
 
 const config = {
@@ -13,7 +13,7 @@ const config = {
 class Firebase {
   constructor() {
     app.initializeApp(config);
-
+    
     this.auth = app.auth();
   }
 
@@ -30,7 +30,6 @@ class Firebase {
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
 }
-
 
 export default Firebase;
 

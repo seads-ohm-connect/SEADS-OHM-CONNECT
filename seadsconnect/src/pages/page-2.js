@@ -18,7 +18,7 @@ const INITIAL_STATE = {
     password: ""
 }
 
-export default class Login extends Component {
+class Login extends Component {
   constructor(props) {
     super(props);
 
@@ -41,8 +41,9 @@ export default class Login extends Component {
   	const { email, password } = this.state;
     this.props.firebase
    	 .doSignInWithEmailAndPassword(email, password)
-     .then(authUser => {
+     .then(() => {
        this.setState({ ...INITIAL_STATE });
+       alert("signed in");
      })
        .catch(error => {
        this.setState({ error });
@@ -95,3 +96,8 @@ export default class Login extends Component {
   	);
   }
 }
+
+
+export default SignInPage;
+
+export { Login };
