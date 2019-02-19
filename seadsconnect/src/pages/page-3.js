@@ -38,7 +38,7 @@ class SignUpForm extends Component {
   validateForm() {
     return this.state.email.length > 0    && this.state.password.length > 0 &&
            this.state.address.length > 0  && this.state.city.length > 0     &&
-           this.state.zip.length > 0;  
+           this.state.zip.length > 0;
   }
 
   validatePassword() {
@@ -57,6 +57,11 @@ class SignUpForm extends Component {
       this.props.firebase
       .doCreateuserWithEmailAndPassword(email, password)
       .then(authUser => {
+        return this.props.firebase.user(authUser.user.uid).set({
+          email,
+        });
+      })
+      .then(() => {
         this.setState({...INITIAL_STATE});
       })
       .catch(error => {
@@ -83,16 +88,16 @@ class SignUpForm extends Component {
 
     return (
 
-      <form onSubmit={this.onSubmit}> 
+      <form onSubmit={this.onSubmit}>
         <Layout>
           <div className="Signup">
             <Form>
               <Row>
                 <Form.Group as={Col} controlId="email">
                   <Form.Label>Email</Form.Label>
-                  <Form.Control 
+                  <Form.Control
                     autoFocus
-                      type="email" 
+                      type="email"
                       placeholder="Enter email"
                       value={email}
                       onChange={this.handleChange}
@@ -101,18 +106,18 @@ class SignUpForm extends Component {
 
                 <Form.Group as={Col} controlId="password">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control 
+                  <Form.Control
                     type="password"
                     placeholder="Enter Password"
                     value={password}
-                    onChange={this.handleChange} 
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="passwordConfirm">
                   <Form.Label>Confirm Password</Form.Label>
-                  <Form.Control 
-                    type="password" 
+                  <Form.Control
+                    type="password"
                     placeholder="Confirm Password"
                     value={passwordConfirm}
                     onChange={this.handleChange}
@@ -123,9 +128,9 @@ class SignUpForm extends Component {
 
                 <Form.Group controlId="address">
                   <Form.Label>Address</Form.Label>
-                  <Form.Control 
-                    type="address" 
-                    placeholder="Enter Adress" 
+                  <Form.Control
+                    type="address"
+                    placeholder="Enter Adress"
                     value={address}
                     onChange={this.handleChange}
                   />
@@ -135,11 +140,11 @@ class SignUpForm extends Component {
 
                 <Form.Group as={Col} controlId="city">
                   <Form.Label>City</Form.Label>
-                  <Form.Control 
-                    type="City" 
+                  <Form.Control
+                    type="City"
                     placeholder="City"
                     value={city}
-                    onChange={this.handleChange} 
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
@@ -205,27 +210,27 @@ class SignUpForm extends Component {
 
                 <Form.Group as={Col} controlId="zip">
                   <Form.Label>Zip Code</Form.Label>
-                  <Form.Control 
+                  <Form.Control
                     value={zip || "Choose..."}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
 
-              </Row> 
+              </Row>
 
                <Form.Group id="ohmConnect">
                   <Form.Check type="checkbox" label="Connect to OhmConnect" />
                </Form.Group>
-     
-                <Button 
-                  variant="primary" 
+
+                <Button
+                  variant="primary"
                   type="submit"
                   disabled={!this.validateForm() || !this.validatePassword()}
                 >
                   Create Account
                 </Button>
 
-                {error && <p>{error.message}</p>} 
+                {error && <p>{error.message}</p>}
 
             </Form>
           </div>

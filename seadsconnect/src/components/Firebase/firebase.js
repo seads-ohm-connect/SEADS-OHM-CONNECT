@@ -13,7 +13,7 @@ const config = {
 class Firebase {
   constructor() {
     app.initializeApp(config);
-    
+
     this.auth = app.auth();
   }
 
@@ -31,5 +31,14 @@ class Firebase {
     this.auth.currentUser.updatePassword(password);
 }
 
-export default Firebase;
+let firebase;
 
+function getFirebase(app, auth) {
+  if (!firebase) {
+    firebase = new Firebase(app, auth);
+  }
+
+  return firebase;
+}
+
+export default getFirebase;
