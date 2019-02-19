@@ -1,4 +1,5 @@
 import React from "react"
+import ReactDOM from "react-dom"
 import { Link } from "gatsby"
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -9,6 +10,7 @@ import Image from "../components/image"
 import SEO from "../components/seo"
 
 import Firebase, { FirebaseContext } from '../components/Firebase'
+
 
 const IndexPage = () => (
   <FirebaseContext.Provider value={new Firebase()}>

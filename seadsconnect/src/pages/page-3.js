@@ -4,7 +4,7 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-import { withFireBase } from '../components/Firebase'
+import { FirebaseContext } from '../components/Firebase'
 import { Button, Col, Row, Form } from "react-bootstrap"
 
 const INITIAL_STATE = {
@@ -21,8 +21,11 @@ const INITIAL_STATE = {
 
 
 const SignUpPage = () => (
-    
+    <FirebaseContext.Consumer>
+        {firebase => <SignUpForm firebase={firebase} />}
+    </FirebaseContext.Consumer>  
 );
+
 
 class SignUpForm extends Component {
   constructor(props) {
@@ -51,16 +54,18 @@ class SignUpForm extends Component {
 
   onSubmit = event => {
     const { email, password, address, city, stateLoc, zip } = this.state;
-
-      this.props.firebase
-      .doCreateuserWithEmailAndPassword(email, password)
-      .then(authUser => {
+    
+    this.props.firebase
+    .doCreateuserWithEmailAndPassword(email, password)
+      .then(() => {
+        alert("aSDFASDF");
         this.setState({...INITIAL_STATE});
       })
       .catch(error => {
+        alert("aSDFASDF12");
         this.setState({ error });
       });
-
+      alert("aSDFASDF12");
     event.preventDefault();
   };
 
@@ -204,7 +209,7 @@ class SignUpForm extends Component {
                 <Form.Group as={Col} controlId="zip">
                   <Form.Label>Zip Code</Form.Label>
                   <Form.Control 
-                    value={zip || "Choose..."}
+                    value={zip}
                     onChange={this.handleChange}
                   />
                 </Form.Group>
