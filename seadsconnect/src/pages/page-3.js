@@ -4,7 +4,7 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-import { FirebaseContext } from '../components/Firebase'
+import { withFireBase } from '../components/Firebase'
 import { Button, Col, Row, Form } from "react-bootstrap"
 
 const INITIAL_STATE = {
@@ -21,9 +21,7 @@ const INITIAL_STATE = {
 
 
 const SignUpPage = () => (
-  <FirebaseContext.Consumer>
-    {firebase => <SignUpForm firebase={firebase} />}
-  </FirebaseContext.Consumer>
+    
 );
 
 class SignUpForm extends Component {
