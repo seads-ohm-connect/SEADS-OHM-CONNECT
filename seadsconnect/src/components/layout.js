@@ -6,6 +6,10 @@ import NavBar from "./nav-bar"
 import Header from "./header"
 import "./layout.css"
 
+import firebase from '../components/firebase'
+
+import getFirebase, { FirebaseContext } from '../components/Firebase'
+
 const Layout = ({ children }) => (
   <StaticQuery
     query={graphql`
@@ -19,6 +23,7 @@ const Layout = ({ children }) => (
     `}
     render={data => (
       <>
+      <FirebaseContext.Provider value={getFirebase()}>
         <Header siteTitle={data.site.siteMetadata.title} />
         <NavBar />
         <div
@@ -36,6 +41,7 @@ const Layout = ({ children }) => (
             <a href="https://www.soe.ucsc.edu/people/mantey">The Mantey Gang</a>
           </footer>
         </div>
+        </FirebaseContext.Provider>
       </>
     )}
   />

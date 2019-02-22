@@ -4,7 +4,8 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-import { FirebaseContext } from '../components/Firebase'
+import { withFirebase } from '../components/Firebase'
+import getFirebase from '../components/firebase'
 import { Button, Col, Row, Form } from "react-bootstrap"
 
 const INITIAL_STATE = {
@@ -21,13 +22,11 @@ const INITIAL_STATE = {
 
 
 const SignUpPage = () => (
-    <FirebaseContext.Consumer>
-        {firebase => <SignUpForm firebase={firebase} />}
-    </FirebaseContext.Consumer>  
+    <SignUpForm /> 
 );
 
 
-class SignUpForm extends Component {
+class SignUpFormBase extends Component {
   constructor(props) {
     super(props);
 
@@ -54,18 +53,17 @@ class SignUpForm extends Component {
 
   onSubmit = event => {
     const { email, password, address, city, stateLoc, zip } = this.state;
-    
-    this.props.firebase
-    .doCreateuserWithEmailAndPassword(email, password)
-      .then(() => {
-        alert("aSDFASDF");
+
+
+     getFirebase().auth().createUserWithEmailAndPassword(email, password)
+      .then(authUser => {
         this.setState({...INITIAL_STATE});
+        alert("signed up");
       })
       .catch(error => {
-        alert("aSDFASDF12");
         this.setState({ error });
       });
-      alert("aSDFASDF12");
+
     event.preventDefault();
   };
 
@@ -237,6 +235,8 @@ class SignUpForm extends Component {
     );
   }
 }
+
+const SignUpForm = withFirebase(SignUpFormBase);
 
 export default SignUpPage;
 

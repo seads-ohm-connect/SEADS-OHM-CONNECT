@@ -10,16 +10,16 @@ import Image from "../components/image"
 import SEO from "../components/seo"
 import HomeCarousel from "../components/hp-carousel"
 
-import Firebase, { FirebaseContext } from '../components/Firebase'
+import getFirebase, { FirebaseContext } from '../components/Firebase'
 
 
 const IndexPage = () => (
-  <FirebaseContext.Provider value={new Firebase()}>
+	<FirebaseContext.Provider value={getFirebase()}>
     <Layout>
       <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
       <HomeCarousel />
     </Layout>
-  </FirebaseContext.Provider>
+    </FirebaseContext.Provider>
 )
 
 export default IndexPage

@@ -1,4 +1,4 @@
-import app from 'firebase/app';
+import firebase from 'firebase'
 import 'firebase/auth';
 
 const config = {
@@ -10,11 +10,11 @@ const config = {
   messagingSenderId: "515432152968"
 };
 
+
 class Firebase {
   constructor() {
-    app.initializeApp(config);
-
-    this.auth = app.auth();
+    firebase.initializeApp(config);
+    this.auth = firebase.auth();
   }
 
   doCreateUserWithEmailAndPassword = (email, password) => {
@@ -32,14 +32,15 @@ class Firebase {
     this.auth.currentUser.updatePassword(password);
 }
 
-let firebase;
+let firebaseApp;
 
-function getFirebase(app, auth) {
-  if (!firebase) {
-    firebase = new Firebase(app, auth);
+function getFirebase () {
+  if (firebase.apps.length < 1) {
+    firebaseApp = new Firebase();
   }
-
-  return firebase;
+  else firebaseApp = firebase;
+  //alert(firebase.apps.length);
+  return firebaseApp;
 }
 
 export default getFirebase;

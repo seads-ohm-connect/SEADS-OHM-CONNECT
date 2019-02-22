@@ -6,11 +6,11 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 import { FirebaseContext } from '../components/Firebase'
+import { withFirebase } from '../components/Firebase'
+import getFirebase from '../components/firebase'
 
 const SignInPage = () => (
-  <FirebaseContext.Consumer>
-    {firebase => <Login firebase={firebase} />}
-  </FirebaseContext.Consumer>
+  <LoginForm />
 );
 
 const INITIAL_STATE = {
@@ -18,7 +18,7 @@ const INITIAL_STATE = {
     password: ""
 }
 
-class Login extends Component {
+class LoginFormBase extends Component {
   constructor(props) {
     super(props);
 
@@ -39,8 +39,9 @@ class Login extends Component {
 
   handleSubmit = event => {
   	const { email, password } = this.state;
-    this.props.firebase
-   	 .doSignInWithEmailAndPassword(email, password)
+
+    getFirebase().auth()
+   	 .signInWithEmailAndPassword(email, password)
      .then(() => {
        this.setState({ ...INITIAL_STATE });
        alert("signed in");
@@ -97,7 +98,8 @@ class Login extends Component {
   }
 }
 
+const LoginForm = withFirebase(LoginFormBase);
 
 export default SignInPage;
 
-export { Login };
+export { LoginForm };
