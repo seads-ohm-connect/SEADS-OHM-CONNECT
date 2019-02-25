@@ -38,7 +38,6 @@ function getFirebase () {
   if (firebase.apps.length < 1) {
     firebaseApp = new Firebase();
   }
-  else firebaseApp = firebase;
   //alert(firebase.apps.length);
   return firebaseApp;
 }
