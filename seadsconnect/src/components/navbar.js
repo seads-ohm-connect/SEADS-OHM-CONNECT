@@ -55,19 +55,15 @@ class NavBarHandler extends Component {
       this.state.signedIn = getFirebase().auth().currentUser;
 
     return this.state.signedIn ? <a class="nav-link active" href="/">Sign Out</a> :
-                                              <a class="nav-link active" href="/page-2/">Sign In</a>;
+                                 <a class="nav-link active" href="/page-2/">Sign In</a>;
   }
 
   getProfile() {
-<<<<<<< HEAD
     if (!this.state.signedIn) 
       this.state.signedIn = getFirebase().auth().currentUser;
 
     return this.state.signedIn ? <a class="nav-link active" href="/">{getFirebase().auth().currentUser.email}</a> :
-=======
-    return getFirebase().auth().currentUser ? <a class="nav-link active" href="/">Profile</a> :
->>>>>>> 7d7b056b6d59943c7830db049bdcacc441bfe1ee
-                                              <a class="nav-link active" href="/page-3/">Sign Up</a>;
+                                 <a class="nav-link active" href="/page-3/">Sign Up</a>;
   }
 
   render() {
