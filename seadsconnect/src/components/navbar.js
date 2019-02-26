@@ -18,7 +18,6 @@ import getFirebase from "../components/firebase"
 
 export default () => (
     <NavBarHandler />
-  
 )
 
 class NavBarHandler extends Component {
@@ -60,10 +59,14 @@ class NavBarHandler extends Component {
   }
 
   getProfile() {
+<<<<<<< HEAD
     if (!this.state.signedIn) 
       this.state.signedIn = getFirebase().auth().currentUser;
 
     return this.state.signedIn ? <a class="nav-link active" href="/">{getFirebase().auth().currentUser.email}</a> :
+=======
+    return getFirebase().auth().currentUser ? <a class="nav-link active" href="/">Profile</a> :
+>>>>>>> 7d7b056b6d59943c7830db049bdcacc441bfe1ee
                                               <a class="nav-link active" href="/page-3/">Sign Up</a>;
   }
 
