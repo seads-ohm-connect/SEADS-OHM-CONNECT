@@ -17,6 +17,8 @@ class Firebase {
     firebase.initializeApp(config);
 
     this.auth = firebase.auth();
+
+    var user = null;
   }
 
   doCreateUserWithEmailAndPassword = (email, password) => {
@@ -32,6 +34,7 @@ class Firebase {
 
   doPasswordUpdate = password =>
     this.auth.currentUser.updatePassword(password);
+
 }
 
 let firebaseApp;

@@ -1,11 +1,10 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { StaticQuery, graphql } from "gatsby"
-import NavBar from "./nav-bar"
 
 import Header from "./header"
 import "./layout.css"
-import Navbar from "./navbar"
+import NavBar from "./navbar"
 
 
 import firebase from '../components/firebase'
