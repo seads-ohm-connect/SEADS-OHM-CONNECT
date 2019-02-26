@@ -1,7 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { Link } from "gatsby"
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 import 'bootstrap/dist/css/bootstrap.css'
 import "react-tabs/style/react-tabs.css"
 
@@ -11,7 +10,6 @@ import SEO from "../components/seo"
 import HomeCarousel from "../components/hp-carousel"
 
 import getFirebase, { FirebaseContext } from '../components/Firebase'
-
 
 const IndexPage = () => (
 	<FirebaseContext.Provider value={getFirebase()}>

@@ -5,6 +5,8 @@ import NavBar from "./nav-bar"
 
 import Header from "./header"
 import "./layout.css"
+import Navbar from "./navbar"
+
 
 import firebase from '../components/firebase'
 
@@ -25,6 +27,7 @@ const Layout = ({ children }) => (
       <>
       <FirebaseContext.Provider value={getFirebase()}>
         <Header siteTitle={data.site.siteMetadata.title} />
+
         <NavBar />
         <div
           style={{
