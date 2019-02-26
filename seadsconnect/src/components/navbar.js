@@ -18,7 +18,7 @@ import getFirebase from "../components/firebase"
 
 export default () => (
         <NavBarHandler />
-  
+
 )
 
 class NavBarHandler extends Component {
@@ -34,7 +34,7 @@ class NavBarHandler extends Component {
 
   getProfile() {
     return getFirebase().auth().currentUser ? <a class="nav-link active" href="/">Profile</a> :
-                                              <a class="nav-link active" href="/page-2/">Sign Up</a>;
+                                              <a class="nav-link active" href="/page-3/">Sign Up</a>;
   }
 
   render() {
