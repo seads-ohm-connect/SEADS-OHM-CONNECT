@@ -13,7 +13,9 @@ const config = {
 
 class Firebase {
   constructor() {
+
     firebase.initializeApp(config);
+
     this.auth = firebase.auth();
   }
 
@@ -37,7 +39,7 @@ let firebaseApp;
 function getFirebase () {
   if (firebase.apps.length < 1) {
     firebaseApp = new Firebase();
-  }
+  } else firebaseApp = firebase;
   //alert(firebase.apps.length);
   return firebaseApp;
 }
