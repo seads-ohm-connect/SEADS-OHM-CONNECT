@@ -5,12 +5,16 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
+import DragGraph from "../Graphs/DragGraph/drag-graph"
+
 import { FirebaseContext } from '../components/Firebase'
 import { withFirebase } from '../components/Firebase'
 import getFirebase from '../components/firebase'
 
 const SignInPage = () => (
+  <React.Fragment>
   <LoginForm />
+  </ React.Fragment>
 );
 
 const INITIAL_STATE = {
@@ -44,7 +48,6 @@ class LoginFormBase extends Component {
    	 .signInWithEmailAndPassword(email, password)
      .then(() => {
        this.setState({ ...INITIAL_STATE });
-       alert("signed in");
      })
        .catch(error => {
        this.setState({ error });
