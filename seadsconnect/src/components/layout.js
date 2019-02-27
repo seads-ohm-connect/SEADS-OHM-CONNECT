@@ -6,6 +6,7 @@ import Header from "./header"
 import "./layout.css"
 import Navbar from "./navbar"
 
+
 const Layout = ({ children }) => (
   <StaticQuery
     query={graphql`
