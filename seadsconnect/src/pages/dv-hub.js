@@ -1,6 +1,7 @@
 import React from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
+import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 var d3 = require("d3");
 
 	/* 
@@ -8,7 +9,7 @@ var d3 = require("d3");
 	get used to d3. Since I can't get my line graph to work,
 	I'm uploading this temporary bar graph which I had working
 	which doesn't require a csv and only the hourData array.
-	*/
+	
 	var hourData = [500,300,100,100,100,100,100,100,400,800,1000,1500,2000,2300,2000,1800,1800,2000,2400,2600,3000,2500,1500,1000,200];
 	
 	var mainWidth = 1400
@@ -112,6 +113,7 @@ var d3 = require("d3");
 const DvHub = () => (
 
   <Layout>
+  <Thresholdbar />
   </Layout>
 )
 

@@ -1,9 +1,5 @@
 import React, { Component } from "react"
-import { Link } from "gatsby"
-
 import Layout from "../components/layout"
-import SEO from "../components/seo"
-
 import { Button, Col, Row, Form } from "react-bootstrap";
 
 
