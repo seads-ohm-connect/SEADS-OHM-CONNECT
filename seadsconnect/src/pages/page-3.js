@@ -16,6 +16,7 @@ const INITIAL_STATE = {
     city: "",
     stateLoc: "",
     zip: "",
+    seadsID : "",
     ohmConnect: false,
     error: null,
 };
@@ -77,6 +78,7 @@ class SignUpFormBase extends Component {
       city,
       stateLoc,
       zip,
+      seadsID,
       ohmConnect,
       error,
     } = this.state;
@@ -122,7 +124,8 @@ class SignUpFormBase extends Component {
 
               </Row>
 
-                <Form.Group controlId="address">
+              <Row>
+                <Form.Group as={Col} controlId="address">
                   <Form.Label>Address</Form.Label>
                   <Form.Control
                     type="address"
@@ -132,8 +135,19 @@ class SignUpFormBase extends Component {
                   />
                 </Form.Group>
 
-              <Row>
+                <Form.Group as={Col} controlId="seadsID">
+                  <Form.Label>SEADS ID</Form.Label>
+                  <Form.Control
+                    type="ID"
+                    placeholder="Enter SEADS ID#"
+                    value={seadsID}
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
 
+              </Row>
+
+              <Row>
                 <Form.Group as={Col} controlId="city">
                   <Form.Label>City</Form.Label>
                   <Form.Control
@@ -207,6 +221,7 @@ class SignUpFormBase extends Component {
                 <Form.Group as={Col} controlId="zip">
                   <Form.Label>Zip Code</Form.Label>
                   <Form.Control 
+                    placeholder="Zip"
                     value={zip}
                     onChange={this.handleChange}
                   />
