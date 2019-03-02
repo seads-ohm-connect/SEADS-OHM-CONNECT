@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
@@ -109,13 +109,20 @@ var d3 = require("d3");
 	});
 	*/
 	
-	
-const DvHub = () => (
+//Thresholdbar: Change pass watts into value and change max to what ever you want.
+class DvHub extends Component {
+	constructor(props) {
+    	super(props);
+	}
 
-  <Layout>
-  <Thresholdbar />
-  </Layout>
-)
+	render() {
+		return (
+			<Layout>
+  			<Thresholdbar value={70} max={100} thresholds={33} />
+  			</Layout>
+		)
+	}
+}
 
 
 export default DvHub
