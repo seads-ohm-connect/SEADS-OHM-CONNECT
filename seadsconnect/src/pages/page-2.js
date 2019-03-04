@@ -5,16 +5,25 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 
-import Rectangle from 'react-rectangle'
+import { FirebaseContext } from '../components/Firebase'
+import { withFirebase } from '../components/Firebase'
+import getFirebase from '../components/firebase'
 
+const SignInPage = () => (
+  <LoginForm />
+);
 
-export default class Login extends Component {
+const INITIAL_STATE = {
+	email: "",
+    password: ""
+}
+
+class LoginFormBase extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: "",
-      password: ""
+      ...INITIAL_STATE
     };
   }
 
@@ -29,6 +38,17 @@ export default class Login extends Component {
   }
 
   handleSubmit = event => {
+  	const { email, password } = this.state;
+
+    getFirebase().auth()
+   	 .signInWithEmailAndPassword(email, password)
+     .then(() => {
+       this.setState({ ...INITIAL_STATE });
+       alert("signed in");
+     })
+       .catch(error => {
+       this.setState({ error });
+    });
     event.preventDefault();
   }
 
@@ -77,3 +97,9 @@ export default class Login extends Component {
   	);
   }
 }
+
+const LoginForm = withFirebase(LoginFormBase);
+
+export default SignInPage;
+
+export { LoginForm };

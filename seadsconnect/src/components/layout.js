@@ -4,8 +4,12 @@ import { StaticQuery, graphql } from "gatsby"
 
 import Header from "./header"
 import "./layout.css"
-import Navbar from "./navbar"
+import NavBar from "./navbar"
 
+
+import firebase from '../components/firebase'
+
+import getFirebase, { FirebaseContext } from '../components/Firebase'
 
 const Layout = ({ children }) => (
   <StaticQuery
@@ -20,8 +24,10 @@ const Layout = ({ children }) => (
     `}
     render={data => (
       <>
+      <FirebaseContext.Provider value={getFirebase()}>
         <Header siteTitle={data.site.siteMetadata.title} />
-        <Navbar />
+
+        <NavBar />
         <div
           style={{
             margin: `0 auto`,
@@ -37,6 +43,7 @@ const Layout = ({ children }) => (
             <a href="https://www.soe.ucsc.edu/people/mantey">The Mantey Gang</a>
           </footer>
         </div>
+        </FirebaseContext.Provider>
       </>
     )}
   />
