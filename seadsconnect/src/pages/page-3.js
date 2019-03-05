@@ -220,12 +220,9 @@ class SignUpFormBase extends Component {
 
                 <Form.Group as={Col} controlId="zip">
                   <Form.Label>Zip Code</Form.Label>
-<<<<<<< HEAD
+                  
                   <Form.Control 
                     placeholder="Zip"
-=======
-                  <Form.Control
->>>>>>> dvpages
                     value={zip}
                     onChange={this.handleChange}
                   />
