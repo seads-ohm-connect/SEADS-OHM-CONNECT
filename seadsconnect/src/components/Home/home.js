@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import Card from 'react-bootstrap/Card'
 import CardColumns from 'react-bootstrap/CardColumns'
 import Button from 'react-bootstrap/Button'
+import SeadsBanner from '../../images/seads-logotest.png'
+import OhmBanner from '../../images/ohmconnecttest.png'
 
 
 export default class HomeCard extends Component {
@@ -10,17 +12,19 @@ export default class HomeCard extends Component {
 		return (
 
 		<CardColumns>
-		   <Card>
-		      <Card.Img variant="top" src="/src/images/ohmconnect" />
-		      <Card.Body>
+		   <Card border="primary" bg="info" text="white">
+						<Card.Img variant='top'/>
+		      
+					<Card.Body>
 		        <Card.Title>SEADS</Card.Title>
 		        <Card.Text>
 		          Get the SEADS device connected and installed in your Home.
 		        </Card.Text>
 		      </Card.Body>
 		      <Card.Footer>
-		        <Button variant="outline-secondary">Sign Up</Button>
+		        <Button variant="outline-light">Sign Up</Button>
 		      </Card.Footer>
+					
 		    </Card>
 
 		    <Card bg="primary" text="white" className="text-center p-3">
@@ -34,8 +38,9 @@ export default class HomeCard extends Component {
               </blockquote>
   			</Card>
 
-  			<Card>
-		      <Card.Img variant="top" src="holder.js/100px160" />
+  			<Card border="primary" bg="info" text="white">
+		      <Card.Img variant="top" />
+					
 		      <Card.Body>
 		        <Card.Title>OhmConnect</Card.Title>
 		        <Card.Text>
@@ -43,8 +48,9 @@ export default class HomeCard extends Component {
 		        </Card.Text>
 		      </Card.Body>
 		      <Card.Footer>
-		        <Button variant="outline-secondary"  href="https://www.ohmconnect.com/#Sign-up-Form">Sign Up</Button>
+		        <Button variant="outline-light"  href="https://www.ohmconnect.com/#Sign-up-Form">Sign Up</Button>
 		      </Card.Footer>
+					
 		    </Card>
 		</ CardColumns>
 		)
