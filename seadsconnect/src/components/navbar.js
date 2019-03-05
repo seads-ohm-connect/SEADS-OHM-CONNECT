@@ -18,7 +18,7 @@ import getFirebase from "../components/firebase"
 
 export default () => (
         <NavBarHandler />
-  
+
 )
 
 class NavBarHandler extends Component {

@@ -7,10 +7,15 @@
   "dependencies": {
     "bootstrap": "^4.3.0",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "firebase": "^5.8.2",
 =======
     "d3": "^5.9.1",
     "fs": "0.0.1-security",
+>>>>>>> dvpages
+=======
+    "bootstrap-toggle": "^2.2.2",
+    "firebase": "^5.8.2",
 >>>>>>> dvpages
     "gatsby": "^2.0.117",
     "gatsby-image": "^2.0.29",

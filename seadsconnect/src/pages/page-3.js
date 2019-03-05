@@ -1,10 +1,12 @@
 import React, { Component } from "react"
 import Layout from "../components/layout"
+
 import SEO from "../components/seo"
 
 import { withFirebase } from '../components/Firebase'
 import getFirebase from '../components/firebase'
 import { Button, Col, Row, Form } from "react-bootstrap"
+
 
 const INITIAL_STATE = {
     email: "",
@@ -21,7 +23,7 @@ const INITIAL_STATE = {
 
 
 const SignUpPage = () => (
-    <SignUpForm /> 
+    <SignUpForm />
 );
 
 
@@ -218,8 +220,12 @@ class SignUpFormBase extends Component {
 
                 <Form.Group as={Col} controlId="zip">
                   <Form.Label>Zip Code</Form.Label>
+<<<<<<< HEAD
                   <Form.Control 
                     placeholder="Zip"
+=======
+                  <Form.Control
+>>>>>>> dvpages
                     value={zip}
                     onChange={this.handleChange}
                   />
