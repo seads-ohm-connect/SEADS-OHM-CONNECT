@@ -2,7 +2,9 @@ import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
-import { Button } from "react-bootstrap"
+import { Button, Row, Form , ToggleButton } from "react-bootstrap"
+import Appliances from "../Graphs/DragGraph/appliances"
+
 var d3 = require("d3");
 
 	/*
@@ -119,9 +121,24 @@ class DvHub extends Component {
 				m: 100,
 				thresh: 33
 			}
+			this.db = new Appliances();
+			this.tester = {
+				t: 10
+			}
 	}
-	AddLoad = () => {
-		this.setState({val: this.state.val + 5 })
+
+
+	AddDryer = () => {
+		this.setState({val: this.state.val + this.db.dryer.kWh })
+	}
+
+
+	AddWasher = () => {
+		this.setState({val: this.state.val + this.db.washingMachineWarm.kWh })
+	}
+
+	AddElectricWaterHeater = () => {
+		this.setState({val: this.state.val + this.db.electricWaterHeater.kWh})
 	}
 
 	ReduceLoad = () => {
@@ -129,14 +146,20 @@ class DvHub extends Component {
 	}
 
 
+
 	render() {
 		return (
 			<Layout>
   			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
-				<div>
-					<Button onClick={this.AddLoad}>Add 5 to Load</Button>
-					<Button onClick={this.ReduceLoad}>Drop load by 5</Button>
-				</div>
+				<Form>
+					<Row>
+						<Button variant="outline-success" data-toggle="button" onClick={this.AddDryer} >Dryer On</Button>
+						<Button variant="outline-success" data-toggle="button" onClick={this.AddWasher}>Washer On</Button>
+						<Button variant="outline-success" data-toggle="button" onClick={this.AddElectricWaterHeater}>Water Heater On</Button>
+						<Button variant="outline-success" data-toggle="button" onClick={this.ReduceLoad}>Reduce Load</Button>
+
+					</Row>
+				</Form>
   		</Layout>
 		)
 	}

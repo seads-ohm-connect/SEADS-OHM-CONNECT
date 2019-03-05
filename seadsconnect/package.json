@@ -6,9 +6,8 @@
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
     "bootstrap": "^4.3.0",
-
+    "bootstrap-toggle": "^2.2.2",
     "firebase": "^5.8.2",
-
     "gatsby": "^2.0.117",
     "gatsby-image": "^2.0.29",
     "gatsby-plugin-manifest": "^2.0.17",
