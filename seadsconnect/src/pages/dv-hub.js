@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
-import { Button, Row, Form , ToggleButton } from "react-bootstrap"
+import { Button, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 
 var d3 = require("d3");
@@ -117,49 +117,126 @@ class DvHub extends Component {
 	constructor(props) {
     	super(props);
 			this.state = {
-				val: 70,
-				m: 100,
-				thresh: 33
+				val: 0,
+				m: 12,
+				thresh: 33,
+				washerToggleOn: true,
+				dryerToggleOn: true,
+				ovenToggleOn: true,
+				fridgeToggleOn: true,
+				dishwasherToggleOn: true,
+				computerToggleOn: true
 			}
+
 			this.db = new Appliances();
-			this.tester = {
-				t: 10
-			}
 	}
 
 
-	AddDryer = () => {
-		this.setState({val: this.state.val + this.db.dryer.kWh })
+
+
+	toggleWasher = () => {
+		if(this.state.washerToggleOn){
+			this.setState({val: this.state.val + this.db.washingMachineHot.kWh })
+		}
+		else{
+			this.setState({val: this.state.val - this.db.washingMachineHot.kWh })
+		}
+	}
+
+	changeColorWasher = () => {
+		this.setState({washerToggleOn: !this.state.washerToggleOn})
+	}
+
+	toggleDryer = () => {
+		if(this.state.dryerToggleOn){
+			this.setState({val: this.state.val + this.db.dryer.kWh})
+		}
+		else{
+			this.setState({val: this.state.val - this.db.dryer.kWh})
+		}
+	}
+
+	changeColorDryer = () => {
+		this.setState({dryerToggleOn: !this.state.dryerToggleOn})
+	}
+
+	toggleOven = () => {
+		if(this.state.ovenToggleOn){
+			this.setState({val: this.state.val + this.db.oven.kWh})
+		}
+		else{
+			this.setState({val: this.state.val - this.db.oven.kWh})
+		}
 	}
 
 
-	AddWasher = () => {
-		this.setState({val: this.state.val + this.db.washingMachineWarm.kWh })
+	changeColorOven = () => {
+		this.setState({ovenToggleOn: !this.state.ovenToggleOn})
 	}
 
-	AddElectricWaterHeater = () => {
-		this.setState({val: this.state.val + this.db.electricWaterHeater.kWh})
+	toggleFridge = () => {
+		if(this.state.fridgeToggleOn){
+			this.setState({val: this.state.val + this.db.fridge.kWh})
+		}
+		else{
+			this.setState({val: this.state.val - this.db.fridge.kWh})
+		}
 	}
 
-	ReduceLoad = () => {
-		this.setState({val: this.state.val - 5 })
+	changeColorFridge = () => {
+		this.setState({fridgeToggleOn: !this.state.fridgeToggleOn})
 	}
 
+	toggleDishwasher = () => {
+		if(this.state.dishwasherToggleOn){
+			this.setState({val: this.state.val + this.db.dishwasher.kWh})
+		}
+		else{
+			this.setState({val: this.state.val - this.db.dishwasher.kWh})
+		}
+	}
 
+	changeColorDishwasher = () => {
+		this.setState({dishwasherToggleOn: !this.state.dishwasherToggleOn})
+	}
+
+	toggleComputer = () => {
+		if(this.state.computerToggleOn){
+			this.setState({val: this.state.val + this.db.computer.kWh})
+		}
+		else{
+			this.setState({val: this.state.val - this.db.computer.kWh})
+		}
+	}
+
+	changeColorComputer = () => {
+		this.setState({computerToggleOn: !this.state.computerToggleOn})
+	}
 
 	render() {
+		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
+		let dryerColor = this.state.dryerToggleOn ? "outline-success" : "success";
+		let ovenColor = this.state.ovenToggleOn ? "outline-success" : "success";
+		let fridgeColor = this.state.fridgeToggleOn ? "outline-success" : "success";
+		let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
+		let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
+
 		return (
+
 			<Layout>
   			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
-				<Form>
-					<Row>
-						<Button variant="outline-success" data-toggle="button" onClick={this.AddDryer} >Dryer On</Button>
-						<Button variant="outline-success" data-toggle="button" onClick={this.AddWasher}>Washer On</Button>
-						<Button variant="outline-success" data-toggle="button" onClick={this.AddElectricWaterHeater}>Water Heater On</Button>
-						<Button variant="outline-success" data-toggle="button" onClick={this.ReduceLoad}>Reduce Load</Button>
-
-					</Row>
-				</Form>
+				<div align="center">
+					<ButtonGroup>
+						<ButtonToolbar>
+							<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
+							<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
+							<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
+							<Button variant={fridgeColor} onClick={() => {this.toggleFridge(); this.changeColorFridge()}} >Fridge</Button>
+							<Button variant={dishwasherColor} onClick={() => {this.toggleDishwasher(); this.changeColorDishwasher()}} >Dishwasher</Button>
+							<Button variant={computerColor} onClick={() => {this.toggleComputer(); this.changeColorComputer()}} >Computer</Button>
+						</ButtonToolbar>
+					</ButtonGroup>
+				</div>
   		</Layout>
 		)
 	}
