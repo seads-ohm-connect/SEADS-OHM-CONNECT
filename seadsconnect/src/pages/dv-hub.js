@@ -223,7 +223,7 @@ class DvHub extends Component {
 
 		return (
 
-			<Layout>
+		<Layout>
   			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
 				<div align="center">
 					<ButtonGroup>
