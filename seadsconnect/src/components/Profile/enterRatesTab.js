@@ -58,7 +58,7 @@ export default class EnterRates extends Component {
              onChange={(e) => handleChange(e, appliance)}
     		 />
           </td>
-          <td>${appliance.priceEstimate}</td>
+          <td>${Math.round(getLocal(appliance) / 9.09090909 * 100) / 100}</td>
         </tr>
       );
       return (
