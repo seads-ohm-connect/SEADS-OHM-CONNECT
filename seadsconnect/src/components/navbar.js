@@ -39,8 +39,8 @@ class NavBarHandler extends Component {
   }
 
   getData(){
-      setTimeout(() => {
-        this.setState({
+    setTimeout(() => {
+      this.setState({
         signedIn: getFirebase().auth().currentUser
       })
     }, 1000)

@@ -127,18 +127,25 @@ class DvHub extends Component {
 			}
 	}
 
+	getLocal(req) {
+    	const cachedHits = localStorage.getItem(req.name);
+        if (cachedHits)
+        	return (JSON.parse(cachedHits));
+        else 
+        	return req.kWh;
+    }
 
 	AddDryer = () => {
-		this.setState({val: this.state.val + Appliances.dryer.kWh })
+		this.setState({val: this.state.val + this.getLocal(Appliances.dryer) })
 	}
 
 
 	AddWasher = () => {
-		this.setState({val: this.state.val + Appliances.washingMachineWarm.kWh })
+		this.setState({val: this.state.val + this.getLocal(Appliances.washingMachineWarm)})
 	}
 
 	AddElectricWaterHeater = () => {
-		this.setState({val: this.state.val + Appliances.electricWaterHeater.kWh})
+		this.setState({val: this.state.val + this.getLocal(Appliances.electricWaterHeater)})
 	}
 
 	ReduceLoad = () => {
@@ -157,7 +164,6 @@ class DvHub extends Component {
 						<Button variant="outline-success" data-toggle="button" onClick={this.AddWasher}>Washer On</Button>
 						<Button variant="outline-success" data-toggle="button" onClick={this.AddElectricWaterHeater}>Water Heater On</Button>
 						<Button variant="outline-success" data-toggle="button" onClick={this.ReduceLoad}>Reduce Load</Button>
-
 					</Row>
 				</Form>
   		</Layout>

@@ -30,12 +30,20 @@ export default class EnterRates extends Component {
 
       const handleChange = (event, appliance) => {
       	appliance.kWh = event.target.value;
-      	Appliances.kWh = event.target.value;
       	appliance.priceEstimate = Math.round(appliance.kWh / 9.09090909 * 100) / 100;
-      	alert(appliance.kWh);
+        localStorage.setItem(appliance.name, JSON.stringify(appliance.kWh));
       	this.setState({
-          [Appliances.dryer.priceEstimate]: event.target.value
+          [event.target.id]: event.target.value
         });
+      }
+
+      function getLocal(req)
+      {
+        const cachedHits = localStorage.getItem(req.name);
+        if (cachedHits)
+          return (JSON.parse(cachedHits));
+        else 
+          return req.kWh;
       }
 
       const appArray  = props.appList;
@@ -46,7 +54,7 @@ export default class EnterRates extends Component {
           <td>{appliance.name}</td>
           <td>
             <FormControl
-             placeholder={appliance.kWh}
+             placeholder={getLocal(appliance)}
              onChange={(e) => handleChange(e, appliance)}
     		 />
           </td>
