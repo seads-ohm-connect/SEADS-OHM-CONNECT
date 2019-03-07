@@ -128,18 +128,26 @@ class DvHub extends Component {
 				computerToggleOn: true
 			}
 
-			this.db = new Appliances();
+			this.tester = {
+				t: 10
+			}
 	}
 
-
+	getLocal(req) {
+    	const cachedHits = localStorage.getItem(req.name);
+        if (cachedHits)
+        	return (JSON.parse(cachedHits));
+        else 
+        	return req.kWh;
+    }
 
 
 	toggleWasher = () => {
 		if(this.state.washerToggleOn){
-			this.setState({val: this.state.val + this.db.washingMachineHot.kWh })
+			this.setState({val: this.state.val + this.getLocal(Appliances.washingMachineHot)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.washingMachineHot.kWh })
+			this.setState({val: this.state.val - this.getLocal(Appliances.washingMachineHot)})
 		}
 	}
 
@@ -149,10 +157,10 @@ class DvHub extends Component {
 
 	toggleDryer = () => {
 		if(this.state.dryerToggleOn){
-			this.setState({val: this.state.val + this.db.dryer.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.dryer)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.dryer.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.dryer)})
 		}
 	}
 
@@ -162,10 +170,10 @@ class DvHub extends Component {
 
 	toggleOven = () => {
 		if(this.state.ovenToggleOn){
-			this.setState({val: this.state.val + this.db.oven.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.oven)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.oven.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.oven)})
 		}
 	}
 
@@ -176,10 +184,10 @@ class DvHub extends Component {
 
 	toggleFridge = () => {
 		if(this.state.fridgeToggleOn){
-			this.setState({val: this.state.val + this.db.fridge.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.fridge)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.fridge.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.fridge)})
 		}
 	}
 
@@ -189,10 +197,10 @@ class DvHub extends Component {
 
 	toggleDishwasher = () => {
 		if(this.state.dishwasherToggleOn){
-			this.setState({val: this.state.val + this.db.dishwasher.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.dishwasher)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.dishwasher.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.dishwasher)})
 		}
 	}
 
@@ -202,10 +210,10 @@ class DvHub extends Component {
 
 	toggleComputer = () => {
 		if(this.state.computerToggleOn){
-			this.setState({val: this.state.val + this.db.computer.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.computer)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.computer.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.computer)})
 		}
 	}
 
@@ -222,7 +230,6 @@ class DvHub extends Component {
 		let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
 
 		return (
-
 		<Layout>
   			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
 				<div align="center">
