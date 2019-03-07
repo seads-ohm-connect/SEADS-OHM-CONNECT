@@ -48,7 +48,7 @@ class LoginFormBase extends Component {
    	 .signInWithEmailAndPassword(email, password)
      .then(() => {
        this.setState({ ...INITIAL_STATE });
-       this.props.history.push(/profile/);
+       sessionStorage.setItem("signedIn", JSON.stringify(true));
      })
        .catch(error => {
        this.setState({ error });

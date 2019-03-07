@@ -38,36 +38,45 @@ class NavBarHandler extends Component {
       }
   }
 
-  getData(){
+  getData() {
     setTimeout(() => {
       this.setState({
-        signedIn: getFirebase().auth().currentUser
+        signedIn: this.getSignedIn()
       })
-    }, 1000)
+    })
   }
 
-  componentDidMount(){
+  getSignedIn() {
+    const cachedHits = sessionStorage.getItem("signedIn");
+    if (cachedHits) {
+      return true;
+    }
+    else 
+      return false;
+  }
+
+  componentDidMount() {
     this.getData();
   }
 
   isSignedIn() {
     if (!this.state.signedIn) 
-      this.state.signedIn = getFirebase().auth().currentUser;
+      this.state.signedIn = this.getSignedIn();
 
-    return this.state.signedIn ? <a class="nav-link active" href="/">Sign Out</a> :
+    return this.getSignedIn() ? <a class="nav-link active" href="/">Sign Out</a> :
                                  <a class="nav-link active" href="/page-2/">Sign In</a>;
   }
 
   getProfile() {
     if (!this.state.signedIn) 
-      this.state.signedIn = getFirebase().auth().currentUser;
+      this.state.signedIn = this.getSignedIn();
 
-    return this.state.signedIn ? <a class="nav-link active" href="/profile">{getFirebase().auth().currentUser.email}</a> :
+    return this.getSignedIn() ? <a class="nav-link active" href="/profile">Profile</a> :
                                  <a class="nav-link active" href="/page-3/">Sign Up</a>;
   }
 
   render() {
-
+      this.state.signedIn = this.getSignedIn();
       return (
 
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
