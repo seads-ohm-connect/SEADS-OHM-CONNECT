@@ -3,71 +3,86 @@
 //Appliances class is used for training graph and simulation pages as a
 //stand in for currently dissagregated data.
 class Appliances {
-  constructor(props){
 
-    this.electricFurnace = {
+    static electricFurnace = {
+      name: "Electric Furnace",
       kWh: 10.5,
       priceEstimate: 1.16
     }
-    this.centralAirconditioning = {
+
+    static centralAirconditioning = {
+      name: "Central Airconditioning",
       kWh: 3.0,
       priceEstimate: 0.33
     }
 
-    this.windowAC120v = {
+    static windowAC120v = {
+      name: "Window AC 120v",
       kWh: 0.73,
       priceEstimate: 0.08
     }
 
-    this.windowAC240v = {
+    static windowAC240v = {
+      name: "Window AC 240v",
       kWh: 1.8,
       priceEstimate: 0.20
     }
 
-    this.electricWaterHeater = {
+    static electricWaterHeater = {
+      name: "Electric Water Heater",
       kWh: 0.61,
       priceEstimate: 0.16
     }
 
-    this.oven = {
+    static oven = {
+      name: "Oven",
       kWh: 2.3,
       priceEstimate: 0.25
     }
 
-    this.dishwasher = {
+    static dishwasher = {
+      name: "Dishwasher",
       kWh: 1.58,
       priceEstimate: 0.18
     }
 
-    this.fridge = {
+    static fridge = {
+      name: "Fridge",
       kWh: 0.07,
       priceEstimate: 0.01
     }
 
-    this.computer = {
+    static computer = {
+      name: "Computer",
       kWh: 0.15,
       priceEstimate: 0.02
     }
 
-    this.washingMachineWarm = {
+    static washingMachineWarm = {
+      name: "Washing Machine (Warm)",
       kWh: 2.3,
       priceEstimate: 0.25
     }
 
-    this.washingMachineHot = {
+    static washingMachineHot = {
+      name: "Washing Machine (Hot)",
       kWh: 6.3,
       priceEstimate: 0.69
     }
 
-    this.dryer = {
+    static dryer = {
+      name: "Dryer",
       kWh: 3.0,
       priceEstimate: 0.34
     }
 
-    this.hairDryer = {
+    static hairDryer = {
+      name: "Hair Dryer",
       kWh: 1.5,
       priceEstimate: 0.17
     }
-  }
 }
-export default Appliances
+
+
+
+export default Appliances;

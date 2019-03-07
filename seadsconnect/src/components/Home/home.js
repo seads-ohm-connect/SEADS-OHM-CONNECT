@@ -10,7 +10,7 @@ export default class HomeCard extends Component {
 		return (
 
 		<CardColumns>
-		   <Card>
+		   <Card border="primary">
 		      <Card.Img variant="top" src="/src/images/ohmconnect" />
 		      <Card.Body>
 		        <Card.Title>SEADS</Card.Title>
@@ -34,7 +34,7 @@ export default class HomeCard extends Component {
               </blockquote>
   			</Card>
 
-  			<Card>
+  			<Card border="primary">
 		      <Card.Img variant="top" src="holder.js/100px160" />
 		      <Card.Body>
 		        <Card.Title>OhmConnect</Card.Title>

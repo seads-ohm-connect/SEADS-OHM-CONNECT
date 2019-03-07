@@ -121,7 +121,7 @@ class DvHub extends Component {
 				m: 100,
 				thresh: 33
 			}
-			this.db = new Appliances();
+			
 			this.tester = {
 				t: 10
 			}
@@ -129,16 +129,16 @@ class DvHub extends Component {
 
 
 	AddDryer = () => {
-		this.setState({val: this.state.val + this.db.dryer.kWh })
+		this.setState({val: this.state.val + Appliances.dryer.kWh })
 	}
 
 
 	AddWasher = () => {
-		this.setState({val: this.state.val + this.db.washingMachineWarm.kWh })
+		this.setState({val: this.state.val + Appliances.washingMachineWarm.kWh })
 	}
 
 	AddElectricWaterHeater = () => {
-		this.setState({val: this.state.val + this.db.electricWaterHeater.kWh})
+		this.setState({val: this.state.val + Appliances.electricWaterHeater.kWh})
 	}
 
 	ReduceLoad = () => {
