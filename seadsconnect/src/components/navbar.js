@@ -33,7 +33,7 @@ class NavBarHandler extends Component {
   toSignOut = () => {
       if (this.state.signedIn) {
         getFirebase().auth().signOut().then(function() {
-          alert("User Signed Out");
+          sessionStorage.removeItem("signedIn");
         })
       }
   }
