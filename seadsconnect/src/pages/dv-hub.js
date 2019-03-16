@@ -118,8 +118,9 @@ class DvHub extends Component {
     	super(props);
 			this.state = {
 				val: 0,
-				m: 12,
-				thresh: 33,
+				m: 100,
+				liveData: 0, 
+				liveTime: new Date().toLocaleString(),
 				washerToggleOn: true,
 				dryerToggleOn: true,
 				ovenToggleOn: true,
@@ -136,7 +137,7 @@ class DvHub extends Component {
 	getLocal(req) {
     	const cachedHits = localStorage.getItem(req.name);
         if (cachedHits)
-        	return (JSON.parse(cachedHits));
+        	return parseFloat((JSON.parse(cachedHits)));
         else 
         	return req.kWh;
     }
@@ -221,6 +222,25 @@ class DvHub extends Component {
 		this.setState({computerToggleOn: !this.state.computerToggleOn})
 	}
 
+	componentDidMount() {
+        this.interval = setInterval(() => this.updatePower(), 500);
+    }
+
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+	updatePower = () => {
+		var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
+		d3.json(liveUpdateURL).then( (liveDataa) => {
+			var watts = liveDataa.DataPoints[0].Power;
+			var currentTime = new Date().toLocaleString();
+			this.setState({liveData: watts });	
+			this.setState({liveTime: currentTime });
+		});
+	}
+
 	render() {
 		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
 		let dryerColor = this.state.dryerToggleOn ? "outline-success" : "success";
@@ -231,7 +251,9 @@ class DvHub extends Component {
 
 		return (
 		<Layout>
-  			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
+			<h1>current power: { this.state.liveData }</h1>
+			<h2>current date: { this.state.liveTime }</h2>		
+  			<Thresholdbar value={this.state.val  + parseFloat(this.state.liveData)} max={this.state.m} />
 				<div align="center">
 					<ButtonGroup>
 						<ButtonToolbar>
