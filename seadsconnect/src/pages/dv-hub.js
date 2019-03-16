@@ -111,7 +111,8 @@ var d3 = require("d3");
 		.text("Energy");
 	});
 	*/
-
+	
+	
 //Thresholdbar: Change pass watts into value and change max to what ever you want.
 class DvHub extends Component {
 	constructor(props) {
@@ -120,6 +121,7 @@ class DvHub extends Component {
 				val: 0,
 				m: 12,
 				thresh: 33,
+				liveData: -1, 
 				washerToggleOn: true,
 				dryerToggleOn: true,
 				ovenToggleOn: true,
@@ -130,9 +132,6 @@ class DvHub extends Component {
 
 			this.db = new Appliances();
 	}
-
-
-
 
 	toggleWasher = () => {
 		if(this.state.washerToggleOn){
@@ -212,6 +211,16 @@ class DvHub extends Component {
 	changeColorComputer = () => {
 		this.setState({computerToggleOn: !this.state.computerToggleOn})
 	}
+	
+	updatePower = () => {
+		var w;
+		d3.json("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last").then(function(liveDataa){
+			w = liveDataa.DataPoints[0].Power;
+			console.log("W_w"+w);
+			//this.setState({liveData: 5})
+		});
+		setTimeout(function(){console.log("HUHawaaaa:" + w); this.setState({liveData:w});}, 5000);
+	}
 
 	render() {
 		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
@@ -220,14 +229,15 @@ class DvHub extends Component {
 		let fridgeColor = this.state.fridgeToggleOn ? "outline-success" : "success";
 		let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
 		let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
-
+		
 		return (
-
 			<Layout>
-  			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
+				<h1>{ this.state.liveData }</h1>
+			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
 				<div align="center">
 					<ButtonGroup>
 						<ButtonToolbar>
+							<Button variant={washerColor} onClick={() => {this.updatePower()}} >Washer</Button>
 							<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
 							<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
 							<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
@@ -237,7 +247,7 @@ class DvHub extends Component {
 						</ButtonToolbar>
 					</ButtonGroup>
 				</div>
-  		</Layout>
+		</Layout>
 		)
 	}
 }
