@@ -122,6 +122,7 @@ class DvHub extends Component {
 				m: 12,
 				thresh: 33,
 				liveData: -1, 
+				liveTime: new Date(0).toLocaleString(),
 				washerToggleOn: true,
 				dryerToggleOn: true,
 				ovenToggleOn: true,
@@ -213,13 +214,15 @@ class DvHub extends Component {
 	}
 	
 	updatePower = () => {
-		var w;
-		d3.json("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last").then(function(liveDataa){
-			w = liveDataa.DataPoints[0].Power;
-			console.log("W_w"+w);
-			//this.setState({liveData: 5})
-		});
-		setTimeout(function(){console.log("HUHawaaaa:" + w); this.setState({liveData:w});}, 5000);
+		String liveUpdateURL = "http://seadsone.soe.ucsc.edu:8000/api/seads/power/last";
+		setInterval( () => {
+			d3.json(liveUpdateURL).then( (liveDataa) => {
+				var watts = liveDataa.DataPoints[0].Power;
+				var currentTime = new Date(liveDataa.DataPoints[0].Timestamp*1000).toLocaleString();
+				this.setState({liveData: watts });	
+				this.setState({liveTime: currentTime });
+			});
+		}, 1000);
 	}
 
 	render() {
@@ -232,7 +235,8 @@ class DvHub extends Component {
 		
 		return (
 			<Layout>
-				<h1>{ this.state.liveData }</h1>
+				<h1>current power: { this.state.liveData }</h1>
+				<h2>current date: { this.state.liveTime }</h2>
 			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
 				<div align="center">
 					<ButtonGroup>
