@@ -253,7 +253,7 @@ class DvHub extends Component {
 		<Layout>
 			<h1>current power: { this.state.liveData }</h1>
 			<h2>current date: { this.state.liveTime }</h2>		
-  			<Thresholdbar value={this.state.val  + parseFloat(this.state.liveData)} max={this.state.m} />
+  			<Thresholdbar value={(this.state.val  + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} />
 				<div align="center">
 					<ButtonGroup>
 						<ButtonToolbar>
