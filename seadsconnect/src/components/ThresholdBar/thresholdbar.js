@@ -22,9 +22,9 @@ export default class Thresholdbar extends Component {
     render() {
     	return (
 		    <ProgressBar>
-			  <ProgressBar animated striped variant="success" now={this.clamp(this.props.value, 0, this.thresholds)} key={1} />
-			  <ProgressBar animated variant="warning" now={this.clamp(this.props.value, this.thresholds, 2 * this.thresholds)} key={2} label={`${this.props.value}`} />
-			  <ProgressBar animated striped variant="danger" now={this.clamp(this.props.value, 2 * this.thresholds, 3 * this.thresholds + 1)} key={3} />
+			  <ProgressBar animated striped variant="success" now={this.clamp(this.normalizedValue(), 0, this.thresholds)} key={1} />
+			  <ProgressBar animated variant="warning" now={this.clamp(this.normalizedValue(), this.thresholds, 2 * this.thresholds)} key={2} label={`${this.props.value}`} />
+			  <ProgressBar animated striped variant="danger" now={this.clamp(this.normalizedValue(), 2 * this.thresholds, 3 * this.thresholds + 1)} key={3} />
 			</ProgressBar>
     	)
     }

@@ -251,7 +251,7 @@ class DvHub extends Component {
 
 		return (
 		<Layout>
-			<h1>current power: { this.state.liveData }</h1>
+			<h1>current power: { this.state.liveData } watts</h1>
 			<h2>current date: { this.state.liveTime }</h2>		
   			<Thresholdbar value={(this.state.val  + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} />
 				<div align="center">

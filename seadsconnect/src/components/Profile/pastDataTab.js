@@ -1,5 +1,4 @@
 import React, { Component } from "react"
-import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import Media from 'react-bootstrap/Media'

@@ -7,13 +7,14 @@ import Row from 'react-bootstrap/Row'
 import Tab from 'react-bootstrap/Tab'
 
 import PastData from './pastDataTab'
+import AccountSettings from './accountSettings'
 import EnterRates from './enterRatesTab'
 
 export default class ProfileSideBar extends Component {
 	constructor(props) {
     	super(props);
 
-  	}
+  }
 
 	render() {
 		return (
@@ -41,7 +42,7 @@ export default class ProfileSideBar extends Component {
                   <PastData />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#link2">
-                  <PastData />
+                  <AccountSettings />
                 </Tab.Pane>
                 <Tab.Pane eventKey="#link3">
                   <EnterRates />
