@@ -40,7 +40,6 @@ export default class HomeCard extends Component {
 
   			<Card border="primary" bg="info" text="white">
 		      <Card.Img variant="top" />
-					
 		      <Card.Body>
 		        <Card.Title>OhmConnect</Card.Title>
 		        <Card.Text>

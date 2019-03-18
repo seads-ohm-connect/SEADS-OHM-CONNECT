@@ -118,8 +118,9 @@ class DvHub extends Component {
     	super(props);
 			this.state = {
 				val: 0,
-				m: 12,
-				thresh: 33,
+				m: 100,
+				liveData: 0, 
+				liveTime: new Date().toLocaleString(),
 				washerToggleOn: true,
 				dryerToggleOn: true,
 				ovenToggleOn: true,
@@ -128,18 +129,26 @@ class DvHub extends Component {
 				computerToggleOn: true
 			}
 
-			this.db = new Appliances();
+			this.tester = {
+				t: 10
+			}
 	}
 
-
+	getLocal(req) {
+    	const cachedHits = localStorage.getItem(req.name);
+        if (cachedHits)
+        	return parseFloat((JSON.parse(cachedHits)));
+        else 
+        	return req.kWh;
+    }
 
 
 	toggleWasher = () => {
 		if(this.state.washerToggleOn){
-			this.setState({val: this.state.val + this.db.washingMachineHot.kWh })
+			this.setState({val: this.state.val + this.getLocal(Appliances.washingMachineHot)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.washingMachineHot.kWh })
+			this.setState({val: this.state.val - this.getLocal(Appliances.washingMachineHot)})
 		}
 	}
 
@@ -149,10 +158,10 @@ class DvHub extends Component {
 
 	toggleDryer = () => {
 		if(this.state.dryerToggleOn){
-			this.setState({val: this.state.val + this.db.dryer.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.dryer)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.dryer.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.dryer)})
 		}
 	}
 
@@ -162,10 +171,10 @@ class DvHub extends Component {
 
 	toggleOven = () => {
 		if(this.state.ovenToggleOn){
-			this.setState({val: this.state.val + this.db.oven.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.oven)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.oven.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.oven)})
 		}
 	}
 
@@ -176,10 +185,10 @@ class DvHub extends Component {
 
 	toggleFridge = () => {
 		if(this.state.fridgeToggleOn){
-			this.setState({val: this.state.val + this.db.fridge.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.fridge)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.fridge.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.fridge)})
 		}
 	}
 
@@ -189,10 +198,10 @@ class DvHub extends Component {
 
 	toggleDishwasher = () => {
 		if(this.state.dishwasherToggleOn){
-			this.setState({val: this.state.val + this.db.dishwasher.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.dishwasher)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.dishwasher.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.dishwasher)})
 		}
 	}
 
@@ -202,15 +211,34 @@ class DvHub extends Component {
 
 	toggleComputer = () => {
 		if(this.state.computerToggleOn){
-			this.setState({val: this.state.val + this.db.computer.kWh})
+			this.setState({val: this.state.val + this.getLocal(Appliances.computer)})
 		}
 		else{
-			this.setState({val: this.state.val - this.db.computer.kWh})
+			this.setState({val: this.state.val - this.getLocal(Appliances.computer)})
 		}
 	}
 
 	changeColorComputer = () => {
 		this.setState({computerToggleOn: !this.state.computerToggleOn})
+	}
+
+	componentDidMount() {
+        this.interval = setInterval(() => this.updatePower(), 500);
+    }
+
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+	updatePower = () => {
+		var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
+		d3.json(liveUpdateURL).then( (liveDataa) => {
+			var watts = liveDataa.DataPoints[0].Power;
+			var currentTime = new Date().toLocaleString();
+			this.setState({liveData: watts });	
+			this.setState({liveTime: currentTime });
+		});
 	}
 
 	render() {
@@ -222,9 +250,10 @@ class DvHub extends Component {
 		let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
 
 		return (
-
 		<Layout>
-  			<Thresholdbar value={this.state.val} max={this.state.m} thresholds={this.state.thresh} />
+			<h1>current power: { this.state.liveData } watts</h1>
+			<h2>current date: { this.state.liveTime }</h2>		
+  			<Thresholdbar value={(this.state.val  + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} />
 				<div align="center">
 					<ButtonGroup>
 						<ButtonToolbar>

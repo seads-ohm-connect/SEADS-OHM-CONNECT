@@ -48,6 +48,8 @@ class LoginFormBase extends Component {
    	 .signInWithEmailAndPassword(email, password)
      .then(() => {
        this.setState({ ...INITIAL_STATE });
+       sessionStorage.setItem("signedIn", JSON.stringify(true));
+       this.context.router.history.push("/") 
      })
        .catch(error => {
        this.setState({ error });
