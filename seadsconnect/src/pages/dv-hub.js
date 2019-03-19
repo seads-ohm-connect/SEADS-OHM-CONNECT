@@ -123,10 +123,7 @@ class DvHub extends Component {
 		var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
 		d3.json(liveUpdateURL).then( (liveData) => {
 			var watts = liveData.DataPoints[0].Power;
-			/* The current time isn't pulling the time from the seads device.
-			 * Is this intended?
-			 */
-			var currentTime = new Date().toLocaleString();
+			var currentTime = new Date(liveData.DataPoints[0].Timestamp*1000).toLocaleString();
 			this.setState({liveData: watts });	
 			this.setState({liveTime: currentTime });
 		});
@@ -139,7 +136,7 @@ class DvHub extends Component {
 		
 		var x = d3.scaleLinear().range([0, width]);
 		var y = d3.scaleLinear().range([height, 0]);
-		var mode = "random";
+		var mode = "live";
 		
 		var currentData = this.state.savedData;
 		
