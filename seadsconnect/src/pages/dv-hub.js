@@ -141,7 +141,7 @@ class DvHub extends Component {
 	setValue(req, toggle) {
 
 		//if user not signed in just use values from database
-		if (!getFirebase().auth()) {
+		if (!getFirebase().auth().currentUser) {
 			if (toggle)
 				this.setState({val: this.state.val + watts});
 			else 
