@@ -40,7 +40,7 @@ class SignUpFormBase extends Component {
   validateForm() {
     return this.state.email.length > 0    && this.state.password.length > 0 &&
            this.state.address.length > 0  && this.state.city.length > 0     &&
-           this.state.zip.length > 0      && this.state.firstName > 0       &&
+           this.state.zip.length > 0      && this.state.firstName.length > 0       &&
            this.state.lastName.length > 0; 
   }
 

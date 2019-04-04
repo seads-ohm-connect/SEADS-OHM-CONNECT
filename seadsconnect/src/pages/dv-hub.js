@@ -139,6 +139,18 @@ class DvHub extends Component {
 	//queries the data base to see if there is a value enetered for the appliance.
 	//if not it uses the static database values
 	setValue(req, toggle) {
+
+		//if user not signed in just use values from database
+		if (!getFirebase().auth()) {
+			if (toggle)
+				this.setState({val: this.state.val + watts});
+			else 
+				this.setState({val: this.state.val - watts});
+
+			return;
+		}
+
+
 		var watts = req.watts;
 		var userId = getFirebase().auth().currentUser.uid;
 		var ref = getFirebase().database().ref('users/' + userId + '/appliances/' + req.name + '/watts');
