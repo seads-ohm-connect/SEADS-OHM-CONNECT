@@ -10,6 +10,7 @@ import PastData from './pastDataTab'
 import AccountSettings from './accountSettings'
 import EnterRates from './enterRatesTab'
 
+
 export default class ProfileSideBar extends Component {
 	constructor(props) {
     	super(props);

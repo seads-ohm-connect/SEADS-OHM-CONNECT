@@ -9,6 +9,8 @@ import { Button, Col, Row, Form } from "react-bootstrap"
 
 
 const INITIAL_STATE = {
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     passwordConfirm: "",
@@ -17,7 +19,6 @@ const INITIAL_STATE = {
     stateLoc: "",
     zip: "",
     seadsID : "",
-    ohmConnect: false,
     error: null,
 };
 
@@ -39,7 +40,8 @@ class SignUpFormBase extends Component {
   validateForm() {
     return this.state.email.length > 0    && this.state.password.length > 0 &&
            this.state.address.length > 0  && this.state.city.length > 0     &&
-           this.state.zip.length > 0;
+           this.state.zip.length > 0      && this.state.firstName > 0       &&
+           this.state.lastName.length > 0; 
   }
 
   validatePassword() {
@@ -53,13 +55,11 @@ class SignUpFormBase extends Component {
   }
 
   onSubmit = event => {
-    const { email, password, address, city, stateLoc, zip } = this.state;
-
-
-     getFirebase().auth().createUserWithEmailAndPassword(email, password)
+    const { firstName, lastName, email, password, address, city, stateLoc, zip, seadsID} = this.state;
+    getFirebase().auth().createUserWithEmailAndPassword(email, password)
       .then(authUser => {
         this.setState({...INITIAL_STATE});
-        alert("signed up");
+        this.writeUserData(firstName, lastName, email, address, city, stateLoc, zip, seadsID);
       })
       .catch(error => {
         this.setState({ error });
@@ -68,9 +68,29 @@ class SignUpFormBase extends Component {
     event.preventDefault();
   };
 
+  writeUserData(n_first, n_last, n_email, n_address, n_city, n_stateLoc, n_zip, n_seadsID) {
+    var db = getFirebase().database();
+    var userId = getFirebase().auth().currentUser.uid;
+
+    //write user data to realtime database
+    db.ref('users/' + userId).set({
+      firstName: n_first,
+      lastName: n_last,
+      email: n_email,
+      address: n_address,
+      city: n_city,
+      state: n_stateLoc,
+      zip: n_zip,
+      seadsID: n_seadsID,
+    });
+
+  }
+
   render() {
 
     const {
+      firstName,
+      lastName,
       email,
       password,
       passwordConfirm,
@@ -79,7 +99,6 @@ class SignUpFormBase extends Component {
       stateLoc,
       zip,
       seadsID,
-      ohmConnect,
       error,
     } = this.state;
 
@@ -91,14 +110,36 @@ class SignUpFormBase extends Component {
           <div className="Signup">
             <Form>
               <Row>
+                <Form.Group as={Col} controlId="firstName">
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Control
+                    autoFocus
+                    type="name"
+                    placeholder="Enter First Name"
+                    value={firstName}
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+
+                <Form.Group as={Col} controlId="lastName">
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control
+                    type="name"
+                    placeholder="Enter Last Name"
+                    value={lastName}
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+              </Row>
+
+              <Row>
                 <Form.Group as={Col} controlId="email">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
-                    autoFocus
-                      type="email"
-                      placeholder="Enter email"
-                      value={email}
-                      onChange={this.handleChange}
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={this.handleChange}
                   />
                 </Form.Group>
 
@@ -229,10 +270,6 @@ class SignUpFormBase extends Component {
                 </Form.Group>
 
               </Row>
-
-               <Form.Group id="ohmConnect">
-                  <Form.Check type="checkbox" label="Connect to OhmConnect" />
-               </Form.Group>
 
                 <Button
                   variant="primary"

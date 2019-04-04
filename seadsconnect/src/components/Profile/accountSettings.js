@@ -12,6 +12,8 @@ import Button from 'react-bootstrap/Button'
 import FormControl from 'react-bootstrap/FormControl'
 import DropdownButton  from 'react-bootstrap/DropdownButton'
 
+import getFirebase from '../firebase'
+
 export default class AccountSettings extends Component {
 	constructor(props) {
     	super(props);
@@ -67,12 +69,13 @@ export default class AccountSettings extends Component {
   	addEmail() {
 
   		let emails = [];
-  		for (var i = 0; i < this.state.numberOfEmail; ++i) {
+  		for (var i = 1; i < this.state.numberOfEmail; ++i) {
   			emails.push(
   				<Card.Body>
                 <InputGroup className="mb-3">
                   <FormControl
                     placeholder="Recipient's email"
+                    onChange={(e) => this.handleChange(e, i)}
                   />
                   <InputGroup.Append>
                     <Button variant="outline-danger" onClick={() => {this.setState({numberOfEmail: this.state.numberOfEmail - 1})}}>-</Button>
@@ -87,6 +90,7 @@ export default class AccountSettings extends Component {
           <InputGroup className="mb-3">
             <FormControl
               placeholder="Recipient's email"
+              onChange={(e) => this.handleChange(e, 0)}
             />
             <InputGroup.Append>
               <Button variant="outline-success" onClick={() => {this.setState({numberOfEmail: this.state.numberOfEmail + 1})}}>+</Button>
@@ -100,33 +104,36 @@ export default class AccountSettings extends Component {
   	addPhone() {
 
   		let phones = [];
-  		for (var i = 0; i < this.state.numberOfPhone - 1; ++i) {
-  			phones.push(
-  				<Card.Body>
-                <InputGroup className="mb-3">
-                  <FormControl
-                    placeholder="Recipient's phone #"
-                  />
-                  <InputGroup.Append>
-                    <Button variant="outline-danger" onClick={() => {this.setState({numberOfPhone: this.state.numberOfPhone - 1})}} >-</Button>
-                  </InputGroup.Append>
-                </InputGroup>
-                </Card.Body>
-  			);
-  		}
 
-  		phones.push(
-  		  <Card.Body>
+      phones.push(
+        <Card.Body>
           <InputGroup className="mb-3">
             <FormControl
               placeholder="Recipient's phone #"
+              onChange={(e) => this.handleChange(e, 0)}
             />
             <InputGroup.Append>
               <Button variant="outline-success" onClick={() => {this.setState({numberOfPhone: this.state.numberOfPhone + 1})}} >+</Button>
             </InputGroup.Append>
           </InputGroup>
+        </Card.Body>
+      );
+
+  		for (var i = 1; i < this.state.numberOfPhone; ++i) {
+  			phones.push(
+  				<Card.Body>
+            <InputGroup className="mb-3">
+              <FormControl
+                placeholder="Recipient's phone #"
+                onChange={(e) => this.handleChange(e, i)}
+              />
+              <InputGroup.Append>
+                <Button variant="outline-danger" onClick={() => {this.setState({numberOfPhone: this.state.numberOfPhone - 1})}} >-</Button>
+              </InputGroup.Append>
+            </InputGroup>
           </Card.Body>
-  	    );
+  			);
+  		}
 
   		return phones;
   	}
@@ -195,12 +202,13 @@ export default class AccountSettings extends Component {
   	addSEADSForm() {
 
   		let SEADS = [];
-  		for (var i = 0; i < this.state.numberOfSEADS - 1; ++i) {
+  		for (var i = 1; i < this.state.numberOfSEADS; ++i) {
   			SEADS.push(
   				<Card.Body>
                 <InputGroup className="mb-3">
                   <FormControl
                     placeholder="SEADS ID #"
+                    onChange={(e) => this.handleChange(e, i)}
                   />
                   <InputGroup.Append>
                     <Button variant="outline-danger" onClick={() => {this.setState({numberOfSEADS: this.state.numberOfSEADS - 1})}} >-</Button>
@@ -215,6 +223,7 @@ export default class AccountSettings extends Component {
           <InputGroup className="mb-3">
             <FormControl
               placeholder="SEADS ID #"
+              onChange={(e) => this.handleChange(e, 0)}
             />
             <InputGroup.Append>
               <Button variant="outline-success" onClick={() => {this.setState({numberOfSEADS: this.state.numberOfSEADS + 1})}} >+</Button>
@@ -224,6 +233,20 @@ export default class AccountSettings extends Component {
   	    );
   		return SEADS;
   	}
+
+  handleChange = (event, count) => {
+
+    var db = getFirebase().database();
+    var userId = getFirebase().auth().currentUser.uid;
+
+    //write appliance values to realtime database
+    db.ref('/users/' + userId + '/phoneAlerts').set({ 
+      [count]: event.target.value
+    });
+
+
+    this.setState({[event.target.id]: event.target.value});
+  }
 
 	render() {
 
@@ -272,6 +295,4 @@ export default class AccountSettings extends Component {
 			</Card>
 		)
 	}
-
-
 }

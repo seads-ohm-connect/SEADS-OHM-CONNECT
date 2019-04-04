@@ -9,6 +9,8 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert'
 
+import getFirebase from '../firebase'
+
 export default class Tips extends Component {
 
 
@@ -64,7 +66,7 @@ export default class Tips extends Component {
   			        <OverlayTrigger placement="right" overlay= {
   			          <Popover id="Dryer" title="Average Dryer">
   			            <p>
-  			              <strong>kWh:</strong> 3.0
+  			              <strong>Watts:</strong> 3.0
   			            </p>
   			            <p>
   			              <strong>$</strong>0.34
@@ -78,7 +80,7 @@ export default class Tips extends Component {
   			         <OverlayTrigger placement="right" overlay= {
   			          <Popover id="Washer" title="Average Washer">
   			            <p>
-  			              <strong>kWh:</strong> 6.3
+  			              <strong>Watts:</strong> 6.3
   			            </p>
   			            <p>
   			              <strong>$</strong>0.70
@@ -92,7 +94,7 @@ export default class Tips extends Component {
   			         <OverlayTrigger placement="right" overlay= {
   			          <Popover id="Oven" title="Average Oven">
   			            <p>
-  			              <strong>kWh:</strong> 2.3
+  			              <strong>Watts:</strong> 2.3
   			            </p>
   			            <p>
   			              <strong>$</strong>0.25
@@ -106,7 +108,7 @@ export default class Tips extends Component {
   			        <OverlayTrigger placement="right" overlay= {
   			          <Popover id="Dishwasher" title="Average Dishwasher">
   			            <p>
-  			              <strong>kWh:</strong> 1.58
+  			              <strong>Watts:</strong> 1.58
   			            </p>
   			            <p>
   			              <strong>$</strong>0.18
@@ -120,7 +122,7 @@ export default class Tips extends Component {
   			         <OverlayTrigger placement="right" overlay= {
   			          <Popover id="Fridge" title="Average Fridge">
   			            <p>
-  			              <strong>kWh:</strong> 0.07
+  			              <strong>Watts:</strong> 0.07
   			            </p>
   			            <p>
   			              <strong>$</strong>0.01
@@ -134,7 +136,7 @@ export default class Tips extends Component {
   			         <OverlayTrigger placement="right" overlay= {
   			          <Popover id="Computer" title="Average Computer">
   			            <p>
-  			              <strong>kWh:</strong> 0.15
+  			              <strong>Watts:</strong> 0.15
   			            </p>
   			            <p>
   			              <strong>$</strong>0.02

@@ -5,6 +5,8 @@ import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import { Button, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 
+import getFirebase from '../components/firebase'
+
 var d3 = require("d3");
 
 	/*
@@ -134,21 +136,36 @@ class DvHub extends Component {
 			}
 	}
 
-	getLocal(req) {
-    	const cachedHits = localStorage.getItem(req.name);
-        if (cachedHits)
-        	return parseFloat((JSON.parse(cachedHits)));
-        else 
-        	return req.kWh;
+	//queries the data base to see if there is a value enetered for the appliance.
+	//if not it uses the static database values
+	setValue(req, toggle) {
+		var watts = req.watts;
+		var userId = getFirebase().auth().currentUser.uid;
+		var ref = getFirebase().database().ref('users/' + userId + '/appliances/' + req.name + '/watts');
+		ref.once("value",snapshot => {
+			if (snapshot.exists()) {
+				if (toggle)
+					this.setState({val: this.state.val + parseFloat(snapshot.val())});
+				else
+					this.setState({val: this.state.val - parseFloat(snapshot.val())});
+			}
+			else {
+				if (toggle)
+					this.setState({val: this.state.val + watts});
+				else 
+					this.setState({val: this.state.val - watts});
+			}
+		});
     }
 
 
 	toggleWasher = () => {
+
 		if(this.state.washerToggleOn){
-			this.setState({val: this.state.val + this.getLocal(Appliances.washingMachineHot)})
+			this.setValue(Appliances.washingMachineHot, true);
 		}
 		else{
-			this.setState({val: this.state.val - this.getLocal(Appliances.washingMachineHot)})
+			this.setValue(Appliances.washingMachineHot, false);
 		}
 	}
 
@@ -158,10 +175,10 @@ class DvHub extends Component {
 
 	toggleDryer = () => {
 		if(this.state.dryerToggleOn){
-			this.setState({val: this.state.val + this.getLocal(Appliances.dryer)})
+			this.setValue(Appliances.dryer, true);
 		}
 		else{
-			this.setState({val: this.state.val - this.getLocal(Appliances.dryer)})
+			this.setValue(Appliances.dryer, false);
 		}
 	}
 
@@ -171,10 +188,10 @@ class DvHub extends Component {
 
 	toggleOven = () => {
 		if(this.state.ovenToggleOn){
-			this.setState({val: this.state.val + this.getLocal(Appliances.oven)})
+			this.setValue(Appliances.oven, true);
 		}
 		else{
-			this.setState({val: this.state.val - this.getLocal(Appliances.oven)})
+			this.setValue(Appliances.oven, false);
 		}
 	}
 
@@ -185,10 +202,10 @@ class DvHub extends Component {
 
 	toggleFridge = () => {
 		if(this.state.fridgeToggleOn){
-			this.setState({val: this.state.val + this.getLocal(Appliances.fridge)})
+			this.setValue(Appliances.fridge, true);
 		}
 		else{
-			this.setState({val: this.state.val - this.getLocal(Appliances.fridge)})
+			this.setValue(Appliances.fridge, false);
 		}
 	}
 
@@ -198,10 +215,10 @@ class DvHub extends Component {
 
 	toggleDishwasher = () => {
 		if(this.state.dishwasherToggleOn){
-			this.setState({val: this.state.val + this.getLocal(Appliances.dishwasher)})
+			this.setValue(Appliances.dishwasher, true);
 		}
 		else{
-			this.setState({val: this.state.val - this.getLocal(Appliances.dishwasher)})
+			this.setValue(Appliances.dishwasher, false);
 		}
 	}
 
@@ -211,10 +228,10 @@ class DvHub extends Component {
 
 	toggleComputer = () => {
 		if(this.state.computerToggleOn){
-			this.setState({val: this.state.val + this.getLocal(Appliances.computer)})
+			this.setValue(Appliances.computer, true);
 		}
 		else{
-			this.setState({val: this.state.val - this.getLocal(Appliances.computer)})
+			this.setValue(Appliances.computer, false);
 		}
 	}
 
@@ -235,7 +252,7 @@ class DvHub extends Component {
 		var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
 		d3.json(liveUpdateURL).then( (liveDataa) => {
 			var watts = liveDataa.DataPoints[0].Power;
-			var currentTime = new Date().toLocaleString();
+			var currentTime = new Date(liveDataa.DataPoints[0].Timestamp*1000).toLocaleString();
 			this.setState({liveData: watts });	
 			this.setState({liveTime: currentTime });
 		});
@@ -253,7 +270,7 @@ class DvHub extends Component {
 		<Layout>
 			<h1>current power: { this.state.liveData } watts</h1>
 			<h2>current date: { this.state.liveTime }</h2>		
-  			<Thresholdbar value={(this.state.val  + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} />
+  			<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
 				<div align="center">
 					<ButtonGroup>
 						<ButtonToolbar>
