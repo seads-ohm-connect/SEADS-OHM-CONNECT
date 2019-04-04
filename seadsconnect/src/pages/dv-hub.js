@@ -146,28 +146,27 @@ class DvHub extends Component {
 				this.setState({val: this.state.val + watts});
 			else 
 				this.setState({val: this.state.val - watts});
+		} 
+		else {
 
-			return;
+			var watts = req.watts;
+			var userId = getFirebase().auth().currentUser.uid;
+			var ref = getFirebase().database().ref('users/' + userId + '/appliances/' + req.name + '/watts');
+			ref.once("value",snapshot => {
+				if (snapshot.exists()) {
+					if (toggle)
+						this.setState({val: this.state.val + parseFloat(snapshot.val())});
+					else
+						this.setState({val: this.state.val - parseFloat(snapshot.val())});
+				}
+				else {
+					if (toggle)
+						this.setState({val: this.state.val + watts});
+					else 
+						this.setState({val: this.state.val - watts});
+				}
+			});
 		}
-
-
-		var watts = req.watts;
-		var userId = getFirebase().auth().currentUser.uid;
-		var ref = getFirebase().database().ref('users/' + userId + '/appliances/' + req.name + '/watts');
-		ref.once("value",snapshot => {
-			if (snapshot.exists()) {
-				if (toggle)
-					this.setState({val: this.state.val + parseFloat(snapshot.val())});
-				else
-					this.setState({val: this.state.val - parseFloat(snapshot.val())});
-			}
-			else {
-				if (toggle)
-					this.setState({val: this.state.val + watts});
-				else 
-					this.setState({val: this.state.val - watts});
-			}
-		});
     }
 
 
