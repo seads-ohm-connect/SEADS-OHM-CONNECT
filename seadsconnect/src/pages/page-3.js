@@ -76,12 +76,18 @@ class SignUpFormBase extends Component {
     db.ref('users/' + userId).set({
       firstName: n_first,
       lastName: n_last,
-      email: n_email,
       address: n_address,
       city: n_city,
       state: n_stateLoc,
-      zip: n_zip,
-      seadsID: n_seadsID,
+      zip: n_zip
+    });
+
+    db.ref('users/' + userId + "/emailAlerts").set({
+      email: n_email
+    });
+
+    db.ref('users/' + userId + "/seadsDevice").set({
+      seadsID: n_seadsID
     });
 
   }
