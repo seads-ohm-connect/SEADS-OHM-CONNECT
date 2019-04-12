@@ -4,13 +4,14 @@ import CardColumns from 'react-bootstrap/CardColumns'
 import Button from 'react-bootstrap/Button'
 import SeadsBanner from '../../images/seads-logotest.png'
 import OhmBanner from '../../images/ohmconnecttest.png'
+import Updater from "../Firebase/adminDBupdater"
 
 
 export default class HomeCard extends Component {
 
 	render() {
 		return (
-
+		<Updater>
 		<CardColumns>
 		   <Card border="primary" bg="info" text="white">
 						<Card.Img variant='top'/>
@@ -51,7 +52,8 @@ export default class HomeCard extends Component {
 		      </Card.Footer>
 					
 		    </Card>
-		</ CardColumns>
+		</CardColumns>
+		</Updater>
 		)
 	}
 
