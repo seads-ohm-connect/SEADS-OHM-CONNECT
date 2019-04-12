@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import { Button, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
+import GetDevice from "../components/Profile/getDeviceID"
 
 import getFirebase from '../components/firebase'
 
@@ -121,7 +122,7 @@ class DvHub extends Component {
 			this.state = {
 				val: 0,
 				m: 100,
-				liveData: 0, 
+				liveData: 0,
 				liveTime: new Date().toLocaleString(),
 				washerToggleOn: true,
 				dryerToggleOn: true,
@@ -130,10 +131,8 @@ class DvHub extends Component {
 				dishwasherToggleOn: true,
 				computerToggleOn: true
 			}
+			this.device = new GetDevice()
 
-			this.tester = {
-				t: 10
-			}
 	}
 
 	//queries the data base to see if there is a value enetered for the appliance.
@@ -145,9 +144,9 @@ class DvHub extends Component {
 		if (!getFirebase().auth().currentUser) {
 			if (toggle)
 				this.setState({val: this.state.val + watts});
-			else 
+			else
 				this.setState({val: this.state.val - watts});
-		} 
+		}
 		else {
 
 			var userId = getFirebase().auth().currentUser.uid;
@@ -162,7 +161,7 @@ class DvHub extends Component {
 				else {
 					if (toggle)
 						this.setState({val: this.state.val + watts});
-					else 
+					else
 						this.setState({val: this.state.val - watts});
 				}
 			});
@@ -251,7 +250,7 @@ class DvHub extends Component {
 	}
 
 	componentDidMount() {
-        this.interval = setInterval(() => this.updatePower(), 500);
+        this.interval = setInterval(() => this.updatePower(), 1000);
     }
 
 
@@ -259,15 +258,44 @@ class DvHub extends Component {
         clearInterval(this.interval);
     }
 
+	// updatePower = () => {
+	// 	var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
+	// 	d3.json(liveUpdateURL).then( (liveDataa) => {
+	// 		var watts = liveDataa.DataPoints[0].Power;
+	// 		var currentTime = new Date(liveDataa.DataPoints[0].Timestamp*1000).toLocaleString();
+	// 		this.setState({liveData: watts });
+	// 		this.setState({liveTime: currentTime });
+	// 	});
+	// }
+
+
+
 	updatePower = () => {
-		var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
-		d3.json(liveUpdateURL).then( (liveDataa) => {
-			var watts = liveDataa.DataPoints[0].Power;
-			var currentTime = new Date(liveDataa.DataPoints[0].Timestamp*1000).toLocaleString();
-			this.setState({liveData: watts });	
-			this.setState({liveTime: currentTime });
+		console.log("call update power");
+		this.device.findID().then( (id) => {
+				this.device.userDeviceId = id;
+				//console.log(id);
 		});
+		console.log("called findID");
+		console.log(this.device.userDeviceId);
+		this.device.findIndex(this.device.userDeviceId).then( (ind) => {
+				this.device.userDeviceIndex = ind;
+		});
+		console.log("called findIndex");
+		console.log(this.device.userDeviceIndex);
+		this.device.findPower(this.device.userDeviceIndex).then((powTime) => {
+			if(powTime){
+				this.device.liveData = powTime[0];
+				this.device.liveTime = powTime[1];
+			}
+		});
+		console.log("called findPower");
+		console.log(this.device.liveData);
+		this.setState({liveData: this.device.liveData});
+		this.setState({liveTime: this.device.liveTime});
 	}
+
+
 
 	render() {
 		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
@@ -280,7 +308,7 @@ class DvHub extends Component {
 		return (
 		<Layout>
 			<h1>current power: { this.state.liveData } watts</h1>
-			<h2>current date: { this.state.liveTime }</h2>		
+			<h2>current date: { this.state.liveTime }</h2>
   			<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
 				<div align="center">
 					<ButtonGroup>
