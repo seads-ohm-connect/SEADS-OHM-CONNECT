@@ -5,10 +5,12 @@
   "version": "0.1.0",
   "author": "Kyle Mathews <mathews.kyle@gmail.com>",
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap": "^4.3.0",
     "bootstrap-toggle": "^2.2.2",
     "child_process": "^1.0.2",
     "d3": "^5.9.1",
+    "dns": "^0.2.2",
     "firebase": "^5.8.2",
     "firebase-admin": "^7.2.0",
     "firebase-functions": "^2.2.1",
@@ -23,6 +25,7 @@
     "gatsby-transformer-sharp": "^2.1.13",
     "http2": "^3.3.7",
     "net": "^1.0.2",
+    "nodemailer": "^6.1.0",
     "prop-types": "^15.6.2",
     "react": "^16.8.2",
     "react-bootstrap": "^1.0.0-beta.5",
@@ -43,6 +46,7 @@
     "serve": "gatsby serve",
     "test": "echo \"Write tests! -> https://gatsby.app/unit-testing\""
   },
+  "proxy": "http://localhost:8000/",
   "repository": {
     "type": "git",
     "url": "https://github.com/gatsbyjs/gatsby-starter-default"

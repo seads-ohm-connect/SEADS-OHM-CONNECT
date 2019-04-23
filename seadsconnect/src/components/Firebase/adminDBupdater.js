@@ -1,7 +1,11 @@
 import React, { Component } from "react"
 import getFirebase from '../firebase'
+import GetDevice from "../Profile/getDeviceID"
+import sendMailAlert from "../Alerts/email"
+import Keys from '../../../keys'
 
 var d3 = require("d3");
+
 
 export default class Updater extends Component {
 	constructor(props) {
@@ -9,7 +13,11 @@ export default class Updater extends Component {
 
     	this.state = {
     		time: 30000, //updates every 30 seconds
+            liveData: 0,
+            liveTime: 0
     	}
+
+        this.adminId = Keys.ADMIN_KEY; //user  generated id from firebase
     }
 
 	componentDidMount() {
@@ -29,25 +37,63 @@ export default class Updater extends Component {
         var userId = getFirebase().auth().currentUser.uid;
         var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
 
+        if (userId !== this.adminId)
+            return;
+
+        var self = this;
+
         //admin will be able to read ever userId
-        db.ref('/users/').once('value', snapshot => {
+        db.ref('/users/').once('value').then(function(snapshot){
         	if (snapshot.exists()) {
         		//for each userid write the current watt data.
         		//will need to update this function to only  write if they have a seads device.
-        		snapshot.forEach(function(_child){
+        		snapshot.forEach((_child) =>{
             		var _userId = _child.key;
             		d3.json(liveUpdateURL).then( (liveDataa) => {
-            			var watts = liveDataa.DataPoints[0].Power;
-            			db.ref('/users/' + _userId + '/currentUsage/').set({
-            				realTimeWatts: watts
-            			});
+                        var device = new GetDevice();
+                        device.getSeadsData(_userId).then((powTime) => {
+                            if(powTime){
+                                device.liveData = powTime[0];
+                                device.liveTime = powTime[1];
+
+                                if (device.liveData < 0) {
+                                    return;
+                                }
+
+                                self.checkToSend(db, _userId, device.liveData);
+
+                                db.ref('/users/' + _userId + '/currentUsage/').set({
+                                    realTimeWatts: device.liveData
+                                });
+                            }
+                        });
             		});
             	});
         	}
         });
-
-    	//alert("test")
     }
+
+    //check to see if an alert is needed to be sent
+    checkToSend(db, userId, currentWatt){
+        //check to see if it is the users ohm hour
+        db.ref('/users/' + userId).once('value').then(function(snapshot) {
+            if (snapshot.exists()) {
+                if (snapshot.child('isOhmHour').val() === true) {
+                    //check to see if their current watt is above their threshold.
+                    if (snapshot.child('threshold').val() < currentWatt) {
+                        sendMailAlert('aberkson@ucsc.edu');
+                        //this is also where we would send phone alerts.
+
+                        //instead of updating ohm hour we will update a timestamp on last email sent
+                        db.ref('/users/' + userId).update({
+                            isOhmHour: false
+                        });
+                    }
+                }
+            }
+        });
+    }  
+
 
     render() {
     	return(<div />);
