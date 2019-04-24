@@ -124,8 +124,9 @@ class GetDevice {
           if(snapshot.exists()) {
             var emailList = '';
             snapshot.forEach(function(email) {
-              emailList = emailList + email.val() + " ";
+              emailList = emailList + email.val() + ",";
             });
+            emailList = emailList.slice(0, -1);
             return emailList;
           }
         });
