@@ -163,6 +163,12 @@ class DvHub extends Component {
 			}
 		});
 
+		this.device.getUserEmail(userID).then((emailList) => {
+				if(emailList){
+					console.log(emailList);
+				}
+		});
+
 		this.setState({liveData: this.device.liveData});
 		this.setState({liveTime: this.device.liveTime});
 	}

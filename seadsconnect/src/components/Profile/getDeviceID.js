@@ -112,16 +112,21 @@ class GetDevice {
       });
     }
 
-    //Getter method that retrieve the email of the account from Firebase
+    //Getter method that retrieves all of the emails of the account from Firebase
+    //and puts them in a list seperated by a single space
     async getUserEmail(userID){
       if( !getFirebase().auth().currentUser) {
         return 'NO EMAIL, MUST LOG IN';
       }
       else {
-        var ref = getFirebase().database().ref('users/' + userID + '/emailAlerts/email' );
+        var ref = getFirebase().database().ref('users/' + userID + '/emailAlerts' );
         return ref.once("value").then(function(snapshot) {
           if(snapshot.exists()) {
-            return snapshot.val();
+            var emailList = '';
+            snapshot.forEach(function(email) {
+              emailList = emailList + email.val() + " ";
+            });
+            return emailList;
           }
         });
       }
