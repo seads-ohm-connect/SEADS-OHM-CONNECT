@@ -2,6 +2,8 @@ import React, { Component } from "react"
 import { Link } from "gatsby"
 import { Navbar, Nav } from "react-bootstrap"
 import getFirebase from "../components/firebase"
+// import SEADSConnectLogo from "../images/seadsconnectlogo"
+
 //
 // export default () => (
 //
@@ -101,6 +103,8 @@ class NavBarHandler extends Component {
               </ul>
           </div>
         </nav>
+
+        
       )
     }
 }
