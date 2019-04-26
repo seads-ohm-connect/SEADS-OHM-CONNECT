@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import getFirebase from '../firebase'
 import GetDevice from "../Profile/getDeviceID"
-import sendMailAlert from "../Alerts/email"
+import sendMailAlert, { sendEmailWarning } from "../Alerts/email"
 import Keys from '../../../keys'
 
 var d3 = require("d3");
@@ -30,6 +30,7 @@ export default class Updater extends Component {
     }
 
     updateServer() {
+
     	if (!getFirebase().auth().currentUser)
     		return
 
@@ -60,7 +61,7 @@ export default class Updater extends Component {
                                     return;
                                 }
 
-                                self.checkToSend(db, _userId, device.liveData);
+                                self.checkToSend(self, device, db, _userId, device.liveData);
 
                                 db.ref('/users/' + _userId + '/currentUsage/').set({
                                     realTimeWatts: device.liveData
@@ -74,28 +75,55 @@ export default class Updater extends Component {
     }
 
     //check to see if an alert is needed to be sent
-    checkToSend(db, userId, currentWatt){
+    checkToSend(self, device, db, userId, currentWatt){
         //check to see if it is the users ohm hour
         db.ref('/users/' + userId).once('value').then(function(snapshot) {
             if (snapshot.exists()) {
-                if (snapshot.child('isOhmHour').val() === true) {
-                    //check to see if their current watt is above their threshold.
-                    if (snapshot.child('threshold').val() < currentWatt) {
-                        sendMailAlert('aberkson@ucsc.edu');
-                        //this is also where we would send phone alerts.
-
-                        //instead of updating ohm hour we will update a timestamp on last email sent
-                        db.ref('/users/' + userId).update({
-                            isOhmHour: false
-                        });
-                    }
-                }
+                self.overThreshold(device, snapshot, db, userId, currentWatt);
+                self.ohmHourApproaching(device, snapshot, db, userId);
             }
         });
+    }
+
+    overThreshold(device, snapshot, db, userId, currentWatt) {
+        if (snapshot.child('isOhmHour').val() === true) {
+            //check to see if their current watt is above their threshold.
+            if (snapshot.child('threshold').val() < currentWatt) {
+                device.getUserEmail(userId).then((emails) => {
+                    sendMailAlert(emails);
+    
+                    //instead of updating ohm hour we will update a timestamp on last email sent
+                    db.ref('/users/' + userId).update({
+                        isOhmHour: false
+                    });
+                });
+            }
+        }
+    }
+
+    ohmHourApproaching(device, snapshot, db, userId) {
+        var notifyTime = snapshot.child('notifyInAdvanceEmail').val();
+        if (notifyTime > 0) {
+            var currentTime = 0;
+            //going to want to convert ohmdate into minutes
+            console.log(notifyTime + " " + currentTime + " " + snapshot.child('ohmDate').val())
+            if (snapshot.child('ohmDate').val() === currentTime + notifyTime) {
+                device.getUserEmail(userId).then((emails) => {
+                    var hr  = Math.floor(notifyTime / 60);
+                    var min = notifyTime % 60;
+                    sendEmailWarning(emails, hr, min);
+    
+                    //instead of updating ohm hour we will update a timestamp on last email sent
+                    db.ref('/users/' + userId).update({
+                        notifyInAdvanceEmail: 0
+                    });
+                });
+            }
+        }
     }  
 
 
     render() {
-    	return(<div />);
+    	return(null);
     }
 }

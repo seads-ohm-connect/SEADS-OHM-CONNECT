@@ -11,8 +11,8 @@ export default class HomeCard extends Component {
 
 	render() {
 		return (
-		<Updater>
 		<CardColumns>
+				<Updater />
 		   <Card border="primary" bg="info" text="white">
 						<Card.Img variant='top'/>
 		      
@@ -53,7 +53,6 @@ export default class HomeCard extends Component {
 					
 		    </Card>
 		</CardColumns>
-		</Updater>
 		)
 	}
 

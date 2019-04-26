@@ -11,6 +11,7 @@ import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
 import FormControl from 'react-bootstrap/FormControl'
 import DropdownButton  from 'react-bootstrap/DropdownButton'
+import Nav  from 'react-bootstrap/Nav'
 
 import getFirebase from '../firebase'
 
@@ -19,22 +20,25 @@ export default class AccountSettings extends Component {
     	super(props);
 
     	this.state = {
-    		changeEmail   : false,
-    		setUpAlerts   : false,
-    		emailAlerts   : false,
-    		phoneAlerts   : false,
-    		changePw      : false,
-    		addSEADSDevice: false,
-    		connectOhm    : false,
-    		newEmail      : "",
-    		confirmEmail  : "",
+    		changeEmail    : false,
+    		setUpAlerts    : false,
+    		emailAlerts    : false,
+    		phoneAlerts    : false,
+    		changePw       : false,
+    		addSEADSDevice : false,
+    		connectOhm     : false,
+    		newEmail       : "",
+    		confirmEmail   : "",
 
-    		numberOfEmail : 0,
-    		numberOfPhone : 0,
-    		numberOfSEADS : 0,
+    		numberOfEmail  : 0,
+    		numberOfPhone  : 0,
+    		numberOfSEADS  : 0,
 
-        confirmToken  : "Update",
-        removeToken   : "Remove"
+        confirmToken   : "Update",
+        removeToken    : "Remove",
+
+        activeTimeEmail: "0",
+        activeTimePhone: "0"
     	}
   	}
 
@@ -116,11 +120,31 @@ export default class AccountSettings extends Component {
                   >{confirm}</Button>
                 </InputGroup.Append>
               </InputGroup>
-              </Card.Body>
+            </Card.Body>
           );
       });
 
   		let emails = [];
+
+      emails.push(
+        <Card.Body>
+        <Nav variant="pills" activeKey={this.state.activeTimeEmail} onSelect={k => this.handleSelectEmail(k)}>
+          <Nav.Item>
+            <Nav.Link eventKey="0">None</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="1">30 Mins</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="2">1 Hour</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="3">90 Mins</Nav.Link>
+          </Nav.Item>
+        </Nav>
+        </Card.Body>
+      )
+
   		for (var i = 0; i < 5; ++i) {
   		  createForm(i, setState, state);
       }
@@ -163,7 +187,6 @@ export default class AccountSettings extends Component {
       //creates a input form with three seperate blocks for a phone number
       var createForm = (function (ind, setState, state) {
         phones.push(
-        <div>
         <Card.Body>
           <InputGroup className="mb-3" style={{width: "100%"}}>
           <Row>
@@ -195,6 +218,7 @@ export default class AccountSettings extends Component {
                 onClick={(e) => {
                   var keys = [(`phone ${ind}`) + 1, (`phone ${ind}`) + 2, (`phone ${ind}`) + 3];
                   if (document.getElementById(`phone ${ind}`).innerHTML === confirm) {
+                    console.log('confirm clicked ' + ind)
                     self.saveToDB(keys, path, `phone ${ind}`);
                     self.setState({numberOfPhone: self.state.numberOfPhone + 1})
                   }
@@ -209,11 +233,30 @@ export default class AccountSettings extends Component {
             </Row>
           </InputGroup>
         </Card.Body>
-        </div>
         );
       });
 
       let phones = [];
+
+      phones.push(
+        <Card.Body>
+        <Nav variant="pills" activeKey={this.state.activeTimePhone} onSelect={k => this.handleSelectPhone(k)}>
+          <Nav.Item>
+            <Nav.Link eventKey="0">None</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="1">30 Mins</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="2">1 Hour</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link eventKey="3">90 Mins</Nav.Link>
+          </Nav.Item>
+        </Nav>
+        </Card.Body>
+      )
+
   		for (var i = 0; i < 5; ++i) {
         createForm(i, setState, state);
       }
@@ -348,6 +391,40 @@ export default class AccountSettings extends Component {
     this.setState({[event.target.id]: event.target.value});
   }
 
+  handleSelectEmail(eventKey) {
+
+    if (!getFirebase().auth().currentUser)
+      return;
+
+    var db = getFirebase().database();
+    var userId = getFirebase().auth().currentUser.uid;
+
+    this.setState({activeTime: eventKey});
+
+    var mins = parseInt(eventKey) * 30;
+
+    db.ref('/users/' + userId).update({ 
+      notifyInAdvanceEmail: mins
+    });
+  }
+
+  handleSelectPhone(eventKey) {
+
+    if (!getFirebase().auth().currentUser)
+      return;
+
+    var db = getFirebase().database();
+    var userId = getFirebase().auth().currentUser.uid;
+
+    this.setState({activeTime: eventKey});
+
+    var mins = parseInt(eventKey) * 30;
+
+    db.ref('/users/' + userId).update({ 
+      notifyInAdvancePhone: mins
+    });
+  }
+
 
   //writes user input to the specified path and changes the button from confirm to remove.
   saveToDB(input, path, buttonId) {
@@ -365,6 +442,8 @@ export default class AccountSettings extends Component {
         userInput += document.getElementById(input[x]).value;
     }
 
+
+    console.log(buttonId);
     db.ref('/users/' + userId + path).update({ 
       [buttonId]: userInput
     });

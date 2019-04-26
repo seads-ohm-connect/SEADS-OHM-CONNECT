@@ -1,5 +1,5 @@
+const Keys = require('../keys');
 const nodemailer = require('nodemailer');
-import Keys from './keys'
 //const config = require('../config/keys');
 
 const transporter = nodemailer.createTransport({
@@ -10,13 +10,18 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const mailOptions = {
+const mailOptionsAlert = {
     from: 'seadsconnectalert@gmail.com',
-    subject: 'Warning! Energy usage high!',
-    text: 'SEADConnect has detect a high amount of energy usage during your ohm our! Consider reducing power consumption.',
+    subject: 'Alert! Energy usage high!',
+};
+
+const mailOptionsWarning = {
+    from: 'seadsconnectalert@gmail.com',
+    subject: 'Up Comming OhmHour!'
 };
 
 module.exports = {
     transporter,
-    mailOptions,
+    mailOptionsAlert,
+    mailOptionsWarning
 };
