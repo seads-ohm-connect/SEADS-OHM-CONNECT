@@ -127,22 +127,25 @@ export default class AccountSettings extends Component {
   		let emails = [];
 
       emails.push(
-        <Card.Body>
-        <Nav variant="pills" activeKey={this.state.activeTimeEmail} onSelect={k => this.handleSelectEmail(k)}>
-          <Nav.Item>
-            <Nav.Link eventKey="0">None</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="1">30 Mins</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="2">1 Hour</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="3">90 Mins</Nav.Link>
-          </Nav.Item>
-        </Nav>
-        </Card.Body>
+        <div>      
+          <p1>Notify me of my OhmHour in advance by: </p1>
+          <Card.Body>
+          <Nav variant="pills" activeKey={this.state.activeTimeEmail} onSelect={k => this.handleSelectEmail(k)}>
+            <Nav.Item>
+              <Nav.Link eventKey="0">None</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="1">30 Mins</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="2">1 Hour</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="3">90 Mins</Nav.Link>
+            </Nav.Item>
+          </Nav>
+          </Card.Body>
+          </div>
       )
 
   		for (var i = 0; i < 5; ++i) {
@@ -239,22 +242,25 @@ export default class AccountSettings extends Component {
       let phones = [];
 
       phones.push(
-        <Card.Body>
-        <Nav variant="pills" activeKey={this.state.activeTimePhone} onSelect={k => this.handleSelectPhone(k)}>
-          <Nav.Item>
-            <Nav.Link eventKey="0">None</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="1">30 Mins</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="2">1 Hour</Nav.Link>
-          </Nav.Item>
-          <Nav.Item>
-            <Nav.Link eventKey="3">90 Mins</Nav.Link>
-          </Nav.Item>
-        </Nav>
+        <div>
+          <p1>Notify me of my OhmHour in advance by: </p1>
+          <Card.Body>
+          <Nav variant="pills" activeKey={this.state.activeTimePhone} onSelect={k => this.handleSelectPhone(k)}>
+            <Nav.Item>
+              <Nav.Link eventKey="0">None</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="1">30 Mins</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="2">1 Hour</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="3">90 Mins</Nav.Link>
+            </Nav.Item>
+          </Nav>
         </Card.Body>
+        </div>
       )
 
   		for (var i = 0; i < 5; ++i) {
