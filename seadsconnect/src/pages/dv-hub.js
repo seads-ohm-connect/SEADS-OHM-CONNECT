@@ -1,10 +1,11 @@
-import React, { Component } from "react"
+  import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
-import { Button, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
+import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
+
 
 import getFirebase from '../components/firebase'
 
@@ -183,8 +184,10 @@ class DvHub extends Component {
 
 		return (
 		<Layout>
-			<h1>current power: { this.state.liveData } watts</h1>
-			<h2>current date: { this.state.liveTime }</h2>
+			<Jumbotron>
+					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
+					<h2 align="center">Current Date: { this.state.liveTime }</h2>	
+			</Jumbotron>	
   			<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
 				<div align="center">
 					<ButtonGroup>
