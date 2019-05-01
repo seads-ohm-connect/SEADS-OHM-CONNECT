@@ -1,0 +1,38 @@
+{
+  "TEST": [
+    {
+      "Day": "Monday",
+      "Power": "300"
+    },
+
+    {
+      "Day": "Tuesday",
+      "Power": "400"
+    },
+
+    {
+      "Day": "Wednesday",
+      "Power": "350"
+    },
+
+    {
+      "Day": "Thusday",
+      "Power": "500"
+    },
+
+    {
+      "Day": "Friday",
+      "Power": "450"
+    },
+
+    {
+      "Day": "Saturday",
+      "Power": "350"
+    },
+
+    {
+      "Day": "Sunday",
+      "Power": "200"
+    }
+   ]
+}
