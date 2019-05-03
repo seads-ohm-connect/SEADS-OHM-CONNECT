@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
+import RealTimeGraph from "../Graphs/RealTime/realTimeGraph"
 import GetDevice from "../components/Profile/getDeviceID"
 
 
@@ -20,6 +21,7 @@ class DvHub extends Component {
 				m: 100,
 				liveData: 0,
 				liveTime: new Date().toLocaleString(),
+				savedData: [],
 				washerToggleOn: true,
 				dryerToggleOn: true,
 				ovenToggleOn: true,
@@ -147,6 +149,24 @@ class DvHub extends Component {
 
 	componentDidMount() {
         this.interval = setInterval(() => this.updatePower(), 1000);
+
+	    var width = 1000;
+		var height = 400;
+		var margin = {left: 80, right: 60, top:30, bottom:60};
+        var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset: 80, leftOffset: 130};
+        var dimensions = {margin, width, height};
+        /*
+          Svg is d3's canvas basically.
+          Declared here because svg is persistent and doesn't
+          need to be "drawn" every second.
+        */
+		var svg = d3.select("body")
+		  .append("svg")
+		  .attr("width", width + margin.left + margin.right)
+		  .attr("height", height + margin.left + margin.right)
+      
+        //draw the realtime graph once a second
+		setInterval(() => RealTimeGraph.drawGraph(svg, dimensions, TooltipValues, this, this.state.liveData), 1000);
     }
 
 
@@ -174,6 +194,7 @@ class DvHub extends Component {
 			this.setState({liveTime: currentTime});
 		}
 	}
+      
 
 	render() {
 		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
