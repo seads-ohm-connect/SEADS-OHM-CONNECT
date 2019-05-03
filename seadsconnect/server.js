@@ -18,7 +18,6 @@ app.get('/sendAlert', function(req, res) {
 
 //send email from server to notify when the user has an upcoming ohm hour
 app.get('/sendWarning', function(req, res) {
-	console.log('sdfsdf');
     mail.sendEmailWarning(req.query.email, req.query.hr, req.query.min);
 });
 

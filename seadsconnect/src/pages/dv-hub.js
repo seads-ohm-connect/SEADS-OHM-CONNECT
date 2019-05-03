@@ -5,6 +5,7 @@ import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
+import Training from "../components/Training/training"
 
 
 import getFirebase from '../components/firebase'
@@ -201,6 +202,7 @@ class DvHub extends Component {
 						</ButtonToolbar>
 					</ButtonGroup>
 				</div>
+			<Training />
   		</Layout>
 		)
 	}
