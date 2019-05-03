@@ -1,4 +1,4 @@
-  import React, { Component } from "react"
+import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
@@ -154,6 +154,7 @@ class DvHub extends Component {
         clearInterval(this.interval);
     }
 
+
 	updatePower = () => {
 
 		if (getFirebase().auth().currentUser) {
@@ -181,8 +182,9 @@ class DvHub extends Component {
 		let fridgeColor = this.state.fridgeToggleOn ? "outline-success" : "success";
 		let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
 		let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
-
+		
 		return (
+
 		<Layout>
 			<Jumbotron>
 					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
@@ -192,6 +194,7 @@ class DvHub extends Component {
 				<div align="center">
 					<ButtonGroup>
 						<ButtonToolbar>
+							<Button variant={washerColor} onClick={() => {this.updatePower()}} >Washer</Button>
 							<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
 							<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
 							<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
@@ -201,7 +204,7 @@ class DvHub extends Component {
 						</ButtonToolbar>
 					</ButtonGroup>
 				</div>
-  		</Layout>
+		</Layout>
 		)
 	}
 }
