@@ -1,11 +1,11 @@
-  import React, { Component } from "react"
+import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
+import RealTimeGraph from "../Graphs/RealTime/realTimeGraph"
 import GetDevice from "../components/Profile/getDeviceID"
-import Training from "../components/Training/training"
 
 
 import getFirebase from '../components/firebase'
@@ -21,6 +21,7 @@ class DvHub extends Component {
 				m: 100,
 				liveData: 0,
 				liveTime: new Date().toLocaleString(),
+				savedData: [],
 				washerToggleOn: true,
 				dryerToggleOn: true,
 				ovenToggleOn: true,
@@ -28,7 +29,7 @@ class DvHub extends Component {
 				dishwasherToggleOn: true,
 				computerToggleOn: true
 			}
-			this.device = new GetDevice()
+			this.device = new GetDevice();
 
 	}
 
@@ -148,12 +149,31 @@ class DvHub extends Component {
 
 	componentDidMount() {
         this.interval = setInterval(() => this.updatePower(), 1000);
+
+	    var width = 1000;
+		var height = 400;
+		var margin = {left: 80, right: 60, top:30, bottom:60};
+        var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset: 80, leftOffset: 130};
+        var dimensions = {margin, width, height};
+        /*
+          Svg is d3's canvas basically.
+          Declared here because svg is persistent and doesn't
+          need to be "drawn" every second.
+        */
+		var svg = d3.select("body")
+		  .append("svg")
+		  .attr("width", width + margin.left + margin.right)
+		  .attr("height", height + margin.left + margin.right)
+      
+        //draw the realtime graph once a second
+		setInterval(() => RealTimeGraph.drawGraph(svg, dimensions, TooltipValues, this, this.state.liveData, "#ff0000", "#ffb2b2"), 1000);
     }
 
 
     componentWillUnmount() {
         clearInterval(this.interval);
     }
+
 
 	updatePower = () => {
 
@@ -174,6 +194,7 @@ class DvHub extends Component {
 			this.setState({liveTime: currentTime});
 		}
 	}
+      
 
 	render() {
 		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
@@ -182,8 +203,9 @@ class DvHub extends Component {
 		let fridgeColor = this.state.fridgeToggleOn ? "outline-success" : "success";
 		let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
 		let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
-
+		
 		return (
+
 		<Layout>
 			<Jumbotron>
 					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
@@ -193,6 +215,7 @@ class DvHub extends Component {
 				<div align="center">
 					<ButtonGroup>
 						<ButtonToolbar>
+							<Button variant={washerColor} onClick={() => {this.updatePower()}} >Washer</Button>
 							<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
 							<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
 							<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
@@ -202,7 +225,6 @@ class DvHub extends Component {
 						</ButtonToolbar>
 					</ButtonGroup>
 				</div>
-			<Training />
   		</Layout>
 		)
 	}
