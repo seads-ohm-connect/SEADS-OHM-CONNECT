@@ -113,10 +113,10 @@ class DvHub extends Component {
 	componentDidMount() {
       this.interval = setInterval(() => this.updatePower(), 500);
         
-		var width = 1000;
-		var height = 400;
-		var margin = {left: 80, right: 60, top:30, bottom:60};
-      var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset = 80, leftOffset = 130};
+	  var width = 1000;
+      var height = 400;
+	  var margin = {left: 80, right: 60, top:30, bottom:60};
+      var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset: 80, leftOffset: 130};
       var dimensions = {margin, width, height};
       /*
         Svg is d3's canvas basically.
@@ -129,7 +129,7 @@ class DvHub extends Component {
 		    .attr("height", height + margin.left + margin.right)
       
       //draw the realtime graph once a second
-		setInterval(() => this.drawChart(svg, dimensions), 1000);
+		setInterval(() => this.drawChart(svg, dimensions, TooltipValues), 1000);
     }
 
 
@@ -147,7 +147,7 @@ class DvHub extends Component {
 		});
 	}
 	
-	drawChart = (svg, dimensions) => {
+	drawChart = (svg, dimensions, TooltipValues) => {
       //hard coded values for dimensions of the graph
       
 		var width = dimensions.width;
@@ -164,7 +164,7 @@ class DvHub extends Component {
 		var currentData = this.state.savedData;
 		
 		/* mode 1: random data  between 1 and 101 */
-		if (mode == "random") {
+		if (mode === "random") {
 			currentData[currentData.length]={"Second":currentData.length+1, "Energy":(Math.floor(Math.random()*100)+1)};
 		}
 		
@@ -172,7 +172,7 @@ class DvHub extends Component {
 		/* TODO: This assumes that data comes in consistently at once 
 		 * every second. This will not always be the case in real life.
 		 */
-		if (mode == "live") {
+		if (mode === "live") {
 			currentData[currentData.length]={"Second":currentData.length+1, "Energy":this.state.liveData};
 		}
 		
