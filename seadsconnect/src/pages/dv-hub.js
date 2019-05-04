@@ -2,11 +2,12 @@
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
-import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
+import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 
 
 import getFirebase from '../components/firebase'
+import { supportsGoWithoutReloadUsingHash } from "history/DOMUtils";
 
 var d3 = require("d3");
 
@@ -280,10 +281,26 @@ class DvHub extends Component {
 
 		return (
 		<Layout>
-			<Jumbotron>
-					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
-					<h2 align="center">Current Date: { this.state.liveTime }</h2>	
-			</Jumbotron>	
+			  <Container>
+					<Row>
+					<Col></Col>
+					<Col> 
+						<Card bg="info" className="text-center p-2" border="primary" style={CardStyle}>
+							<h1>Current Usage:</h1>
+							<Container>
+								<Row>
+									<Col></Col>
+									<Col><div class="dot" style={liveWattsCircle} align="center"> { this.state.liveData } watts </div></Col>
+									<Col></Col>
+								</Row>
+							</Container>
+						</Card>
+					</Col>
+					<Col></Col>
+					</Row>
+				</Container>
+
+				<h2 align="center">Current Date: { this.state.liveTime }</h2>
   			<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
 				<div align="center">
 					<ButtonGroup>
@@ -302,5 +319,23 @@ class DvHub extends Component {
 	}
 }
 
+const CardStyle = {
+	width: '25rem',
+	color: 'white'
+}
+
+const liveWattsBox = {
+	top: 15,
+	height: 250,
+	width: 325,
+};
+
+const liveWattsCircle = {
+	height: 200,
+	width: 200, 
+
+	borderRadius: 95,
+	fontSize: 65,
+}
 
 export default DvHub
