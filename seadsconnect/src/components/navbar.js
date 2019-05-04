@@ -90,6 +90,9 @@ class NavBarHandler extends Component {
                   <li class="nav-item active">
                       <a class="nav-link" href="/dv-hub/">Metrics</a>
                   </li>
+                  <li class="nav-item active">
+                      <a class="nav-link" href="/training-module/">Training</a>
+                  </li>                  
               </ul>
           </div>
           <div class="navbar-collaps order-3 dual-collapse2">
