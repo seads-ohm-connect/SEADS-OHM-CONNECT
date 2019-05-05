@@ -238,7 +238,7 @@ class DvHub extends Component {
 		/* TODO(jordan): This assumes that data comes in consistently at once 
 		 * every second. This will not always be the case in real life.
 		 */
-            console.log(this.state.liveTime);
+      console.log(this.state.liveTime);
 		if (mode === "live") {
          //this assumes at least something is on. maybe we shouldn't do that?
          if (this.state.liveTime == "12/31/1969, 4:00:00 PM") {
