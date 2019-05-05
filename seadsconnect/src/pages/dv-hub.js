@@ -18,6 +18,15 @@ class DvHub extends Component {
 				thresh: 33,
 				liveData: 0, 
 				savedData: [],
+            /* is this reasonable?
+              monthdata:
+              {
+                 month: {days:28, energy: []} 
+              }
+            */
+            monthData: {
+               "May2019" : {days: 0, Energy: []}
+            },
 				liveTime: new Date(0).toLocaleString(),
 				washerToggleOn: true,
 				dryerToggleOn: true,
@@ -116,7 +125,7 @@ class DvHub extends Component {
 		var width = 1000;
 		var height = 400;
 		var margin = {left: 80, right: 60, top:30, bottom:60};
-      var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset = 80, leftOffset = 130};
+      var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset: 80, leftOffset: 130};
       var dimensions = {margin, width, height};
       /*
         Svg is d3's canvas basically.
@@ -127,9 +136,16 @@ class DvHub extends Component {
 		  .append("svg")
 		    .attr("width", width + margin.left + margin.right)
 		    .attr("height", height + margin.left + margin.right)
+		var svg2 = d3.select("body")
+		  .append("svg")
+		    .attr("width", width + margin.left + margin.right)
+		    .attr("height", height + margin.left + margin.right)
       
       //draw the realtime graph once a second
-		setInterval(() => this.drawChart(svg, dimensions), 1000);
+		setInterval(() => this.drawChart(svg, dimensions, TooltipValues), 1000);
+      this.drawChart(svg, dimensions, TooltipValues);
+      this.updateMonthData();
+      this.drawMonthChart(svg2, dimensions);
     }
 
 
@@ -141,13 +157,63 @@ class DvHub extends Component {
 		var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
 		d3.json(liveUpdateURL).then( (liveData) => {
 			var watts = liveData.DataPoints[0].Power;
+         //temporary solution to not see the seads plug device in baskin
+         if (watts == 0)
+            return;
 			var currentTime = new Date(liveData.DataPoints[0].Timestamp*1000).toLocaleString();
+         var currentData = this.state.savedData;
+         //  This ensures that only new data will get saved
+         //by checking the latest time saved and updated time.
+         //  Also, if no data saved yet, check to see if we got response
+         if (currentData.length > 0) {
+           if (currentTime == currentData[currentData.length-1].Second)
+             return;
+         }
+         else {
+            if (currentTime == "12/31/1969, 4:00:00 PM")
+               return;
+         }
 			this.setState({liveData: watts });	
 			this.setState({liveTime: currentTime });
 		});
 	}
+   
+   updateMonthData = () => {
+      //this data is to be replaced when real data from the SEADS team is given
+      var month = 3
+      var numDays = 31;
+      var monthData = this.state.monthData;
+      var month = "May2019";
+      for (var i = 0; i < Math.round(numDays); i++) {
+         monthData[month].Energy[i] = Math.round(Math.random() * 1500);
+      }
+      monthData[month].days = monthData[month].Energy.length;
+      this.setState({monthData : monthData});
+      console.log(this.state.monthData);
+   }
 	
-	drawChart = (svg, dimensions) => {
+   drawMonthChart = (svg, dimensions) => {
+      //style is slightly different in this this one compared to live graph
+      //should probably change 
+      var width = dimensions.width;
+      var height = dimensions.height;
+      var margin = dimensions.margin;
+      //month we are currently working on. make this dynamic somehow
+      var month = "May2019";
+      
+		var x = d3.scaleLinear().range([0, width]);
+		var y = d3.scaleLinear().range([height, 0]);
+      
+      var savedData = this.state.monthData;
+      var energyData = savedData[month].Energy;
+      
+      x.domain(0, savedData[month].days);
+      y.domain(0, d3.max(d3.values(savedData[month].Energy)));
+      
+      var bars = svg.selectAll("bars");
+   }
+   
+	drawChart = (svg, dimensions, TooltipValues) => {
       //hard coded values for dimensions of the graph
       
 		var width = dimensions.width;
@@ -159,21 +225,38 @@ class DvHub extends Component {
 		var y = d3.scaleLinear().range([height, 0]);
       
       /* Probably remove this and just detect is the graph is live */
-		var mode = "random";
+		var mode = "live";
 		
 		var currentData = this.state.savedData;
 		
 		/* mode 1: random data  between 1 and 101 */
-		if (mode == "random") {
+		if (mode === "random") {
 			currentData[currentData.length]={"Second":currentData.length+1, "Energy":(Math.floor(Math.random()*100)+1)};
 		}
 		
 		/* mode 2: based on live data */
-		/* TODO: This assumes that data comes in consistently at once 
+		/* TODO(jordan): This assumes that data comes in consistently at once 
 		 * every second. This will not always be the case in real life.
 		 */
-		if (mode == "live") {
-			currentData[currentData.length]={"Second":currentData.length+1, "Energy":this.state.liveData};
+            console.log(this.state.liveTime);
+		if (mode === "live") {
+         //this assumes at least something is on. maybe we shouldn't do that?
+         if (this.state.liveTime == "12/31/1969, 4:00:00 PM") {
+            return;
+            currentData[0] = {"Second": 0, "Energy":this.state.liveData,"unixtime":this.state.liveTime};
+         }
+         else {
+            console.log(this.state.liveTime);
+           //TODO(jordan): updates made below make tooltip location inaccurate.
+           //Make sure that tooltips work correctly after below updates are made
+           if (currentData.length != 0 && currentData[currentData.length-1].unixtime == this.state.liveTime) {
+              //don't update the graph because no new information
+           }
+           else { //updates the graph
+             console.log(currentData[currentData.length-1]);
+			    currentData[currentData.length]={"Second":currentData.length+1, "Energy":this.state.liveData, "unixtime":this.state.liveTime};
+           }
+         }
 		}
 		
 		this.setState({savedData : currentData});
@@ -187,14 +270,13 @@ class DvHub extends Component {
       //d3.selectAll("path").remove();
       //if (path) path.remove();
 		  
-      //
+      
 		var areaFill = d3.area()
         .curve(d3.curveMonotoneX) //curveLinear, curveStep, curveCardinal, curveMonotoneX, d3.curveCatmullRom work
 		  .x(function(d) { return x(d.Second); })
 		  .y(function(d) { return y(d.Energy); })
 		  .y1(height);
 		
-      //declare svg
 		
       //the line of the graph
 		var path = svg.append("path")
@@ -301,7 +383,7 @@ class DvHub extends Component {
          var mouseAtIndex = Math.round((parseFloat(x)/dimensions.width)*numIndexes)
          var indexXPosition = mouseAtIndex * (dimensions.width/numIndexes)
          var energy = currentData[mouseAtIndex].Energy;
-         var time = currentData[mouseAtIndex].Second;
+         var time = currentData[mouseAtIndex].unixtime;
          var maxEnergy = d3.max(currentData, function(d) {return d.Energy;})
          var indexYPosition = (1-parseFloat(energy)/maxEnergy)*dimensions.height
          
