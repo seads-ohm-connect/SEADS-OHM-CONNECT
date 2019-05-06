@@ -1,16 +1,12 @@
-import React, { Component } from "react"
+  import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
-import RealTimeGraph from "../Graphs/RealTime/realTimeGraph"
-import GetDevice from "../components/Profile/getDeviceID"
 
 
 import getFirebase from '../components/firebase'
-import { supportsGoWithoutReloadUsingHash } from "history/DOMUtils";
-
 var d3 = require("d3");
 
 //Thresholdbar: Change pass watts into value and change max to what ever you want.
@@ -20,9 +16,8 @@ class DvHub extends Component {
 			this.state = {
 				val: 0,
 				m: 100,
-				liveData: 0,
+				liveData: 0, 
 				liveTime: new Date().toLocaleString(),
-				savedData: [],
 				washerToggleOn: true,
 				dryerToggleOn: true,
 				ovenToggleOn: true,
@@ -30,8 +25,10 @@ class DvHub extends Component {
 				dishwasherToggleOn: true,
 				computerToggleOn: true
 			}
-			this.device = new GetDevice();
 
+			this.tester = {
+				t: 10
+			}
 	}
 
 	//queries the data base to see if there is a value enetered for the appliance.
@@ -43,9 +40,9 @@ class DvHub extends Component {
 		if (!getFirebase().auth().currentUser) {
 			if (toggle)
 				this.setState({val: this.state.val + watts});
-			else
+			else 
 				this.setState({val: this.state.val - watts});
-		}
+		} 
 		else {
 
 			var userId = getFirebase().auth().currentUser.uid;
@@ -60,7 +57,7 @@ class DvHub extends Component {
 				else {
 					if (toggle)
 						this.setState({val: this.state.val + watts});
-					else
+					else 
 						this.setState({val: this.state.val - watts});
 				}
 			});
@@ -149,25 +146,7 @@ class DvHub extends Component {
 	}
 
 	componentDidMount() {
-        this.interval = setInterval(() => this.updatePower(), 1000);
-
-	    var width = 1000;
-		var height = 400;
-		var margin = {left: 80, right: 60, top:30, bottom:60};
-        var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset: 80, leftOffset: 130};
-        var dimensions = {margin, width, height};
-        /*
-          Svg is d3's canvas basically.
-          Declared here because svg is persistent and doesn't
-          need to be "drawn" every second.
-        */
-		var svg = d3.select("body")
-		  .append("svg")
-		  .attr("width", width + margin.left + margin.right)
-		  .attr("height", height + margin.left + margin.right)
-      
-        //draw the realtime graph once a second
-		setInterval(() => RealTimeGraph.drawGraph(svg, dimensions, TooltipValues, this, this.state.liveData, "#ff0000", "#ffb2b2"), 1000);
+        this.interval = setInterval(() => this.updatePower(), 500);
     }
 
 
@@ -175,27 +154,15 @@ class DvHub extends Component {
         clearInterval(this.interval);
     }
 
-
 	updatePower = () => {
-
-		if (getFirebase().auth().currentUser) {
-			var userID = getFirebase().auth().currentUser.uid;
-			this.device.getSeadsData(userID).then((powTime) => {
-				if(powTime){
-					this.device.liveData = powTime[0];
-					this.device.liveTime = powTime[1];
-				}
-			});
-	
-			this.setState({liveData: this.device.liveData});
-			this.setState({liveTime: this.device.liveTime});
-		}
-		else {
-			var currentTime = new Date().toLocaleString();
-			this.setState({liveTime: currentTime});
-		}
+		var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
+		d3.json(liveUpdateURL).then( (liveDataa) => {
+			var watts = liveDataa.DataPoints[0].Power;
+			var currentTime = new Date(liveDataa.DataPoints[0].Timestamp*1000).toLocaleString();
+			this.setState({liveData: watts });	
+			this.setState({liveTime: currentTime });
+		});
 	}
-      
 
 	render() {
 		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
@@ -204,9 +171,8 @@ class DvHub extends Component {
 		let fridgeColor = this.state.fridgeToggleOn ? "outline-success" : "success";
 		let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
 		let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
-		
-		return (
 
+		return (
 		<Layout>
 			  <Container>
 					<Row>
@@ -232,7 +198,6 @@ class DvHub extends Component {
 				<div align="center">
 					<ButtonGroup>
 						<ButtonToolbar>
-							<Button variant={washerColor} onClick={() => {this.updatePower()}} >Washer</Button>
 							<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
 							<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
 							<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
@@ -261,7 +226,6 @@ const liveWattsBox = {
 const liveWattsCircle = {
 	height: 200,
 	width: 200, 
-
 	borderRadius: 95,
 	fontSize: 65,
 }

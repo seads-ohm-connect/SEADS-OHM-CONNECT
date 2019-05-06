@@ -15,20 +15,12 @@
     "firebase-admin": "^7.2.0",
     "firebase-functions": "^2.2.1",
     "fs": "0.0.1-security",
-<<<<<<< HEAD
-    "gatsby": "^2.4.2",
-=======
     "gatsby": "^2.3.16",
->>>>>>> 7944990165325ce69f774a9f694e774327789493
     "gatsby-image": "^2.0.29",
     "gatsby-plugin-manifest": "^2.0.17",
     "gatsby-plugin-offline": "^2.0.24",
     "gatsby-plugin-react-helmet": "^3.0.6",
-<<<<<<< HEAD
-    "gatsby-plugin-sharp": "^2.0.36",
-=======
     "gatsby-plugin-sharp": "^2.0.33",
->>>>>>> 7944990165325ce69f774a9f694e774327789493
     "gatsby-source-filesystem": "^2.0.23",
     "gatsby-transformer-sharp": "^2.1.13",
     "http2": "^3.3.7",
