@@ -281,8 +281,9 @@ class DvHub extends Component {
 					<Row>
 					<Col></Col>
 					<Col> 
-						<Card className="text-center p-2" border="primary" style={CardStyle}>
-							<h1>Current Usage:</h1>
+						<Card className="text-center" border="info" style={cardStyle}>
+							<Card.Header class="p-3 mb-2 bg-info text-white" style={cardHeaderStyle}><h1>Current Usage</h1></Card.Header>
+							<Card.Body>
 							<Container>
 								<Row>
 									<Col></Col>
@@ -295,6 +296,7 @@ class DvHub extends Component {
 									<Col></Col>
 								</Row>
 							</Container>
+							</Card.Body>
 						</Card>
 					</Col>
 					<Col></Col>
@@ -320,8 +322,12 @@ class DvHub extends Component {
 	}
 }
 
-const CardStyle = {
+const cardStyle = {
 	width: '25rem',
+}
+
+const cardHeaderStyle = {
+	fontSize: 40
 }
 
 const liveWattsCircle = {
