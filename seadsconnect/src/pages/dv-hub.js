@@ -299,6 +299,25 @@ class DvHub extends Component {
 							</Card.Body>
 						</Card>
 					</Col>
+					<Col> 
+						<Card className="text-center" border="info" style={cardStyle}>
+							<Card.Header class="p-3 mb-2 bg-warning text-white" style={cardHeaderStyle}><h1>Target</h1></Card.Header>
+							<Card.Body>
+							<Container>
+								<Row>
+									<Col></Col>
+									<Col>
+										<div class="dot" class="p-3 mb-2 bg-warning text-white" style={liveWattsCircle} align="center">
+											<h1 style={liveDataStyle}>{ this.state.liveData }</h1>
+											<h1>watts</h1>
+										</div>
+									</Col>
+									<Col></Col>
+								</Row>
+							</Container>
+							</Card.Body>
+						</Card>
+					</Col>
 					<Col></Col>
 					</Row>
 				</Container>
@@ -323,7 +342,7 @@ class DvHub extends Component {
 }
 
 const cardStyle = {
-	width: '25rem',
+	width: '20rem',
 }
 
 const cardHeaderStyle = {
