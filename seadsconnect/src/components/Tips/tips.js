@@ -9,7 +9,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Alert from 'react-bootstrap/Alert'
 
-import getFirebase from '../firebase'
+import getFirebase from '../Firebase'
 
 export default class Tips extends Component {
 

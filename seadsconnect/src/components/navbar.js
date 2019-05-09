@@ -1,7 +1,7 @@
 import React, { Component } from "react"
 import { Link } from "gatsby"
 import { Navbar, Nav } from "react-bootstrap"
-import getFirebase from "../components/firebase"
+import getFirebase from "../components/Firebase"
 // import SEADSConnectLogo from "../images/seadsconnectlogo"
 
 //

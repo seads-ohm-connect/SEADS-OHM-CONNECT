@@ -4,7 +4,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 import { withFirebase } from '../components/Firebase'
-import getFirebase from '../components/firebase'
+import getFirebase from '../components/Firebase'
 import { Button, Col, Row, Form } from "react-bootstrap"
 
 

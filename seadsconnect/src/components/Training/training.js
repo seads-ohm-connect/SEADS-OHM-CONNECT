@@ -11,7 +11,7 @@ import Form from 'react-bootstrap/Form'
 
 
 import RealTimeGraph from "../../Graphs/RealTime/realTimeGraph"
-import getFirebase from '../firebase'
+import getFirebase from '../Firebase'
 import GetDevice from "../Profile/getDeviceID"
 
 
