@@ -1,10 +1,12 @@
-  import React, { Component } from "react"
+import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
+import 'bootstrap/dist/css/bootstrap.css';
 import Appliances from "../Graphs/DragGraph/appliances"
 import getFirebase from '../components/firebase'
+
 var d3 = require("d3");
 
 	/*
@@ -279,10 +281,20 @@ class DvHub extends Component {
 		<Layout>
 			  <Container>
 					<Row>
-					<Col></Col>
-					<Col> 
-						<Card className="text-center" border="info" style={cardStyle}>
-							<Card.Header class="p-3 mb-2 bg-info text-white" style={cardHeaderStyle}><h1>Current Usage</h1></Card.Header>
+						<Col></Col>
+						<Col>
+							<Card className="text-center" border="info" style={ohmHourCard}>
+								<Card.Header class="p-3 mb-2 bg-success text-white" style={ohmHourHeaderStyle}><h4>OhmHour</h4></Card.Header>
+								<Card.Body>Upcoming OhmHour will go here when we get the API working </Card.Body>
+							</Card>
+						</Col>
+						<Col></Col>
+					</Row>
+					<Row>
+						<Col></Col>
+						<Col> 
+							<Card className="text-center" border="info" style={wattsCard}>
+							<Card.Header class="p-3 mb-2 bg-info text-white" style={dataHeaderStyle}><h1>Current Usage</h1></Card.Header>
 							<Card.Body>
 							<Container>
 								<Row>
@@ -298,27 +310,27 @@ class DvHub extends Component {
 							</Container>
 							</Card.Body>
 						</Card>
-					</Col>
-					<Col> 
-						<Card className="text-center" border="info" style={cardStyle}>
-							<Card.Header class="p-3 mb-2 bg-warning text-white" style={cardHeaderStyle}><h1>Target</h1></Card.Header>
-							<Card.Body>
-							<Container>
-								<Row>
-									<Col></Col>
-									<Col>
-										<div class="dot" class="p-3 mb-2 bg-warning text-white" style={liveWattsCircle} align="center">
-											<h1 style={liveDataStyle}>{ this.state.liveData }</h1>
-											<h1>watts</h1>
-										</div>
-									</Col>
-									<Col></Col>
-								</Row>
-							</Container>
-							</Card.Body>
-						</Card>
-					</Col>
-					<Col></Col>
+						</Col>
+						<Col> 
+							<Card className="text-center" border="info" style={wattsCard}>
+								<Card.Header class="p-3 mb-2 bg-warning text-white" style={dataHeaderStyle}><h1>Target</h1></Card.Header>
+								<Card.Body>
+								<Container>
+									<Row>
+										<Col></Col>
+										<Col>
+											<div class="dot" class="p-3 mb-2 bg-warning text-white" style={liveWattsCircle} align="center">
+												<h1 style={liveDataStyle}>{ this.state.liveData }</h1>
+												<h1>watts</h1>
+											</div>
+										</Col>
+										<Col></Col>
+									</Row>
+								</Container>
+								</Card.Body>
+							</Card>
+						</Col>
+						<Col></Col>
 					</Row>
 				</Container>
 
@@ -341,18 +353,25 @@ class DvHub extends Component {
 	}
 }
 
-const cardStyle = {
+const wattsCard = {
 	width: '20rem',
 }
 
-const cardHeaderStyle = {
+const ohmHourCard = {
+	width: '42rem'
+}
+const dataHeaderStyle = {
 	fontSize: 40
+}
+
+const ohmHourHeaderStyle = {
+	fontSize: 15
 }
 
 const liveWattsCircle = {
 	height: 200,
 	width: 200, 
-	borderRadius: 95,
+	borderRadius: 100,
 }
 
 const liveDataStyle = {
