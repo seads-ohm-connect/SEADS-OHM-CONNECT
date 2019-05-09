@@ -5,6 +5,9 @@ import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.css';
 import Appliances from "../Graphs/DragGraph/appliances"
+import GetDevice from "../components/Profile/getDeviceID"
+
+
 import getFirebase from '../components/firebase'
 
 var d3 = require("d3");
@@ -131,9 +134,8 @@ class DvHub extends Component {
 				computerToggleOn: true
 			}
 
-			this.tester = {
-				t: 10
-			}
+			this.device = new GetDevice();
+
 	}
 
 	//queries the data base to see if there is a value enetered for the appliance.
@@ -260,13 +262,23 @@ class DvHub extends Component {
     }
 
 	updatePower = () => {
-		var liveUpdateURL = new String("http://seadsone.soe.ucsc.edu:8000/api/seads/power/last");
-		d3.json(liveUpdateURL).then( (liveDataa) => {
-			var watts = liveDataa.DataPoints[0].Power;
-			var currentTime = new Date(liveDataa.DataPoints[0].Timestamp*1000).toLocaleString();
-			this.setState({liveData: watts });	
-			this.setState({liveTime: currentTime });
-		});
+
+		if (getFirebase().auth().currentUser) {
+			var userID = getFirebase().auth().currentUser.uid;
+			this.device.getSeadsData(userID).then((powTime) => {
+				if(powTime){
+					this.device.liveData = powTime[0];
+					this.device.liveTime = powTime[1];
+				}
+			});
+	
+			this.setState({liveData: this.device.liveData});
+			this.setState({liveTime: this.device.liveTime});
+		}
+		else {
+			var currentTime = new Date().toLocaleString();
+			this.setState({liveTime: currentTime});
+		}
 	}
 
 	render() {
