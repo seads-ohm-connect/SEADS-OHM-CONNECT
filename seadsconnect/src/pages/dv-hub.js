@@ -2,14 +2,13 @@
 import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
-import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup} from "react-bootstrap"
+import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
 import GetOhmData from "../components/Profile/OhmConnect"
 
 
 import getFirebase from '../components/firebase'
-
 var d3 = require("d3");
 
 //Thresholdbar: Change pass watts into value and change max to what ever you want.
@@ -28,8 +27,10 @@ class DvHub extends Component {
 				dishwasherToggleOn: true,
 				computerToggleOn: true
 			}
+
 			this.device = new GetDevice()
       this.ohmData = new GetOhmData()
+
 	}
 
 	//queries the data base to see if there is a value enetered for the appliance.
@@ -147,7 +148,7 @@ class DvHub extends Component {
 	}
 
 	componentDidMount() {
-        this.interval = setInterval(() => this.updatePower(), 1000);
+        this.interval = setInterval(() => this.updatePower(), 500);
     }
 
 
@@ -188,10 +189,12 @@ class DvHub extends Component {
 
 		return (
 		<Layout>
+
 			<Jumbotron>
 					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
 					<h2 align="center">Current Date: { this.state.liveTime }</h2>
 			</Jumbotron>
+
   			<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
 				<div align="center">
 					<ButtonGroup>
@@ -210,5 +213,22 @@ class DvHub extends Component {
 	}
 }
 
+const CardStyle = {
+	width: '25rem',
+	color: 'white'
+}
+
+const liveWattsBox = {
+	top: 15,
+	height: 250,
+	width: 325,
+};
+
+const liveWattsCircle = {
+	height: 200,
+	width: 200,
+	borderRadius: 95,
+	fontSize: 65,
+}
 
 export default DvHub
