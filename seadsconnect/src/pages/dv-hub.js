@@ -6,6 +6,7 @@ import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, Button
 import 'bootstrap/dist/css/bootstrap.css';
 import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
+import GetOhmData from "../components/Profile/OhmConnect"
 
 
 import getFirebase from '../components/firebase'
@@ -124,7 +125,7 @@ class DvHub extends Component {
 			this.state = {
 				val: 0,
 				m: 100,
-				liveData: 0, 
+				liveData: 0,
 				liveTime: new Date().toLocaleString(),
 				washerToggleOn: true,
 				dryerToggleOn: true,
@@ -134,7 +135,8 @@ class DvHub extends Component {
 				computerToggleOn: true
 			}
 
-			this.device = new GetDevice();
+			this.device = new GetDevice()
+      this.ohmData = new GetOhmData()
 
 	}
 
@@ -147,9 +149,9 @@ class DvHub extends Component {
 		if (!getFirebase().auth().currentUser) {
 			if (toggle)
 				this.setState({val: this.state.val + watts});
-			else 
+			else
 				this.setState({val: this.state.val - watts});
-		} 
+		}
 		else {
 
 			var userId = getFirebase().auth().currentUser.uid;
@@ -164,7 +166,7 @@ class DvHub extends Component {
 				else {
 					if (toggle)
 						this.setState({val: this.state.val + watts});
-					else 
+					else
 						this.setState({val: this.state.val - watts});
 				}
 			});
@@ -271,7 +273,7 @@ class DvHub extends Component {
 					this.device.liveTime = powTime[1];
 				}
 			});
-	
+
 			this.setState({liveData: this.device.liveData});
 			this.setState({liveTime: this.device.liveTime});
 		}
@@ -279,6 +281,9 @@ class DvHub extends Component {
 			var currentTime = new Date().toLocaleString();
 			this.setState({liveTime: currentTime});
 		}
+
+
+
 	}
 
 	render() {
@@ -291,6 +296,7 @@ class DvHub extends Component {
 
 		return (
 		<Layout>
+<<<<<<< HEAD
 			  <Container>
 					<Row>
 						<Col></Col>
@@ -347,6 +353,14 @@ class DvHub extends Component {
 				</Container>
 
 				<h2 align="center">Current Date: { this.state.liveTime }</h2>
+=======
+
+			<Jumbotron>
+					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
+					<h2 align="center">Current Date: { this.state.liveTime }</h2>
+			</Jumbotron>
+
+>>>>>>> origin/development
   			<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
 				<div align="center">
 					<ButtonGroup>
@@ -382,12 +396,18 @@ const ohmHourHeaderStyle = {
 
 const liveWattsCircle = {
 	height: 200,
+<<<<<<< HEAD
 	width: 200, 
 	borderRadius: 100,
 }
 
 const liveDataStyle = {
 	fontSize: 70
+=======
+	width: 200,
+	borderRadius: 95,
+	fontSize: 65,
+>>>>>>> origin/development
 }
 
 export default DvHub
