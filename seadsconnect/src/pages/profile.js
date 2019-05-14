@@ -6,6 +6,7 @@ import Media from 'react-bootstrap/Media'
 
 const ProfilePage = () => (
 	<Layout>
+	<p />
 	<ProfileSideBar />
 	</Layout>
 )
