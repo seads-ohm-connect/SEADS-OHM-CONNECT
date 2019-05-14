@@ -5,7 +5,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import Jumbotron from 'react-bootstrap/Jumbotron'
+import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Form from 'react-bootstrap/Form'
@@ -33,7 +33,6 @@ export default class Training extends Component {
         savedData2:       []     
     	}
 
-      this.test = 0;
       this.device = new GetDevice();
 
 	//should make a list of this in the Appliance class.
@@ -98,18 +97,32 @@ export default class Training extends Component {
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.left + margin.right)
 
+
       //draw the realtime graph once a second.
-      var savedData = this.state.savedData;
-      setInterval(() => dg1.drawGraph(svg, dimensions, TooltipValues, this, this.state.liveData, 'savedData', "#ffb2b2", "#ff0000", true), 1000);
+      setInterval(() => {
+        dg1.drawGraph(svg, dimensions, TooltipValues, this, this.state.liveData, 'savedData', "#ffb2b2", "#ff0000", true, false, "live");
+      }, 1000);
 
 
       var svg2 = d3.select(".graph2")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.left + margin.right)
+        .attr("height", height + margin.left + margin.right)  
         
-      console.log(this.state.liveData);
-      setInterval(() => dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true), 1000);
+      setInterval(() => {
+        console.log(this.state.running)
+        if (this.state.running) {
+          svg2.style("opacity", 1)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.left + margin.right);  
+          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "random");
+        }
+        else {
+          svg2.style("opacity", 0)
+            .attr("width", 0)
+            .attr("height", 0); 
+        }
+      }, 1000);
     }
 
 
@@ -121,18 +134,17 @@ export default class Training extends Component {
    		return(
    		<div>
 
+      <p/>
+
   		  <Row>
   		    <Col>
-  		      <Jumbotron fluid>
+  		      <Card>
 
-            <Col>
-              <ButtonGroup>
-                <DropdownButton as={ButtonGroup} id="dropdown-basic-button" title={this.state.currentAppliance === null ? "Choose Appliance" : this.state.currentAppliance.name}>
-                    {dropDown}
-                </DropdownButton>
-                <Button block> </Button>
-              </ButtonGroup>
-            </Col>
+            <Card.Header>
+              <DropdownButton as={ButtonGroup} id="dropdown-basic-button" title={this.state.currentAppliance === null ? "Choose Appliance" : this.state.currentAppliance.name}>
+                {dropDown}
+              </DropdownButton>
+            </Card.Header>
 
 
   			    <Container>
@@ -145,13 +157,14 @@ export default class Training extends Component {
                   This is where we can show the real-time graph of only the appliance.
               </p>
 
-
-              <Button variant={this.state.running ? 'danger' : 'success'} block onClick={e => this.handleButtonClick(e)}>
-                Click here when the appliance is turned {this.state.running ? 'off' : 'on'}
-              </Button>
+              <Card.Footer>
+                <Button variant={this.state.running ? 'danger' : 'success'} block onClick={e => this.handleButtonClick(e)}>
+                  Click here when the appliance is turned {this.state.running ? 'off' : 'on'}
+                </Button>
+              </Card.Footer>
 
   			    </Container>
-			    </Jumbotron>
+			    </Card>
 			  </Col>
   		</Row>
 

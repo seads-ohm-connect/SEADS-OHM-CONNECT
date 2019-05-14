@@ -2,8 +2,10 @@ var d3 = require("d3");
 
 export default class RealTimeGraph {
 
-	drawGraph(svg, dimensions, TooltipValues, self, liveData, savedData_tag, fillColor, lineColor, lowerBound, tooltips) {
+	drawGraph(svg, dimensions, TooltipValues, self, liveData, savedData_tag, fillColor, lineColor, lowerBound, tooltips, mode) {
 		//hard coded values for dimensions of the graph
+    if (!liveData)
+      liveData = 0;
       
 		var width = dimensions.width;
 		var height = dimensions.height;
@@ -16,7 +18,6 @@ export default class RealTimeGraph {
 
       
       /* Probably remove this and just detect is the graph is live */
-		var mode = "live";
 
 		var currentData = self.state[savedData_tag];
     var prevData = JSON.parse(JSON.stringify(currentData));
@@ -25,14 +26,14 @@ export default class RealTimeGraph {
     var length = currentData === null ? 0 : currentData.length;
 		/* mode 1: random data  between 1 and 101 */
 		if (mode === "random") {
-			currentData[length]={"Second":length+1, "Energy":(Math.floor(Math.random()*100)+1)};
+      liveData = (Math.floor(Math.random()*100)+1);
+			currentData[length]={"Second":length+1, "Energy":liveData};
 		}
 		
 		/* mode 2: based on live data */
 		/* TODO: This assumes that data comes in consistently at once 
 		 * every second. This will not always be the case in real life.
 		*/
-
 		if (mode === "live") {
 			currentData[currentData.length]={"Second":length+1, "Energy":liveData};
 		}
@@ -48,8 +49,8 @@ export default class RealTimeGraph {
 		  //       ,d3.max(currentData, function(d) {return d.Second;})]);
 		y.domain([lBound ,d3.max(currentData, function(d) {return d.Energy;})]);
 
-    x.domain([d3.max(currentData, function(d) {return d.Second - 10;})
-             ,d3.max(currentData, function(d) {return d.Second;})]);
+    x.domain([d3.max(currentData, function(d) {return d.Second - 5})
+             ,d3.max(currentData, function(d) {return d.Second})]);
 
 
 		
@@ -59,26 +60,37 @@ export default class RealTimeGraph {
       //if (path) path.remove();
 		  
       //
-		var areaFill = d3.area()
-        .curve(d3.curveMonotoneX) //curveLinear, curveStep, curveCardinal, curveMonotoneX, d3.curveCatmullRom work
-		  .x(function(d) { return x(d.Second === null ? 0 : d.Second); })
+		var areaFill = d3.line()
+        .curve(d3.curveCatmullRom) //curveLinear, curveStep, curveCardinal, curveMonotoneX, d3.curveCatmullRom work
+		  .x(function(d) { return x(d.Second === null ?  0 : d.Second); })
 		  .y(function(d) { return y(d.Energy === null ? 0 : d.Energy); })
-		  .y1(height);
+		  //.y1(height);
+
 	
       //declare svg
-		
       //the line of the graph
-		var path = svg.append("path")
-		  .datum(currentData)
-			.attr("fill", fillColor)
+
+    var path;
+    if (svg.select("path").empty()) {
+      path = svg.append("path");
+    }
+    else {
+      path = svg.select("path");
+      path.transition();
+    }
+
+		path
+		  .data([currentData])
+      .transition()
+			.attr("fill", "none")
 			.attr("class", "line")
       .attr("d", areaFill)
 			.attr("stroke", lineColor)
 			.attr("stroke-width", "2px")
 			.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-         .attr("stroke-linejoin", "round")
-         .attr("stroke-miterlimit", "2")
-         .attr("stroke-linecap", "round");
+      .attr("stroke-linejoin", "round")
+      //.attr("stroke-miterlimit", "2")
+      .attr("stroke-linecap", "round");
 
       //x axis placement
 		var xaxis = svg.append("g")
@@ -105,7 +117,7 @@ export default class RealTimeGraph {
 		    .text("Watts (" + liveData + ")");
       
       //this removes the following things to redraw them to update the graph
-      setTimeout( function() { path.remove(); 
+      setTimeout( function() { //path.remove(); 
                                xaxis.remove();
                                yaxis.remove();
                                xtext.remove();
