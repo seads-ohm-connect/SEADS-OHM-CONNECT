@@ -1,14 +1,14 @@
   import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
-import Thresholdbar from "../components/Thresholdbar/thresholdbar"
+import Thresholdbar from "../components/ThresholdBar/thresholdbar.js"
 import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
 import GetOhmData from "../components/Profile/OhmConnect"
 
 
-import getFirebase from '../components/firebase'
+import getFirebase from '../components/Firebase'
 var d3 = require("d3");
 
 //Thresholdbar: Change pass watts into value and change max to what ever you want.
@@ -28,7 +28,7 @@ class DvHub extends Component {
 				computerToggleOn: true
 			}
 
-			this.device = new GetDevice()
+	  this.device = new GetDevice()
       this.ohmData = new GetOhmData()
 
 	}
@@ -148,7 +148,7 @@ class DvHub extends Component {
 	}
 
 	componentDidMount() {
-        this.interval = setInterval(() => this.updatePower(), 500);
+        this.interval = setInterval(() => this.updatePower(), 1000);
     }
 
 

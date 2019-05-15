@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import Table from 'react-bootstrap/Table'
 import FormControl from 'react-bootstrap/FormControl'
 import Appliances from '../../Graphs/DragGraph/appliances'
-import getFirebase from '../firebase'
+import getFirebase from '../Firebase'
 
 export default class EnterRates extends Component {
 	constructor(props) {

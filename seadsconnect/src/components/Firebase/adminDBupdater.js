@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import getFirebase from '../firebase'
+import getFirebase from '../Firebase'
 import GetDevice from "../Profile/getDeviceID"
 import sendMailAlert, { sendEmailWarning } from "../Alerts/email"
 import Keys from '../../../keys'

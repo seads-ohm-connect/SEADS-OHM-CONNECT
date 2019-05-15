@@ -38,21 +38,25 @@ export default class RealTimeGraph {
 			currentData[currentData.length]={"Second":length+1, "Energy":liveData};
 		}
 
-    var lBound = 0;
+    var lBound, rBound = 0;
     if (lowerBound === true) {
-      lowerBound = d3.min(currentData, function(d) {return d.Energy;});
+      lBound = d3.min(length <= 5 ? currentData : currentData.slice(length - 5, length), function(d) {return d.Energy;});
+      rBound = d3.max(length <= 5 ? currentData : currentData.slice(length - 5, length), function(d) {return d.Energy;});
     }
 		
 		self.setState({[savedData_tag] : currentData});
 		  
-		//x.domain([d3.min(currentData, function(d) {return d.Second;})
-		  //       ,d3.max(currentData, function(d) {return d.Second;})]);
-		y.domain([lBound ,d3.max(currentData, function(d) {return d.Energy;})]);
 
-    x.domain([d3.max(currentData, function(d) {return d.Second - 5})
-             ,d3.max(currentData, function(d) {return d.Second})]);
+		//y.domain([lBound ,d3.max(currentData, function(d) {return d.Energy;}) * 2]);
+
+    var max = d3.max(currentData, function(d) {return d.Second});
+    x.domain([max - 5 < 1 ? 1 : max - 5, 
+             max <= 5 ? 5 : max]);
+
+    
 
 
+    y.domain([lBound / 2, rBound * 2]);
 		
 		/* This is used to remove the current graph before replacing with updated graph */
 		//d3.selectAll("svg").remove()
@@ -62,9 +66,9 @@ export default class RealTimeGraph {
       //
 		var areaFill = d3.line()
         .curve(d3.curveCatmullRom) //curveLinear, curveStep, curveCardinal, curveMonotoneX, d3.curveCatmullRom work
-		  .x(function(d) { return x(d.Second === null ?  0 : d.Second); })
+		  .x(function(d) { return x(d.Second === null ? 0 : d.Second); })
 		  .y(function(d) { return y(d.Energy === null ? 0 : d.Energy); })
-		  //.y1(height);
+		  //.y1(height); if you want to use d3.area() instead of d3.line(). Area doesn't work too well with transitions though.
 
 	
       //declare svg

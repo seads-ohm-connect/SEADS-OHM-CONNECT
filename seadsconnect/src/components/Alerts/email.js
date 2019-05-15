@@ -1,4 +1,4 @@
-import axios from 'Axios' 
+import axios from 'axios' 
 
     
 export default function sendMailAlert(emails) {

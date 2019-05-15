@@ -1,4 +1,4 @@
-import getFirebase from '../firebase'
+import getFirebase from '../Firebase'
 import React, { Component } from "react"
 
 

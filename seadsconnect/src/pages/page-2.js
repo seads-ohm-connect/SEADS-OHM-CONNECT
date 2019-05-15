@@ -9,7 +9,7 @@ import DragGraph from "../Graphs/DragGraph/drag-graph"
 
 import { FirebaseContext } from '../components/Firebase'
 import { withFirebase } from '../components/Firebase'
-import getFirebase from '../components/firebase'
+import getFirebase from '../components/Firebase'
 
 const SignInPage = () => (
   <React.Fragment>

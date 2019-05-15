@@ -13,7 +13,7 @@ import FormControl from 'react-bootstrap/FormControl'
 import DropdownButton  from 'react-bootstrap/DropdownButton'
 import Nav  from 'react-bootstrap/Nav'
 
-import getFirebase from '../firebase'
+import getFirebase from '../Firebase'
 
 export default class AccountSettings extends Component {
 	constructor(props) {
