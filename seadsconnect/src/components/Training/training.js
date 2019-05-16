@@ -5,8 +5,9 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
-import Jumbotron from 'react-bootstrap/Jumbotron'
+import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
+import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Form from 'react-bootstrap/Form'
 
 
@@ -29,7 +30,12 @@ export default class Training extends Component {
         liveData:         0,
         liveDataAppliance:0,
         liveTime:         new Date(),
+<<<<<<< HEAD
         savedData:        [],
+=======
+        savedData:        [], 
+        savedData2:       []     
+>>>>>>> development
     	}
 
       this.device = new GetDevice();
@@ -70,11 +76,15 @@ export default class Training extends Component {
 
         this.setState({liveData: this.device.liveData});
         this.setState({liveTime: this.device.liveTime});
+<<<<<<< HEAD
 
 				this.setState({liveDataAppliance: this.tracker.track(this.device.liveData)})
 				console.log("Live Appliance Data")
 				console.log(this.tracker.tracking);
 				console.log(this.tracker.samples);
+=======
+        this.test = this.device.liveData;
+>>>>>>> development
       }
       else {
         var currentTime = new Date().toLocaleString();
@@ -86,9 +96,12 @@ export default class Training extends Component {
 
       this.interval = setInterval(() => this.updatePower(), 1000);
 
+      var dg1 = new RealTimeGraph();
+      var dg2 = new RealTimeGraph();
+
       var item = document.getElementById("test").getBoundingClientRect();
 
-      var width = item.width  * .90;
+      var width = item.width  * .99;
       var height = item.height * 4;
       var margin = {left: 0, right: 60, top:30, bottom:60};
       var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset: 80, leftOffset: 130};
@@ -104,17 +117,39 @@ export default class Training extends Component {
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.left + margin.right)
 
-              //draw the realtime graph once a second
-      setInterval(() => RealTimeGraph.drawGraph(svg, dimensions, TooltipValues, this, this.state.liveData, "#ffb2b2", "#ff0000"), 1000);
+
+      //draw the realtime graph once a second.
+      setInterval(() => {
+        dg1.drawGraph(svg, dimensions, TooltipValues, this, this.state.liveData, 'savedData', "#ffb2b2", "#ff0000", true, false, "live");
+      }, 1000);
 
 
       var svg2 = d3.select(".graph2")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
+<<<<<<< HEAD
         .attr("height", height + margin.left + margin.right)
 
       console.log(this.state.liveDataAppliance);
       setInterval(() => RealTimeGraph.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, "#20b2b2", "#200000"), 1000);
+=======
+        .attr("height", height + margin.left + margin.right)  
+        
+      setInterval(() => {
+        console.log(this.state.running)
+        if (this.state.running) {
+          svg2.style("opacity", 1)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.left + margin.right);  
+          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "random");
+        }
+        else {
+          svg2.style("opacity", 0)
+            .attr("width", 0)
+            .attr("height", 0); 
+        }
+      }, 1000);
+>>>>>>> development
     }
 
 
@@ -125,40 +160,38 @@ export default class Training extends Component {
 
    		return(
    		<div>
-   		  <Row>
 
-   		    <Col>
-   		      <DropdownButton id="dropdown-basic-button" title={this.state.currentAppliance === null ? "Choose Appliance" : this.state.currentAppliance.name}>
-      	        {dropDown}
-  		      </DropdownButton>
-   		    </Col>
-
-   		    <Col>
-  		      <Form.Text>Choose an appliance that you wish to run.</Form.Text>
-  		    </Col>
-
-  		  </Row>
+      <p/>
 
   		  <Row>
   		    <Col>
-  		      <Jumbotron fluid>
+  		      <Card>
+
+            <Card.Header>
+              <DropdownButton as={ButtonGroup} id="dropdown-basic-button" title={this.state.currentAppliance === null ? "Choose Appliance" : this.state.currentAppliance.name}>
+                {dropDown}
+              </DropdownButton>
+            </Card.Header>
+
+
   			    <Container>
     		      <h1>Analytics</h1>
     		      <p class="graph1" id="test">
       		        This is where we can show the real-time graph when an appliance is running.
     		      </p>
 
-              <p class="graph2" id="test">
+              <p class="graph2">
                   This is where we can show the real-time graph of only the appliance.
               </p>
 
-
-              <Button variant={this.state.running ? 'danger' : 'success'} block onClick={e => this.handleButtonClick(e)}>
-                Click here when the appliance is turned {this.state.running ? 'off' : 'on'}
-              </Button>
+              <Card.Footer>
+                <Button variant={this.state.running ? 'danger' : 'success'} block onClick={e => this.handleButtonClick(e)}>
+                  Click here when the appliance is turned {this.state.running ? 'off' : 'on'}
+                </Button>
+              </Card.Footer>
 
   			    </Container>
-			    </Jumbotron>
+			    </Card>
 			  </Col>
   		</Row>
 

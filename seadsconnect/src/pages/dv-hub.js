@@ -28,7 +28,7 @@ class DvHub extends Component {
 				computerToggleOn: true
 			}
 
-			this.device = new GetDevice()
+	  this.device = new GetDevice()
       this.ohmData = new GetOhmData()
       this.tracker = new TrackAppliance()
 	}
@@ -148,7 +148,7 @@ class DvHub extends Component {
 	}
 
 	componentDidMount() {
-        this.interval = setInterval(() => this.updatePower(), 500);
+        this.interval = setInterval(() => this.updatePower(), 1000);
     }
 
 
