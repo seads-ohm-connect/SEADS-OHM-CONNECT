@@ -6,7 +6,7 @@ import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, Button
 import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
 import GetOhmData from "../components/Profile/OhmConnect"
-
+import TrackAppliance from "../components/Training/trackAppliance"
 
 import getFirebase from '../components/Firebase'
 var d3 = require("d3");
@@ -30,7 +30,7 @@ class DvHub extends Component {
 
 			this.device = new GetDevice()
       this.ohmData = new GetOhmData()
-
+      this.tracker = new TrackAppliance()
 	}
 
 	//queries the data base to see if there is a value enetered for the appliance.
@@ -169,6 +169,15 @@ class DvHub extends Component {
 
 			this.setState({liveData: this.device.liveData});
 			this.setState({liveTime: this.device.liveTime});
+
+      //console.log(this.state.liveData);
+      this.tracker.startTracking(this.state.liveData);
+      var t = this.tracker.track(this.state.liveData);
+
+      console.log(this.tracker.beforeEnergy);
+      console.log(this.tracker.samples);
+      console.log(this.tracker.totalEnergy);
+      console.log(t);
 		}
 		else {
 			var currentTime = new Date().toLocaleString();

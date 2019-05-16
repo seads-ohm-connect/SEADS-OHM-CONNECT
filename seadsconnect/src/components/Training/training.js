@@ -13,6 +13,7 @@ import Form from 'react-bootstrap/Form'
 import RealTimeGraph from "../../Graphs/RealTime/realTimeGraph"
 import getFirebase from '../Firebase'
 import GetDevice from "../Profile/getDeviceID"
+import TrackAppliance from "./trackAppliance"
 
 
 var d3 = require("d3");
@@ -28,15 +29,16 @@ export default class Training extends Component {
         liveData:         0,
         liveDataAppliance:0,
         liveTime:         new Date(),
-        savedData:        [],      
+        savedData:        [],
     	}
 
       this.device = new GetDevice();
+			this.tracker = new TrackAppliance();
 
 	//should make a list of this in the Appliance class.
-	    this.appList = [Appliances.electricFurnace, Appliances.centralAirconditioning, Appliances.windowAC120v, 
-            Appliances.windowAC240v, Appliances.electricWaterHeater, Appliances.oven, 
-            Appliances.dishwasher, Appliances.fridge, Appliances.computer, Appliances.washingMachineWarm, 
+	    this.appList = [Appliances.electricFurnace, Appliances.centralAirconditioning, Appliances.windowAC120v,
+            Appliances.windowAC240v, Appliances.electricWaterHeater, Appliances.oven,
+            Appliances.dishwasher, Appliances.fridge, Appliances.computer, Appliances.washingMachineWarm,
             Appliances.washingMachineHot, Appliances.dryer, Appliances.hairDryer];
     }
 
@@ -46,6 +48,12 @@ export default class Training extends Component {
 
     handleButtonClick(e) {
     	this.setState({running: !this.state.running});
+			if(!this.tracker.tracking){
+				this.tracker.startTracking(this.state.liveData);
+			}
+			else{
+				this.tracker.endTracking();
+			}
     	//if running, render real time graph of data usage.
     }
 
@@ -59,9 +67,14 @@ export default class Training extends Component {
             this.device.liveTime = powTime[1];
           }
         });
-    
+
         this.setState({liveData: this.device.liveData});
         this.setState({liveTime: this.device.liveTime});
+
+				this.setState({liveDataAppliance: this.tracker.track(this.device.liveData)})
+				console.log("Live Appliance Data")
+				console.log(this.tracker.tracking);
+				console.log(this.tracker.samples);
       }
       else {
         var currentTime = new Date().toLocaleString();
@@ -99,7 +112,7 @@ export default class Training extends Component {
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.left + margin.right)
-        
+
       console.log(this.state.liveDataAppliance);
       setInterval(() => RealTimeGraph.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, "#20b2b2", "#200000"), 1000);
     }
@@ -108,7 +121,7 @@ export default class Training extends Component {
     render() {
 
     	const dropDown = this.appList.map(appliance => <Dropdown.Item as="button" onClick={e => this.handleDropDownClick(appliance)}>{appliance.name}</Dropdown.Item>);
-      
+
 
    		return(
    		<div>
