@@ -170,14 +170,9 @@ class DvHub extends Component {
 			this.setState({liveData: this.device.liveData});
 			this.setState({liveTime: this.device.liveTime});
 
-      //console.log(this.state.liveData);
       this.tracker.startTracking(this.state.liveData);
       var t = this.tracker.track(this.state.liveData);
 
-      console.log(this.tracker.beforeEnergy);
-      console.log(this.tracker.samples);
-      console.log(this.tracker.totalEnergy);
-      console.log(t);
 		}
 		else {
 			var currentTime = new Date().toLocaleString();

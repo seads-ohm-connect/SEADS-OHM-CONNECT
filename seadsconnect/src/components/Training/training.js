@@ -30,12 +30,9 @@ export default class Training extends Component {
         liveData:         0,
         liveDataAppliance:0,
         liveTime:         new Date(),
-<<<<<<< HEAD
         savedData:        [],
-=======
-        savedData:        [], 
-        savedData2:       []     
->>>>>>> development
+        savedData2:       []
+
     	}
 
       this.device = new GetDevice();
@@ -76,15 +73,8 @@ export default class Training extends Component {
 
         this.setState({liveData: this.device.liveData});
         this.setState({liveTime: this.device.liveTime});
-<<<<<<< HEAD
 
 				this.setState({liveDataAppliance: this.tracker.track(this.device.liveData)})
-				console.log("Live Appliance Data")
-				console.log(this.tracker.tracking);
-				console.log(this.tracker.samples);
-=======
-        this.test = this.device.liveData;
->>>>>>> development
       }
       else {
         var currentTime = new Date().toLocaleString();
@@ -127,29 +117,21 @@ export default class Training extends Component {
       var svg2 = d3.select(".graph2")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
-<<<<<<< HEAD
         .attr("height", height + margin.left + margin.right)
 
-      console.log(this.state.liveDataAppliance);
-      setInterval(() => RealTimeGraph.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, "#20b2b2", "#200000"), 1000);
-=======
-        .attr("height", height + margin.left + margin.right)  
-        
       setInterval(() => {
-        console.log(this.state.running)
         if (this.state.running) {
           svg2.style("opacity", 1)
             .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.left + margin.right);  
-          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "random");
+            .attr("height", height + margin.left + margin.right);
+          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "live");
         }
         else {
           svg2.style("opacity", 0)
             .attr("width", 0)
-            .attr("height", 0); 
+            .attr("height", 0);
         }
       }, 1000);
->>>>>>> development
     }
 
 

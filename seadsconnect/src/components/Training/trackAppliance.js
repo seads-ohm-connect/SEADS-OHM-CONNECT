@@ -19,7 +19,6 @@ class TrackAppliance {
 
     startTracking(livePower) {
       if(!this.tracking){
-        console.log("in start function")
         this.tracking = true
         this.beforeEnergy = livePower
       }
@@ -27,9 +26,7 @@ class TrackAppliance {
 
     track(livePower) {
       if(this.tracking){
-          console.log(livePower)
           var dif = livePower - this.beforeEnergy
-          console.log(dif)
           this.totalEnergy = this.totalEnergy + dif
           this.samples = this.samples + 1
           return dif;
