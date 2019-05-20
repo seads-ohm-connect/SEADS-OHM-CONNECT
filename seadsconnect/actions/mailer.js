@@ -15,9 +15,9 @@ function sendEmailAlert(email) {
 
 function sendEmailWarning(email, hr, min) {
     const { transporter, mailOptionsAlert, mailOptionsWarning } = nodemailer;
-    var hour     = hr > 0 ? hr + ' hour' + hr > 1 ? 's' : '' : '';
-    var minutes  = min > 0? min + ' minutes' : '00 minutes';  
-    var header   = 'Upcoming OhmHour in ' + hour + minutes + "!";
+    var hour     = hr > 0 ? hr + ' hour' + (hr > 1 ? 's' : '') : '';
+    var minutes  = min > 0 ? " " + min + ' minutes' : ' 00 minutes';  
+    var header   = 'Upcoming OhmHour in: ' + hour + " " + minutes + "!";
     var contents = 'An OhmHour is approaching!';
 
     const options = { ...mailOptionsAlert, subject: header, text: contents, to: email };

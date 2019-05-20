@@ -110,7 +110,6 @@ export default class Training extends Component {
         .attr("height", height + margin.left + margin.right)  
         
       setInterval(() => {
-        console.log(this.state.running)
         if (this.state.running) {
           svg2.style("opacity", 1)
             .attr("width", width + margin.left + margin.right)

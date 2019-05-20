@@ -5,7 +5,6 @@ import "react-tabs/style/react-tabs.css"
 
 import Layout from "../components/layout"
 import Image from "../components/image"
-import SEO from "../components/seo"
 import HomeCard from "../components/Home/home"
 import Tips from "../components/Tips/tips"
 
@@ -13,8 +12,8 @@ import getFirebase, { FirebaseContext } from '../components/Firebase'
 
 const IndexPage = () => (
 	<FirebaseContext.Provider value={getFirebase()}>
-    <Layout>
-      <SEO title="Home" keywords={[`gatsby`, `application`, `react`]} />
+    <Layout>     
+      <p />
       <HomeCard />
       <Tips />
     </Layout>

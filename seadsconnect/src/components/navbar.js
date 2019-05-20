@@ -92,7 +92,10 @@ class NavBarHandler extends Component {
                   </li>
                   <li class="nav-item active">
                       <a class="nav-link" href="/training-module/">Training</a>
-                  </li>                  
+                  </li>    
+                  <li class="nav-item active">
+                      <a class="nav-link" href="/ohmDemo/">Demo</a>
+                  </li>               
               </ul>
           </div>
           <div class="navbar-collaps order-3 dual-collapse2">

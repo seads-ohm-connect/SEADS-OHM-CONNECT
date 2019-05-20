@@ -1,25 +1,26 @@
 import React, { Component } from "react"
 import { Link } from "gatsby"
-import Layout from "../components/layout"
-import Thresholdbar from "../components/ThresholdBar/thresholdbar.js"
+import Layout from "../layout"
+import Thresholdbar from "../ThresholdBar/thresholdbar.js"
 import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container, Spinner} from "react-bootstrap"
-import Appliances from "../Graphs/DragGraph/appliances"
-import GetDevice from "../components/Profile/getDeviceID"
-import GetOhmData from "../components/Profile/OhmConnect"
-import Demo from "../components/Demo/demo"
+import Appliances from "../../Graphs/DragGraph/appliances"
+import GetDevice from "../Profile/getDeviceID"
+import GetOhmData from "../Profile/OhmConnect"
 
-
-import getFirebase from '../components/Firebase'
+import getFirebase from '../Firebase'
 var d3 = require("d3");
 
 //Thresholdbar: Change pass watts into value and change max to what ever you want.
-class DvHub extends Component {
+export default class DemoBar extends Component {
+
+	static power = 0;
+
 	constructor(props) {
-    	super(props);
+		super(props);
 
 		this.state = {
 			val: 0,
-			m: 100,
+			m: 9000,
 			liveData: null,
 			liveTime: new Date().toLocaleString(),
 			washerToggleOn: true,
@@ -30,8 +31,8 @@ class DvHub extends Component {
 			computerToggleOn: true
 		}
 
-	  this.device = new GetDevice()
-      this.ohmData = new GetOhmData()
+	    this.device = new GetDevice()
+        this.ohmData = new GetOhmData()
 
 	}
 
@@ -153,7 +154,6 @@ class DvHub extends Component {
         this.interval = setInterval(() => this.updatePower(), 1000);
     }
 
-
     componentWillUnmount() {
         clearInterval(this.interval);
     }
@@ -164,6 +164,7 @@ class DvHub extends Component {
 			var userID = getFirebase().auth().currentUser.uid;
 			this.device.getSeadsData(userID).then((powTime) => {
 				if(powTime){
+					this.power = powTime[0];
 					this.device.liveData = powTime[0];
 					this.device.liveTime = powTime[1];
 				}
@@ -199,23 +200,24 @@ class DvHub extends Component {
 			let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
 			let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
 
+			this.props.getPower((this.state.val + parseFloat(this.state.liveData)).toFixed(2));
+
+			let v = (this.state.val + parseFloat(this.state.liveData)).toFixed(2)
+
 			content.push(
 				<div>
-				<Jumbotron>
-					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
-					<h2 align="center">Current Date: { this.state.liveTime }</h2>
-				</Jumbotron>
-	
-  				<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
+  				  <Thresholdbar value={v} max={v} threshold1={this.props.target} threshold2={this.props.threshold} threshold3={this.state.m - this.props.target - this.props.threshold}/>
 					<div align="center">
 						<ButtonGroup>
 							<ButtonToolbar>
+							  <Row>
 								<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
 								<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
 								<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
 								<Button variant={fridgeColor} onClick={() => {this.toggleFridge(); this.changeColorFridge()}} >Fridge</Button>
 								<Button variant={dishwasherColor} onClick={() => {this.toggleDishwasher(); this.changeColorDishwasher()}} >Dishwasher</Button>
 								<Button variant={computerColor} onClick={() => {this.toggleComputer(); this.changeColorComputer()}} >Computer</Button>
+							  </Row>
 							</ButtonToolbar>
 						</ButtonGroup>
 					</div>
@@ -230,30 +232,13 @@ class DvHub extends Component {
 
 		var contents = this.isLoading();
 		return (
-			<Layout>
-			{contents}
-			<Demo />
-  			</Layout>
+			<div>
+			  {contents}
+			</div>
 		);
 	}
+
 }
 
-const CardStyle = {
-	width: '25rem',
-	color: 'white'
-}
 
-const liveWattsBox = {
-	top: 15,
-	height: 250,
-	width: 325,
-};
 
-const liveWattsCircle = {
-	height: 200,
-	width: 200,
-	borderRadius: 95,
-	fontSize: 65,
-}
-
-export default DvHub
