@@ -12,8 +12,8 @@ import getFirebase, { FirebaseContext } from '../components/Firebase'
 
 const IndexPage = () => (
 	<FirebaseContext.Provider value={getFirebase()}>
-    <Layout>     
-      <p />
+    <Layout>
+	  <p />
       <HomeCard />
       <Tips />
     </Layout>
