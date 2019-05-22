@@ -36,12 +36,33 @@ class TrackAppliance {
 
     endTracking() {
       if(this.tracking){
-        this.tracking = false
         var avrg = (this.totalEnergy / this.samples)
+        this.tracking = false
         this.averageUse = avrg
         this.samples = 0
         this.totalEnergy = 0
       }
+    }
+
+    getAverage() {
+      return this.averageUse;
+    }
+
+    guessAppliance(snapshot, val) {
+      var apps = snapshot.child('appliances').val();
+      var guess = "";
+      var min = val;
+      for (var machine in apps) {
+        for (var fields in apps[machine]) {
+          if (fields === 'watts') {
+            if (Math.abs(val - apps[machine][fields]) <= min) {
+              min = apps[machine][fields]
+              guess = machine;
+            }
+          }
+        }
+      }
+      return guess;
     }
 
 }

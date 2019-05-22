@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import getFirebase from '../Firebase'
 import GetDevice from "../Profile/getDeviceID"
 import sendMailAlert, { sendEmailWarning } from "../Alerts/email"
+import TrackAppliance from "../training/trackAppliance"
 import Keys from '../../../keys'
 
 var d3 = require("d3");
@@ -18,6 +19,9 @@ export default class Updater extends Component {
     	}
 
         this.adminId = Keys.ADMIN_KEY; //user  generated id from firebase
+
+        this.tracker = new TrackAppliance();
+        this.appliance = "";
     }
 
 	componentDidMount() {
@@ -61,7 +65,9 @@ export default class Updater extends Component {
                                     return;
                                 }
 
-                                self.checkToSend(self, device, db, _userId, device.liveData);
+                                var previousPower = snapshot.child(_userId).val()['currentUsage']['realTimeWatts'];
+
+                                self.checkToSend(self, device, db, _userId, device.liveData, previousPower);
 
                                 db.ref('/users/' + _userId + '/currentUsage/').set({
                                     realTimeWatts: device.liveData
@@ -75,26 +81,29 @@ export default class Updater extends Component {
     }
 
     //check to see if an alert is needed to be sent
-    checkToSend(self, device, db, userId, currentWatt){
+    checkToSend(self, device, db, userId, currentWatt, previousPower){
         //check to see if it is the users ohm hour
         db.ref('/users/' + userId).once('value').then(function(snapshot) {
             if (snapshot.exists()) {
-                self.overThreshold(device, snapshot, db, userId, currentWatt);
+                self.overThreshold(device, snapshot, db, userId, currentWatt, previousPower);
                 self.ohmHourApproaching(device, snapshot, db, userId);
             }
         });
     }
 
-    overThreshold(device, snapshot, db, userId, currentWatt) {
+    overThreshold(device, snapshot, db, userId, currentWatt, previousPower) {
         if (snapshot.child('isOhmHour').val() === true) {
             //check to see if their current watt is above their threshold.
-            if (snapshot.child('threshold').val() < currentWatt) {
+            var threshold = snapshot.child('threshold').val();
+            if (threshold < currentWatt) {
                 device.getUserEmail(userId).then((emails) => {
-                    sendMailAlert(emails);
-    
+                    this.appliance = this.tracker.guessAppliance(snapshot, currentWatt - previousPower);
+                    console.log(this.appliance);
+                    sendMailAlert(emails, this.appliance);
                     //instead of updating ohm hour we will update a timestamp on last email sent
                     db.ref('/users/' + userId).update({
-                        isOhmHour: false
+                        isOhmHour: false,
+                        applianceOver: this.appliance
                     });
                 });
             }
@@ -120,7 +129,7 @@ export default class Updater extends Component {
                 });
             }
         }
-    }  
+    }
 
 
     render() {

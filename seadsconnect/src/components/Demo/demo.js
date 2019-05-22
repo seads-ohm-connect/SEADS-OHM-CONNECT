@@ -79,7 +79,7 @@ export default class Demo extends Component {
     		if (this.power > this.state.threshold + this.state.target && !this.warned)
     		{
     			this.warned = true;
-    			sendMailAlert(this.state.email);
+    			sendMailAlert(this.state.email, "");
     		}
 
     		this.setState({status: "It is your Ohm Hour!"});

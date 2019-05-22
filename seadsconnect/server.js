@@ -13,7 +13,8 @@ app.use(bodyParser.json());
 
 //send email from server to notify when the user has gone above their energy threshold
 app.get('/sendAlert', function(req, res) {
-    mail.sendEmailAlert(req.query.email);
+	console.log(req.query.appliance);
+    mail.sendEmailAlert(req.query.email, req.query.appliance);
 });
 
 //send email from server to notify when the user has an upcoming ohm hour

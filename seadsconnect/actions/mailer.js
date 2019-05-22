@@ -1,8 +1,13 @@
 const nodemailer = require("../models/nodemailer");
 
-function sendEmailAlert(email) {
+//params: email address, appliance that makes the user's energy level exceed threshold.
+function sendEmailAlert(email, appliance) {
     const { transporter, mailOptionsAlert, mailOptionsWarning } = nodemailer;
-    var contents = 'SEADConnect has detected a high amount of energy usage during your OhmHour! Consider reducing power consumption.';
+    var contents = 'SEADConnect has detected a high amount of energy usage during your OhmHour!';
+
+    if (appliance !== "undefined") {
+      contents += '\nIt looks like the last appliance turned on was the ' + appliance + '. Consider turning it off to reduce power consumption.'
+    }
 
     const options = { ...mailOptionsAlert, text: contents, to: email };
     transporter.sendMail(options, function(err, info) {

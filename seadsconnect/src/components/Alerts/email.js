@@ -1,8 +1,11 @@
 import axios from 'axios' 
 
     
-export default function sendMailAlert(emails) {
-	var _url = 'http://localhost:5000/sendAlert?email=' + emails;
+export default function sendMailAlert(emails, appliance) {
+	if (appliance === "")
+		appliance = "undefined";
+
+	var _url = 'http://localhost:5000/sendAlert?email=' + emails + '&appliance=' + appliance;
 	axios({ 
         url: _url 
    	});

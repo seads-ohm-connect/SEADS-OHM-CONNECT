@@ -37,6 +37,7 @@ export default class Training extends Component {
 
       this.device = new GetDevice();
 			this.tracker = new TrackAppliance();
+      this.average = 0;
 
 	//should make a list of this in the Appliance class.
 	    this.appList = [Appliances.electricFurnace, Appliances.centralAirconditioning, Appliances.windowAC120v,
@@ -50,12 +51,20 @@ export default class Training extends Component {
     }
 
     handleButtonClick(e) {
+
+      if (this.state.currentAppliance === null)
+        return; 
+
     	this.setState({running: !this.state.running});
 			if(!this.tracker.tracking){
 				this.tracker.startTracking(this.state.liveData);
 			}
 			else{
 				this.tracker.endTracking();
+        this.average = this.tracker.getAverage();
+        this.setDBValues();
+
+        this.setState({savedData2: []})        
 			}
     	//if running, render real time graph of data usage.
     }
@@ -80,6 +89,21 @@ export default class Training extends Component {
         var currentTime = new Date().toLocaleString();
         this.setState({liveTime: currentTime});
       }
+    }
+
+
+    setDBValues() {
+        var db = getFirebase().database();
+        var userId = getFirebase().auth().currentUser.uid;
+
+        if (!getFirebase().auth().currentUser)
+          return; 
+
+        //write appliance values to realtime database
+        db.ref('/users/' + userId + '/appliances/' + this.state.currentAppliance.name).set({ 
+          watts: this.average,
+          price: (Math.round(this.average / 9.09090909 * 100) / 100) 
+        }); 
     }
 
     componentDidMount() {
@@ -124,7 +148,7 @@ export default class Training extends Component {
           svg2.style("opacity", 1)
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.left + margin.right);
-          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "live");
+          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "random");
         }
         else {
           svg2.style("opacity", 0)
