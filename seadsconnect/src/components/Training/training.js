@@ -148,7 +148,7 @@ export default class Training extends Component {
           svg2.style("opacity", 1)
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.left + margin.right);
-          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "random");
+          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "live");
         }
         else {
           svg2.style("opacity", 0)

@@ -11,6 +11,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Popover from 'react-bootstrap/Popover'
 import Overlay from 'react-bootstrap/Overlay'
+import Form from 'react-bootstrap/Form'
 
 import DemoBar from './demoBar'
 import sendMailAlert, { sendEmailWarning } from "../Alerts/email"
@@ -31,7 +32,8 @@ export default class Demo extends Component {
     		alertTime: 0,
     		running: false,
     		status: "Not Running",
-    		attchtarget: null
+    		attchtarget: null,
+            realtime: false,
     	}
 
     	this.age = 0;
@@ -40,10 +42,15 @@ export default class Demo extends Component {
     	this.power = 0;
 	}
 
+    //function that calls the update age every second.
+    //setting the state to be running is to force the render update to be called. It does nothing else.
 	componentDidMount() {
     	this.interval = setInterval(() => this.updateAge(), 1000);
+        this.interval = setInterval(() => {this.setState({running: this.state.running})}, 100);
     }
 
+
+    //increments the age.
     updateAge() {
     	var timeBeforeAlert = 10;
     	var ohmHourLength   = 30;
@@ -59,6 +66,7 @@ export default class Demo extends Component {
     	}
     }
 
+    //changes the status depending on how far along in the sim it is.
     updateStatus(timeBeforeAlert, ohmHourLength, alertTime) {   	
     	var totalTime = timeBeforeAlert + ohmHourLength + alertTime;
 
@@ -68,7 +76,6 @@ export default class Demo extends Component {
  		else if (this.age < totalTime - ohmHourLength) {
     		if (!this.notified && totalTime - this.age - ohmHourLength === this.state.alertTime) {
     			var hr  = Math.floor(this.state.alertTime / 60);
-                console.log(hr);
         	    var min = this.state.alertTime % 60;
         	    this.notified = true;
         	    sendEmailWarning(this.state.email, hr, min);
@@ -86,6 +93,8 @@ export default class Demo extends Component {
     	}
     }
 
+
+    //changes the tooltip depending on how far along in the sim it is.
     tooltipContents() {
 
     	if (this.state.status === "Your Ohm Hour has ended!") {
@@ -107,7 +116,7 @@ export default class Demo extends Component {
 
 
  	getPower = (power) => {
- 		this.power = power;
+ 		this.power = parseFloat(power).toFixed(2);
  	}
 
 	render() {
@@ -165,24 +174,32 @@ export default class Demo extends Component {
                     </InputGroup.Prepend>
                     <FormControl aria-label="Small" value={this.state.email} aria-describedby="inputGroup-sizing-sm" onChange={(e) => {this.setState({email: e.target.value});}}/>
                   </InputGroup>
+
+                <Form.Check type="checkbox" id='checkbox'>
+                <Form.Check.Input type="checkbox" onChange={(e) => {this.setState({realtime: !this.state.realtime})}}/>
+                <Form.Check.Label>Use real-time data</Form.Check.Label>
+                </Form.Check>
+
                 </Row>
               </Col>
 
 		      </Col>
 
-		      <Col style={{paddingTop: '100px'}}>
+		      <Col style={{paddingTop: '120px'}}>
 		        <ProgressBar ref={this.attachRef} now={this.age} label={this.state.status}/>
+                <Row>
 		        <Overlay target={this.state.attchtarget} show={true} placement="top">
-		          <Popover id="popover-basic" title="Life Cycle Demo">
+		          <Popover id="popover-basic" title={"Current power usage: " + this.power + " watts"}>
    				  {this.tooltipContents()}
   				  </Popover>
 		        </Overlay>
+                </Row>
 		      </Col>
 
 
 		      <Col style={{paddingTop: '20px', paddingBottom: '20px'}}>
 		        <p1>Click the different appliances to see how they affect your watt usage!</p1>
-		          <DemoBar target={this.state.target} threshold={this.state.threshold} getPower={this.getPower.bind(this)} />
+		          <DemoBar target={this.state.target} threshold={this.state.threshold} getPower={this.getPower.bind(this)} useReal={this.state.realtime}/>
 		      </Col>
 
 		    </Card.Body>

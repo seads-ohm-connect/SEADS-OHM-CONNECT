@@ -200,26 +200,25 @@ export default class DemoBar extends Component {
 			let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
 			let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
 
-			this.props.getPower((this.state.val + parseFloat(this.state.liveData)).toFixed(2));
+			let v = this.props.useReal ? (this.state.val + parseFloat(this.state.liveData)).toFixed(2) : this.state.val;
 
-			let v = (this.state.val + parseFloat(this.state.liveData)).toFixed(2)
+			this.props.getPower(v);
 
+			v = parseFloat(v);
+
+			//Add a small buffer to the max so when v is zero it does not divide by zero.
 			content.push(
 				<div>
-  				  <Thresholdbar value={v} max={v} threshold1={this.props.target} threshold2={this.props.threshold} threshold3={this.state.m - this.props.target - this.props.threshold}/>
-					<div align="center">
-						<ButtonGroup>
-							<ButtonToolbar>
-							  <Row>
-								<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
-								<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
-								<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
-								<Button variant={fridgeColor} onClick={() => {this.toggleFridge(); this.changeColorFridge()}} >Fridge</Button>
-								<Button variant={dishwasherColor} onClick={() => {this.toggleDishwasher(); this.changeColorDishwasher()}} >Dishwasher</Button>
-								<Button variant={computerColor} onClick={() => {this.toggleComputer(); this.changeColorComputer()}} >Computer</Button>
-							  </Row>
-							</ButtonToolbar>
-						</ButtonGroup>
+  				  <Thresholdbar value={v} max={v + 0.00001} threshold1={this.props.target} threshold2={this.props.threshold} threshold3={v - this.props.target - this.props.threshold}/>
+					<div className="d-flex flex-column">
+					<ButtonGroup block style={{paddingTop: '10px'}}>
+					  <Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
+					  <Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
+					  <Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
+					  <Button variant={fridgeColor} onClick={() => {this.toggleFridge(); this.changeColorFridge()}} >Fridge</Button>
+					  <Button variant={dishwasherColor} onClick={() => {this.toggleDishwasher(); this.changeColorDishwasher()}} >Dishwasher</Button>
+					  <Button variant={computerColor} onClick={() => {this.toggleComputer(); this.changeColorComputer()}} >Computer</Button>
+					</ButtonGroup>
 					</div>
 				</div>
 			);
