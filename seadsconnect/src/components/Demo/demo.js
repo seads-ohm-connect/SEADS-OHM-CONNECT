@@ -205,7 +205,7 @@ export default class Demo extends Component {
 		    </Card.Body>
 
 		    <Card.Footer>
-		      <Button variant={this.state.running ? 'danger' : 'success'} block
+		      <Button variant={this.state.running ? 'danger' : 'success'} block disabled={this.state.alertTime === 0}
 		      	onClick={() => {
 		      		this.age = 0;
     				this.notified = false;
