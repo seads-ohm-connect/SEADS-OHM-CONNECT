@@ -7,7 +7,7 @@ import "./layout.css"
 import NavBar from "./navbar"
 
 
-import firebase from '../components/firebase'
+import firebase from '../components/Firebase'
 
 import getFirebase, { FirebaseContext } from '../components/Firebase'
 
