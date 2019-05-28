@@ -2,72 +2,91 @@
 //that would be used in a household and cause a reasonable enough impact
 //Appliances class is used for training graph and simulation pages as a
 //stand in for currently dissagregated data.
-class Appliances {
-  constructor(props){
 
-    this.electricFurnace = {
-      kWh: 10.5,
+
+//need to get more accurate values...
+//we originally got the values in KwH then we decided to use watts so we just multiplied by 1000... seems to high
+class Appliances {
+
+    static electricFurnace = {
+      name: "Electric Furnace",
+      watts: 10.5 * 1000,
       priceEstimate: 1.16
     }
-    this.centralAirconditioning = {
-      kWh: 3.0,
+
+    static centralAirconditioning = {
+      name: "Central Airconditioning",
+      watts: 3.0 * 1000,
       priceEstimate: 0.33
     }
 
-    this.windowAC120v = {
-      kWh: 0.73,
+    static windowAC120v = {
+      name: "Window AC 120v",
+      watts: 0.73 * 1000,
       priceEstimate: 0.08
     }
 
-    this.windowAC240v = {
-      kWh: 1.8,
+    static windowAC240v = {
+      name: "Window AC 240v",
+      watts: 1.8 * 1000,
       priceEstimate: 0.20
     }
 
-    this.electricWaterHeater = {
-      kWh: 0.61,
+    static electricWaterHeater = {
+      name: "Electric Water Heater",
+      watts: 0.61 * 1000,
       priceEstimate: 0.16
     }
 
-    this.oven = {
-      kWh: 2.3,
+    static oven = {
+      name: "Oven",
+      watts: 2.3 * 1000,
       priceEstimate: 0.25
     }
 
-    this.dishwasher = {
-      kWh: 1.58,
+    static dishwasher = {
+      name: "Dishwasher",
+      watts: 1.58 * 1000,
       priceEstimate: 0.18
     }
 
-    this.fridge = {
-      kWh: 0.07,
+    static fridge = {
+      name: "Fridge",
+      watts: 0.07 * 1000,
       priceEstimate: 0.01
     }
 
-    this.computer = {
-      kWh: 0.15,
+    static computer = {
+      name: "Computer",
+      watts: 0.15 * 1000,
       priceEstimate: 0.02
     }
 
-    this.washingMachineWarm = {
-      kWh: 2.3,
+    static washingMachineWarm = {
+      name: "Washing Machine (Warm)",
+      watts: 2.3 * 1000,
       priceEstimate: 0.25
     }
 
-    this.washingMachineHot = {
-      kWh: 6.3,
+    static washingMachineHot = {
+      name: "Washing Machine (Hot)",
+      watts: 6.3 * 1000,
       priceEstimate: 0.69
     }
 
-    this.dryer = {
-      kWh: 3.0,
+    static dryer = {
+      name: "Dryer",
+      watts: 3.0 * 1000,
       priceEstimate: 0.34
     }
 
-    this.hairDryer = {
-      kWh: 1.5,
+    static hairDryer = {
+      name: "Hair Dryer",
+      watts: 1.5 * 1000,
       priceEstimate: 0.17
     }
-  }
 }
-export default Appliances
+
+
+
+export default Appliances;

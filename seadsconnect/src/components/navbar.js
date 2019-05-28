@@ -1,7 +1,9 @@
 import React, { Component } from "react"
 import { Link } from "gatsby"
 import { Navbar, Nav } from "react-bootstrap"
-import getFirebase from "../components/firebase"
+import getFirebase from "../components/Firebase"
+// import SEADSConnectLogo from "../images/seadsconnectlogo"
+
 //
 // export default () => (
 //
@@ -17,28 +19,66 @@ import getFirebase from "../components/firebase"
 
 
 export default () => (
-        <NavBarHandler />
-
+    <NavBarHandler />
 )
 
 class NavBarHandler extends Component {
   constructor(props) {
       super(props);
+
+      this.state = {
+        signedIn : getFirebase().auth().currentUser
+      }
   }
 
 
+  toSignOut = () => {
+      if (this.state.signedIn) {
+        getFirebase().auth().signOut().then(function() {
+          sessionStorage.removeItem("signedIn");
+        })
+      }
+  }
+
+  getData() {
+    setTimeout(() => {
+      this.setState({
+        signedIn: this.getSignedIn()
+      })
+    })
+  }
+
+  getSignedIn() {
+    const cachedHits = sessionStorage.getItem("signedIn");
+    if (cachedHits) {
+      return true;
+    }
+    else 
+      return false;
+  }
+
+  componentDidMount() {
+    this.getData();
+  }
+
   isSignedIn() {
-    return getFirebase().auth().currentUser ? <a class="nav-link active" href="/">Sign Out</a> :
-                                              <a class="nav-link active" href="/page-2/">Sign In</a>;
+    if (!this.state.signedIn) 
+      this.state.signedIn = this.getSignedIn();
+
+    return this.getSignedIn() ? <a class="nav-link active" href="/">Sign Out</a> :
+                                 <a class="nav-link active" href="/page-2/">Sign In</a>;
   }
 
   getProfile() {
-    return getFirebase().auth().currentUser ? <a class="nav-link active" href="/">Profile</a> :
-                                              <a class="nav-link active" href="/page-3/">Sign Up</a>;
+    if (!this.state.signedIn) 
+      this.state.signedIn = this.getSignedIn();
+
+    return this.getSignedIn() ? <a class="nav-link active" href="/profile">Profile</a> :
+                                 <a class="nav-link active" href="/page-3/">Sign Up</a>;
   }
 
   render() {
-
+      this.state.signedIn = this.getSignedIn();
       return (
 
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
@@ -50,19 +90,27 @@ class NavBarHandler extends Component {
                   <li class="nav-item active">
                       <a class="nav-link" href="/dv-hub/">Metrics</a>
                   </li>
+                  <li class="nav-item active">
+                      <a class="nav-link" href="/training-module/">Training</a>
+                  </li>    
+                  <li class="nav-item active">
+                      <a class="nav-link" href="/ohmDemo/">Demo</a>
+                  </li>               
               </ul>
           </div>
           <div class="navbar-collaps order-3 dual-collapse2">
               <ul class="navbar-nav">
-                  <li class="nav-item">
-                      <a class="nav-link active" href="/page-2/">{this.isSignedIn()}</a>
+                  <li class="nav-item" onClick={this.toSignOut} > 
+                      {this.isSignedIn()}
                   </li>
                   <li class="nav-item active">
-                      <a class="nav-link" href="/page-3/">{this.getProfile()}</a>
+                      {this.getProfile()}
                   </li>
               </ul>
           </div>
         </nav>
+
+        
       )
     }
 }
