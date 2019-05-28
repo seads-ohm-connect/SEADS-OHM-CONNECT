@@ -8,6 +8,69 @@ import * as d3Chromatic from 'd3-scale-chromatic';
 
 var d3 = require("d3");
 
+export default class monthGraph {
+   drawGraph(svg, dimensions, self, savedData) {
+      //style is slightly different in this this one compared to live graph
+      //should probably change 
+      var width = dimensions.width;
+      var height = dimensions.height;
+      var margin = dimensions.margin;
+      //month we are currently working on. make this dynamic somehow
+      var month = "May2019";
+      
+		var xDate = d3.scaleLinear().range([0, width]);
+		var y = d3.scaleLinear().range([height, 0]);
+		var heighty = d3.scaleLinear().range([0, height]);
+      var xIndex = d3.scaleLinear().range([0,width]);
+      
+      var savedData = self.state.monthData;
+      var energyData = savedData[month].Energy;
+      heighty.domain([0, d3.max(energyData, function(d) {return d;})]);
+      
+      xDate.domain([new Date(2019,4,1), new Date(2019,4,31)]);
+      y.domain([0, d3.max(energyData, function(d) {return d;})]);
+      xIndex.domain([0,energyData.length]);
+      
+      var barWidth = (width)*(5/6)/energyData.length;
+      var barWidthSpacing = (width)*(1/6)/(energyData.length-1)
+      
+      
+      var bar = svg.selectAll("rect")
+         .data(energyData)
+          .enter().append("rect")
+        .style("fill","red")
+        .attr("x",function(d, i){return margin.left+xIndex(i);})
+        .attr("y",function(d){return height+margin.top-heighty(d);})
+        .attr("width", "" + barWidth)
+        .attr("height",function(d) {return heighty(d);});
+      
+        
+      var areaFill = d3.area()
+        .curve(d3.curveMonotoneX)
+        .x(function(d, i) { console.log(i+"x");return xIndex(i); })
+        .y(function(d) { console.log(d+"y");return y(d); });
+      
+      var line = svg.append("path")
+        .data([energyData])
+        .attr("fill", "blue")
+        .attr("class", "line")
+        .attr("d", areaFill)
+        .attr("stroke", "blue")
+        .attr("stroke-width", "2px")
+        .attr("transform", "translate(" + margin.left + "," + (margin.top) + ")");
+      
+      var xaxis = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + (margin.top+height) + ")")
+        .call(d3.axisBottom(xDate)
+                .ticks(6)
+                .tickFormat(d3.timeFormat("%d %b")));
+        
+      var yaxis = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .call(d3.axisLeft(y));
+   }
+}
+
 //Thresholdbar: Change pass watts into value and change max to what ever you want.
 class DvHub extends Component {
 	constructor(props) {
@@ -144,6 +207,8 @@ class DvHub extends Component {
       //draw the realtime graph once a second
 		setInterval(() => this.drawChart(svg, dimensions, TooltipValues), 1000);
       this.drawChart(svg, dimensions, TooltipValues);
+      var monthGraph = new monthGraph();
+      monthGraph.draw(svg2, dimensions, this, this.state.savedData);
       this.updateMonthData();
       this.drawMonthChart(svg2, dimensions);
     }
@@ -192,66 +257,6 @@ class DvHub extends Component {
       console.log(this.state.monthData);
    }
 	
-   drawMonthChart = (svg, dimensions) => {
-      //style is slightly different in this this one compared to live graph
-      //should probably change 
-      var width = dimensions.width;
-      var height = dimensions.height;
-      var margin = dimensions.margin;
-      //month we are currently working on. make this dynamic somehow
-      var month = "May2019";
-      
-		var xDate = d3.scaleLinear().range([0, width]);
-		var y = d3.scaleLinear().range([height, 0]);
-		var heighty = d3.scaleLinear().range([0, height]);
-      var xIndex = d3.scaleLinear().range([0,width]);
-      
-      var savedData = this.state.monthData;
-      var energyData = savedData[month].Energy;
-      heighty.domain([0, d3.max(energyData, function(d) {return d;})]);
-      
-      xDate.domain([new Date(2019,4,1), new Date(2019,4,31)]);
-      y.domain([0, d3.max(energyData, function(d) {return d;})]);
-      xIndex.domain([0,energyData.length]);
-      
-      var barWidth = (width)*(5/6)/energyData.length;
-      var barWidthSpacing = (width)*(1/6)/(energyData.length-1)
-      
-      
-      var bar = svg.selectAll("rect")
-         .data(energyData)
-          .enter().append("rect")
-        .style("fill","red")
-        .attr("x",function(d, i){return margin.left+xIndex(i);})
-        .attr("y",function(d){return height+margin.top-heighty(d);})
-        .attr("width", "" + barWidth)
-        .attr("height",function(d) {return heighty(d);});
-      
-        
-      var areaFill = d3.area()
-        .curve(d3.curveMonotoneX)
-        .x(function(d, i) { console.log(i+"x");return xIndex(i); })
-        .y(function(d) { console.log(d+"y");return y(d); });
-      
-      var line = svg.append("path")
-        .data([energyData])
-        .attr("fill", "blue")
-        .attr("class", "line")
-        .attr("d", areaFill)
-        .attr("stroke", "blue")
-        .attr("stroke-width", "2px")
-        .attr("transform", "translate(" + margin.left + "," + (margin.top) + ")");
-      
-      var xaxis = svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + (margin.top+height) + ")")
-        .call(d3.axisBottom(xDate)
-                .ticks(6)
-                .tickFormat(d3.timeFormat("%d %b")));
-        
-      var yaxis = svg.append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-        .call(d3.axisLeft(y));
-   }
    
 	drawChart = (svg, dimensions, TooltipValues) => {
       //hard coded values for dimensions of the graph
