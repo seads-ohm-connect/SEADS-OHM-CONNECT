@@ -125,13 +125,13 @@ export default class Demo extends Component {
 		  <Card>
 
 		    <Card.Header>
-		      <h1>Ohm Hour Demo</h1>
+		      <h1>OhmHour Demo</h1>
 		    </Card.Header>
 
 		    <Card.Body>
 
 		      <Col>
-              
+
 		      <Row>
 
 		        <Col>
@@ -148,7 +148,7 @@ export default class Demo extends Component {
 		        <Col>
                   <Form.Check type="checkbox" id='checkbox'>
                   <Form.Check.Input type="checkbox" onChange={(e) => {this.setState({realtime: !this.state.realtime})}}/>
-                  <Form.Check.Label>Use real-time data</Form.Check.Label>
+                  <Form.Check.Label>Use Real-Time Data</Form.Check.Label>
                   </Form.Check>
 		        </Col>
 
