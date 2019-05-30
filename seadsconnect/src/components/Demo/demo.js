@@ -131,9 +131,7 @@ export default class Demo extends Component {
 		    <Card.Body>
 
 		      <Col>
-
-		      	<p1>This demo shows events that will happen before and throughout an Ohm Hour </p1>
-
+              
 		      <Row>
 
 		        <Col>
@@ -148,12 +146,10 @@ export default class Demo extends Component {
 
 
 		        <Col>
-		          <InputGroup className="mb-4">
-		      	    <InputGroup.Prepend>
-      			      <InputGroup.Text id="inputGroup-sizing-sm1">Enter Threshold</InputGroup.Text>
-    			    </InputGroup.Prepend>
-    			    <FormControl aria-label="Small" value={this.state.threshold} aria-describedby="inputGroup-sizing-sm" type="number" onChange={(e) => {this.setState({threshold: e.target.value});}}/>
-		          </InputGroup>
+                  <Form.Check type="checkbox" id='checkbox'>
+                  <Form.Check.Input type="checkbox" onChange={(e) => {this.setState({realtime: !this.state.realtime})}}/>
+                  <Form.Check.Label>Use real-time data</Form.Check.Label>
+                  </Form.Check>
 		        </Col>
 
 
@@ -172,14 +168,8 @@ export default class Demo extends Component {
                     <InputGroup.Prepend>
                         <InputGroup.Text id="inputGroup-sizing-sm">Email(s)</InputGroup.Text>
                     </InputGroup.Prepend>
-                    <FormControl aria-label="Small" value={this.state.email} aria-describedby="inputGroup-sizing-sm" onChange={(e) => {this.setState({email: e.target.value});}}/>
+                    <FormControl aria-label="Small" value={this.state.email} placeholder="Enter email" aria-describedby="inputGroup-sizing-sm" onChange={(e) => {this.setState({email: e.target.value});}}/>
                   </InputGroup>
-
-                <Form.Check type="checkbox" id='checkbox'>
-                <Form.Check.Input type="checkbox" onChange={(e) => {this.setState({realtime: !this.state.realtime})}}/>
-                <Form.Check.Label>Use real-time data</Form.Check.Label>
-                </Form.Check>
-
                 </Row>
               </Col>
 
