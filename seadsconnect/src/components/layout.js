@@ -25,15 +25,17 @@ const Layout = ({ children }) => (
     render={data => (
       <>
       <FirebaseContext.Provider value={getFirebase()}>
-        <Header siteTitle={data.site.siteMetadata.title} />
+        {/* <Header siteTitle={data.site.siteMetadata.title} /> */}
 
         <NavBar />
+
+
         <div
           style={{
-            margin: `0 auto`,
+            margin: '0 auto',
             maxWidth: 960,
             padding: `0px 1.0875rem 1.45rem`,
-            paddingTop: 0,
+            paddingTop: 75,
           }}
         >
           <main>{children}</main>

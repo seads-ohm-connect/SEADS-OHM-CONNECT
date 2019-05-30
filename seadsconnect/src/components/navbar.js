@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import { Link } from "gatsby"
-import { Navbar, Nav } from "react-bootstrap"
+import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap"
 import getFirebase from "../components/firebase"
-// import SEADSConnectLogo from "../images/seadsconnectlogo"
+import SEADSConnectLogo from "../images/seadsconnectlogo.png"
 
 //
 // export default () => (
@@ -81,7 +81,23 @@ class NavBarHandler extends Component {
       this.state.signedIn = this.getSignedIn();
       return (
 
-        <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        /* <Navbar bg="dark" variant="dark" fixed="top">
+        <Navbar.Brand>
+          <img
+          src={SEADSConnectLogo}
+          className="d-inline-block align-top"
+          alt="SEADSConnect Logo"
+          height="30"
+          width="30"
+          />
+        </Navbar.Brand>
+        <Nav className="mr-auto">
+          <Nav.Link href="/dv-hub/">Metrics</Nav.Link>
+          <Nav.Link href="/training-module/">Training</Nav.Link>
+        </Nav>
+      </Navbar> */
+
+      <nav class="navbar navbar-expand-sm navbar-light bg-light">
           <div class="navbar-collapse order-1 dual-collapse2">
               <ul class="navbar-nav">
                   <li class="nav-item active">
@@ -106,8 +122,7 @@ class NavBarHandler extends Component {
               </ul>
           </div>
         </nav>
-
-        
+       
       )
     }
 }

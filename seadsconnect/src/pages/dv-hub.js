@@ -3,7 +3,7 @@ import { Link } from "gatsby"
 import Layout from "../components/layout"
 import Thresholdbar from "../components/Thresholdbar/thresholdbar"
 import 'bootstrap/dist/css/bootstrap.css';
-import { Button, CardGroup, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
+import { Alert, Button, CardGroup, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
 import GetOhmData from "../components/Profile/OhmConnect"
@@ -127,6 +127,10 @@ class DvHub extends Component {
 				m: 100,
 				liveData: 0,
 				liveTime: new Date().toLocaleString(),
+				targetThreshold: 0,
+				ohmHourDate: new Date().toString(),
+				ohmHourStart: 0,
+				ohmHourEnd: 0,
 				washerToggleOn: true,
 				dryerToggleOn: true,
 				ovenToggleOn: true,
@@ -140,7 +144,7 @@ class DvHub extends Component {
 
 	}
 
-	//queries the data base to see if there is a value enetered for the appliance.
+	//queries the data base to see if there is a value entered for the appliance.
 	//if not it uses the static database values
 	setValue(req, toggle) {
 
@@ -254,13 +258,14 @@ class DvHub extends Component {
 	}
 
 	componentDidMount() {
-        this.interval = setInterval(() => this.updatePower(), 500);
-    }
+			this.interval = setInterval(() => this.updatePower(), 500);
+			console.log("go to jbaskin 316 and look for the turkey picture on the whiteboard ")
+			console.log("austin was an onion ring back in 3012")
+  }
 
-
-    componentWillUnmount() {
+  componentWillUnmount() {
         clearInterval(this.interval);
-    }
+	}
 
 	updatePower = () => {
 
@@ -280,7 +285,43 @@ class DvHub extends Component {
 			var currentTime = new Date().toLocaleString();
 			this.setState({liveTime: currentTime});
 		}
+		this.ohmTargetDate();
 	}
+
+	ohmTargetDate() {
+		if (getFirebase().auth().currentUser) {
+			var userID = getFirebase().auth().currentUser.uid;
+			this.ohmData.getOhmHourThreshold(userID).then((thresholdValue) => {
+				if(thresholdValue){
+					this.ohmData.threshold = thresholdValue;
+					console.log(thresholdValue);
+				}
+			});
+			this.ohmData.getOhmDate(userID).then((ohmDate) => {
+				if(ohmDate){
+					this.ohmData.ohmHourDate = ohmDate;
+				}
+			}); 
+			this.ohmData.getOhmStartTime(userID).then((ohmStartTime) => {
+				if(ohmStartTime) {
+					this.ohmData.startTime = ohmStartTime;
+				}
+			});
+			this.ohmData.getOhmEndTime(userID).then((ohmEndTime) => {
+				if(ohmEndTime) {
+					this.ohmData.endTime = ohmEndTime;
+				}
+			});
+
+			this.setState({targetThreshold: this.ohmData.threshold});
+			this.setState({ohmHourDate: this.ohmData.ohmHourDate});
+			this.setState({ohmHourStart: this.ohmData.startTime});
+			this.setState({ohmHourEnd: this.ohmData.endTime});
+			console.log(this.state.ohmHourDate);
+			console.log(this.state.targetThreshold);
+		}
+	}
+	
 
 	render() {
 		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
@@ -294,8 +335,13 @@ class DvHub extends Component {
 		<Layout>
 			  <Container>
 							<Card className="text-center" border="info">
-								<Card.Header as={Card} bg="success" text="white" style={ohmHourHeaderStyle}><h4>OhmHour</h4></Card.Header>
-								<Card.Body>Upcoming OhmHour will go here when we get the API working </Card.Body>
+								<Card.Header as={Card} bg="success" text="white" style={ohmHourHeaderStyle}><h1>Your Upcoming OhmHour</h1></Card.Header>
+								<Card.Body>
+									<Alert variant="primary">
+										<h3> {this.state.ohmHourDate} </h3> 
+										<h3> {this.state.ohmHourStart} - {this.state.ohmHourEnd} </h3>
+									</Alert>
+								</Card.Body>
 							</Card>
 						<CardGroup>
 									<Card className="text-center" border="info">
@@ -323,7 +369,7 @@ class DvHub extends Component {
 												<Col></Col>
 												<Col>
 													<div class="dot" class="p-3 mb-2 bg-warning text-white" style={liveWattsCircle} align="center">
-														<h1 style={liveDataStyle}>{ this.state.liveData }</h1>
+														<h1 style={liveDataStyle}>{ this.state.targetThreshold }</h1>
 														<h1>watts</h1>
 													</div>
 												</Col>
