@@ -7,6 +7,7 @@ import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
 import GetOhmData from "../components/Profile/OhmConnect"
 import TrackAppliance from "../components/Training/trackAppliance"
+import MonthGraph from "../Graphs/Month/MonthGraph"
 
 import getFirebase from '../components/Firebase'
 var d3 = require("d3");
@@ -150,6 +151,19 @@ class DvHub extends Component {
 
 	componentDidMount() {
         this.interval = setInterval(() => this.updatePower(), 1000);
+      /*
+      var monthGraphExample = new MonthGraph();
+      var width = 1000
+      var height = 600
+      var margin = {left: 100, right: 60, top:30, bottom:60};
+      var TooltipValues = {height: 40, width: 300, textOffset: 15, heightOffset: 80, leftOffset: 130};
+      var dimensions = {margin, width, height};
+      var svg = d3.select("body")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.left + margin.right)   
+        dg1.drawGraph(svg, dimensions, [300,400,100,300,250,600,1000,567,286,373,73,731,824,363,768,456,375,357,136,834,237,365,246,23,175,643,789,287,293,387,202], 5, 2019);
+      */
     }
 
 
