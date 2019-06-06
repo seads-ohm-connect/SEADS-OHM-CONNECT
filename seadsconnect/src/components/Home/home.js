@@ -6,7 +6,10 @@ import SeadsBanner from '../../images/seads-logotest.png'
 import OhmBanner from '../../images/ohmconnecttest.png'
 import Updater from "../Firebase/adminDBupdater"
 
-
+//UI component used in the index page.
+//Any data to be displayed on the front page of the website should
+//be added to any of the bootstrap cards here, or should be added
+//in their own form further down the page. 
 export default class HomeCard extends Component {
 
 	render() {
@@ -15,7 +18,7 @@ export default class HomeCard extends Component {
 				<Updater />
 		   <Card border="primary" bg="info" text="white">
 						<Card.Img variant='top'/>
-		      
+
 					<Card.Body>
 		        <Card.Title>SEADS</Card.Title>
 		        <Card.Text>
@@ -25,7 +28,7 @@ export default class HomeCard extends Component {
 		      <Card.Footer>
 		        <Button variant="outline-light">Sign Up</Button>
 		      </Card.Footer>
-					
+
 		    </Card>
 
 		    <Card bg="primary" text="white" className="text-center p-3">
@@ -50,7 +53,7 @@ export default class HomeCard extends Component {
 		      <Card.Footer>
 		        <Button variant="outline-light"  href="https://www.ohmconnect.com/#Sign-up-Form">Sign Up</Button>
 		      </Card.Footer>
-					
+
 		    </Card>
 		</CardColumns>
 		)

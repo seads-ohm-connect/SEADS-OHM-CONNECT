@@ -3,7 +3,19 @@ import React, { Component } from "react"
 
 var d3 = require("d3");
 
-
+//Class for retreiving data from Firebase related to OhmConnect
+//Each function is asynchronous and functions should be used in as exampled:
+// *GetOhmData object*.[ANY GET FUNCTION].then((local_variable_name) => {
+//  if(local_variable_name){
+//    *use data retrieved from function that is stored in local_variable_name*
+//  }
+//  });
+//
+//Firebase references are able to be changed if the location of each of the
+//OhmConnect related items are moved.
+//There is currently only functions that retrieve a single Data feild.
+//A function that combines these together to get all the data in one call
+//can be made if the individual calls become too cumbersome.
 class GetOhmData {
     constructor(props){
       this.state = {

@@ -11,7 +11,19 @@ import TrackAppliance from "../components/Training/trackAppliance"
 import getFirebase from '../components/Firebase'
 var d3 = require("d3");
 
-//Thresholdbar: Change pass watts into value and change max to what ever you want.
+//Main metrics page for the webApp, labled as Metrics in the navigation bar.
+//Named DvHub as it is for the main data visualizations for realtime energy usage.
+//Consists of an updatePower function that is constantly updating durring while the
+//page is open. This retrieves the the data from the SEADS device and displayes it
+//in a simple format in the center of the page.
+//Color change functions and toggle functions are buton forms for changing button
+//styling for different appliances.
+
+//Any live updating functions/modules that are created in their own componets
+//can be TESTED in the updatePower function as it is always running when on metrics page.
+//However, no other functions or components should be executed from this function unless
+//they are directly involved in giving information to the metrics page itself.
+//ALl new work and componets should have their own page tho keep with modularity. 
 class DvHub extends Component {
 	constructor(props) {
     	super(props);
@@ -183,7 +195,7 @@ class DvHub extends Component {
 
 	isLoading() {
 
-		let content = []; 
+		let content = [];
 		if (this.state.liveData === null || this.state.liveData === undefined) {
 			//change this to a loading circle from react-bootstrap.
 			//I couldn't import the spinner library from bootstrap... maybe need to update?
@@ -208,7 +220,7 @@ class DvHub extends Component {
 					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
 					<h2 align="center">Current Date: { this.state.liveTime }</h2>
 				</Jumbotron>
-	
+
   				<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
 					<div align="center">
 						<ButtonGroup>

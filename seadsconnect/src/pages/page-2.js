@@ -11,6 +11,16 @@ import { FirebaseContext } from '../components/Firebase'
 import { withFirebase } from '../components/Firebase'
 import getFirebase from '../components/Firebase'
 
+
+//Page-2 is the signIn page for SEADSConnect. Checks login credentials un,
+//validateForm and then handleSubmit. If log in is successfull, the users
+//login will change the format of the navigation bar at the top to
+//remove the signIn page option, and replace it with SignOut and Profile.
+//The user will still be on this page after the signIn is successfull.
+//Page switching after successfull log in was not implemented by the end of
+//the first itteration of this project.
+//SignOut is handled in the NavBar component.  
+
 const SignInPage = () => (
   <React.Fragment>
   <LoginForm />
@@ -49,7 +59,7 @@ class LoginFormBase extends Component {
      .then(() => {
        this.setState({ ...INITIAL_STATE });
        sessionStorage.setItem("signedIn", JSON.stringify(true));
-       this.context.router.history.push("/") 
+       this.context.router.history.push("/")
      })
        .catch(error => {
        this.setState({ error });
@@ -67,7 +77,7 @@ class LoginFormBase extends Component {
 	        			<Form.Label>Email </Form.Label>
 	        			<Form.Control
 	        				autoFocus
-	        				type="email" 
+	        				type="email"
 	        				placeholder="Enter email"
 	        				value={this.state.email}
 	        				onChange={this.handleChange}
@@ -96,7 +106,7 @@ class LoginFormBase extends Component {
 	        </Form>
 
      		</div>
-     		
+
      	</Layout>
 
   	);

@@ -19,6 +19,16 @@ import TrackAppliance from "./trackAppliance"
 
 var d3 = require("d3");
 
+//UI for the appliance tracker algorithm. Consists of a Dropdown menu of
+//appliances to track, and 2 graphs that show energy usage.
+//svg1 is the realtime graph that always represents the SEADS data from
+//the users device. svg2 a graph that appears when the tracker is started.
+//Data for svg2 is obtained in updatePower when calling the tracker function:
+//this.setState({liveDataAppliance: this.tracker.track(this.device.liveData)})
+//This line is always executed, but only functions if the tracker has been started.
+//Tracker start and finish are handled un the handleButtonClick function.
+//When button is selected, the tracker is turned on, and when the button is
+//selected again, the tracker is turned off.
 
 export default class Training extends Component {
 	constructor(props) {
@@ -53,7 +63,7 @@ export default class Training extends Component {
     handleButtonClick(e) {
 
       if (this.state.currentAppliance === null)
-        return; 
+        return;
 
     	this.setState({running: !this.state.running});
 			if(!this.tracker.tracking){
@@ -64,7 +74,7 @@ export default class Training extends Component {
         this.average = this.tracker.getAverage();
         this.setDBValues();
 
-        this.setState({savedData2: []})        
+        this.setState({savedData2: []})
 			}
     	//if running, render real time graph of data usage.
     }
@@ -97,13 +107,13 @@ export default class Training extends Component {
         var userId = getFirebase().auth().currentUser.uid;
 
         if (!getFirebase().auth().currentUser)
-          return; 
+          return;
 
         //write appliance values to realtime database
-        db.ref('/users/' + userId + '/appliances/' + this.state.currentAppliance.name).set({ 
+        db.ref('/users/' + userId + '/appliances/' + this.state.currentAppliance.name).set({
           watts: this.average,
-          price: (Math.round(this.average / 9.09090909 * 100) / 100) 
-        }); 
+          price: (Math.round(this.average / 9.09090909 * 100) / 100)
+        });
     }
 
     componentDidMount() {
