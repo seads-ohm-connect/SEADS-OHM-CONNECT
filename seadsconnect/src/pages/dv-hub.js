@@ -324,85 +324,68 @@ class DvHub extends Component {
 	
 
 	render() {
-		let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
-		let dryerColor = this.state.dryerToggleOn ? "outline-success" : "success";
-		let ovenColor = this.state.ovenToggleOn ? "outline-success" : "success";
-		let fridgeColor = this.state.fridgeToggleOn ? "outline-success" : "success";
-		let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
-		let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
 
 		return (
 		<Layout>
 			  <Container>
-							<Card className="text-center" border="info">
-								<Card.Header as={Card} bg="success" text="white" style={ohmHourHeaderStyle}><h1>Your Upcoming OhmHour</h1></Card.Header>
+					<Card className="text-center" border="info" bg="info" text="white">
+						<Card.Body>
+							<h3>The information below gives you real time updates on your power usage as well as any upcoming OhmHours</h3>
+						</Card.Body>
+					</Card>
+					<Card className="text-center" border="info">
+						<Card.Header as={Card} bg="success" text="white" style={ohmHourHeaderStyle}><h1>Your Upcoming OhmHour</h1></Card.Header>
+						<Card.Body>
+							<Alert variant="primary">
+								<h3> {this.state.ohmHourDate} </h3> 
+							</Alert>
+							<Alert variant="primary">
+								<h3> {this.state.ohmHourStart} - {this.state.ohmHourEnd} </h3>
+							</Alert>
+						</Card.Body>
+					</Card>
+					<CardGroup>
+								<Card className="text-center" border="info">
+								<Card.Header as={Card} bg="info" text="white" style={dataHeaderStyle}><h1>Current Usage</h1></Card.Header>
 								<Card.Body>
-									<Alert variant="primary">
-										<h3> {this.state.ohmHourDate} </h3> 
-										<h3> {this.state.ohmHourStart} - {this.state.ohmHourEnd} </h3>
-									</Alert>
+								<Container>
+									<Row>
+										<Col/>
+										<Col>
+											<div class="dot" class="p-3 mb-2 bg-info text-white" style={liveWattsCircle} align="center">
+												<h1 style={liveDataStyle}>{ this.state.liveData }</h1>
+												<h1>watts</h1>
+											</div>
+										</Col>
+										<Col/>
+									</Row>
+								</Container>
 								</Card.Body>
 							</Card>
-						<CardGroup>
-									<Card className="text-center" border="info">
-									<Card.Header as={Card} bg="info" text="white" style={dataHeaderStyle}><h1>Current Usage</h1></Card.Header>
+								<Card className="text-center" border="info">
+									<Card.Header as={Card} bg="warning" text="white" style={dataHeaderStyle}><h1>Target</h1></Card.Header>
 									<Card.Body>
 									<Container>
 										<Row>
-											<Col/>
+											<Col></Col>
 											<Col>
-												<div class="dot" class="p-3 mb-2 bg-info text-white" style={liveWattsCircle} align="center">
-													<h1 style={liveDataStyle}>{ this.state.liveData }</h1>
+												<div class="dot" class="p-3 mb-2 bg-warning text-white" style={liveWattsCircle} align="center">
+													<h1 style={liveDataStyle}>{ this.state.targetThreshold }</h1>
 													<h1>watts</h1>
 												</div>
 											</Col>
-											<Col/>
+											<Col></Col>
 										</Row>
 									</Container>
 									</Card.Body>
 								</Card>
-									<Card className="text-center" border="info">
-										<Card.Header as={Card} bg="warning" text="white" style={dataHeaderStyle}><h1>Target</h1></Card.Header>
-										<Card.Body>
-										<Container>
-											<Row>
-												<Col></Col>
-												<Col>
-													<div class="dot" class="p-3 mb-2 bg-warning text-white" style={liveWattsCircle} align="center">
-														<h1 style={liveDataStyle}>{ this.state.targetThreshold }</h1>
-														<h1>watts</h1>
-													</div>
-												</Col>
-												<Col></Col>
-											</Row>
-										</Container>
-										</Card.Body>
-									</Card>
-						</CardGroup>
+					</CardGroup>
 				</Container>
-
-				<h2 align="center">Current Date: { this.state.liveTime }</h2>
-  			<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
-				<div align="center">
-					<ButtonGroup>
-						<ButtonToolbar>
-							<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
-							<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
-							<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
-							<Button variant={fridgeColor} onClick={() => {this.toggleFridge(); this.changeColorFridge()}} >Fridge</Button>
-							<Button variant={dishwasherColor} onClick={() => {this.toggleDishwasher(); this.changeColorDishwasher()}} >Dishwasher</Button>
-							<Button variant={computerColor} onClick={() => {this.toggleComputer(); this.changeColorComputer()}} >Computer</Button>
-						</ButtonToolbar>
-					</ButtonGroup>
-				</div>
-  		</Layout>
+  	</Layout>
 		)
 	}
 }
 
-const ohmHourCard = {
-	width: '49rem',
-}
 const dataHeaderStyle = {
 	fontSize: 40
 }

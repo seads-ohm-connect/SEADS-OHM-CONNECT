@@ -1,8 +1,8 @@
 import React, { Component } from "react"
 import { Link } from "gatsby"
-import { Navbar, Nav, Form, FormControl, Button } from "react-bootstrap"
+import { Navbar, Nav, Button} from "react-bootstrap"
 import getFirebase from "../components/firebase"
-import SEADSConnectLogo from "../images/seadsconnectlogo.png"
+import SEADSConnectLogo from "../images/SEADSConnectLogo.png"
 
 //
 // export default () => (
@@ -81,47 +81,50 @@ class NavBarHandler extends Component {
       this.state.signedIn = this.getSignedIn();
       return (
 
-        /* <Navbar bg="dark" variant="dark" fixed="top">
-        <Navbar.Brand>
-          <img
+       <Navbar bg="dark" variant="dark" fixed="top">
+        <Navbar.Brand href="/"> 
+        <img
           src={SEADSConnectLogo}
-          className="d-inline-block align-top"
           alt="SEADSConnect Logo"
           height="30"
           width="30"
-          />
-        </Navbar.Brand>
+        />
+        SEADSConnect</Navbar.Brand> 
         <Nav className="mr-auto">
           <Nav.Link href="/dv-hub/">Metrics</Nav.Link>
           <Nav.Link href="/training-module/">Training</Nav.Link>
         </Nav>
-      </Navbar> */
+        <Nav>
+          <Button variant="info" onClick={this.toSignOut}> Login Button For Ari to fix</Button>
+          <Button variant="info" onClick={this.getProfile}> Profile Button for Ari to fix </Button>
+        </Nav>
+      </Navbar> 
 
-      <nav class="navbar navbar-expand-sm navbar-light bg-light">
-          <div class="navbar-collapse order-1 dual-collapse2">
-              <ul class="navbar-nav">
-                  <li class="nav-item active">
-                      <a class="nav-link" href="/">SEADSConnect</a>
-                  </li>
-                  <li class="nav-item active">
-                      <a class="nav-link" href="/dv-hub/">Metrics</a>
-                  </li>
-                  <li class="nav-item active">
-                      <a class="nav-link" href="/training-module/">Training</a>
-                  </li>                  
-              </ul>
-          </div>
-          <div class="navbar-collaps order-3 dual-collapse2">
-              <ul class="navbar-nav">
-                  <li class="nav-item" onClick={this.toSignOut} > 
-                      {this.isSignedIn()}
-                  </li>
-                  <li class="nav-item active">
-                      {this.getProfile()}
-                  </li>
-              </ul>
-          </div>
-        </nav>
+      // <nav class="navbar navbar-expand-sm navbar-light bg-light">
+      //     <div class="navbar-collapse order-1 dual-collapse2">
+      //         <ul class="navbar-nav">
+      //             <li class="nav-item active">
+      //                 <a class="nav-link" href="/">SEADSConnect</a>
+      //             </li>
+      //             <li class="nav-item active">
+      //                 <a class="nav-link" href="/dv-hub/">Metrics</a>
+      //             </li>
+      //             <li class="nav-item active">
+      //                 <a class="nav-link" href="/training-module/">Training</a>
+      //             </li>                  
+      //         </ul>
+      //     </div>
+      //     <div class="navbar-collaps order-3 dual-collapse2">
+      //         <ul class="navbar-nav">
+      //             <li class="nav-item" onClick={this.toSignOut} > 
+      //                 {this.isSignedIn()}
+      //             </li>
+      //             <li class="nav-item active">
+      //                 {this.getProfile()}
+      //             </li>
+      //         </ul>
+      //     </div>
+      //   </nav>
        
       )
     }
