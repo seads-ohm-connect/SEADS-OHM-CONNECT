@@ -1,0 +1,56 @@
+.stack{
+  text-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  width: 100%;
+  font: 12px sans-serif;
+}
+
+
+.group{
+  display: flex;
+  flex-direction: column-reverse;
+  height: 250px;
+  margin: auto;
+  align-items: center;
+}
+
+
+.block{
+  width: 15px;
+  order: 1;
+}
+
+
+.block:hover{
+  opacity: 0.5;
+}
+
+
+.label{
+  order: 0;
+  text-align: center;
+}
+
+
+.count{
+  order: 2;
+}
+
+
+.custom_tooltip{
+  position: absolute;
+  display: none;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+  box-shadow: -3px 3px 15px #888;
+  color: white;
+  padding: 6px;
+}
+
+.bordered{
+  outline-style: solid;
+  outline-width: thin;
+  background-color: rgba(210, 210, 210, 0.6);
+}

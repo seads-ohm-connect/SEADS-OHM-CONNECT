@@ -4,7 +4,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 import { withFirebase } from '../components/Firebase'
-import getFirebase from '../components/firebase'
+import getFirebase from '../components/Firebase'
 import { Button, Col, Row, Form } from "react-bootstrap"
 
 
@@ -14,6 +14,7 @@ const INITIAL_STATE = {
     email: "",
     password: "",
     passwordConfirm: "",
+    phone: "",
     address: "",
     city: "",
     stateLoc: "",
@@ -38,10 +39,10 @@ class SignUpFormBase extends Component {
   }
 
   validateForm() {
-    return this.state.email.length > 0    && this.state.password.length > 0 &&
-           this.state.address.length > 0  && this.state.city.length > 0     &&
-           this.state.zip.length > 0      && this.state.firstName.length > 0       &&
-           this.state.lastName.length > 0; 
+    return this.state.email.length > 0    && this.state.password.length > 0 && 
+	   this.state.phone.length > 0    && this.state.address.length > 0  && 
+           this.state.city.length > 0     && this.state.zip.length > 0      && 
+           this.state.firstName.length > 0       && this.state.lastName.length > 0; 
   }
 
   validatePassword() {
@@ -55,11 +56,11 @@ class SignUpFormBase extends Component {
   }
 
   onSubmit = event => {
-    const { firstName, lastName, email, password, address, city, stateLoc, zip, seadsID} = this.state;
+    const { firstName, lastName, email, password, phone, address, city, stateLoc, zip, seadsID} = this.state;
     getFirebase().auth().createUserWithEmailAndPassword(email, password)
       .then(authUser => {
         this.setState({...INITIAL_STATE});
-        this.writeUserData(firstName, lastName, email, address, city, stateLoc, zip, seadsID);
+        this.writeUserData(firstName, lastName, email, phone, address, city, stateLoc, zip, seadsID);
       })
       .catch(error => {
         this.setState({ error });
@@ -68,7 +69,7 @@ class SignUpFormBase extends Component {
     event.preventDefault();
   };
 
-  writeUserData(n_first, n_last, n_email, n_address, n_city, n_stateLoc, n_zip, n_seadsID) {
+  writeUserData(n_first, n_last, n_email, n_phone, n_address, n_city, n_stateLoc, n_zip, n_seadsID) {
     var db = getFirebase().database();
     var userId = getFirebase().auth().currentUser.uid;
 
@@ -76,6 +77,7 @@ class SignUpFormBase extends Component {
     db.ref('users/' + userId).set({
       firstName: n_first,
       lastName: n_last,
+      phone: n_phone,
       address: n_address,
       city: n_city,
       state: n_stateLoc,
@@ -88,7 +90,11 @@ class SignUpFormBase extends Component {
     });
 
     db.ref('users/' + userId + "/seadsDevice").set({
-      seadsID: n_seadsID
+      "seadsID 0": n_seadsID
+    });
+
+    db.ref('users/' + userId + "/phoneAlerts").set({
+      phone: n_phone
     });
 
   }
@@ -101,6 +107,7 @@ class SignUpFormBase extends Component {
       email,
       password,
       passwordConfirm,
+      phone,
       address,
       city,
       stateLoc,
@@ -173,11 +180,24 @@ class SignUpFormBase extends Component {
               </Row>
 
               <Row>
+                <Form.Group as={Col} controlId="phone">
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Control
+                    type="phone"
+                    placeholder="xxx-xxx-xxxx"
+                    value={phone}
+                    onChange={this.handleChange}
+                  />
+                </Form.Group>
+              </Row>
+
+
+              <Row>
                 <Form.Group as={Col} controlId="address">
                   <Form.Label>Address</Form.Label>
                   <Form.Control
                     type="address"
-                    placeholder="Enter Adress"
+                    placeholder="Enter Address"
                     value={address}
                     onChange={this.handleChange}
                   />

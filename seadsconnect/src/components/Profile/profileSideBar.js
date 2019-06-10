@@ -28,7 +28,6 @@ export default class ProfileSideBar extends Component {
 			<Row>
 			<Col sm={4.1}>
 			  <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
                 <Card.Body>
                   <Card.Title>Profile</Card.Title>
                   <Card.Text>

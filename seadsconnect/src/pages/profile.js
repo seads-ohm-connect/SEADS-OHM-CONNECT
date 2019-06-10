@@ -1,12 +1,12 @@
 import React, { Component } from "react"
 import Layout from "../components/layout"
-import ProfileSideBar from "../components/Profile/ProfileSideBar"
-import Media from 'react-bootstrap/Media'
+import ProfileSideBar from "../components/Profile/profileSideBar"
 
 
 const ProfilePage = () => (
 	<Layout>
-	<ProfileSideBar />
+	  <p />
+	  <ProfileSideBar />
 	</Layout>
 )
 

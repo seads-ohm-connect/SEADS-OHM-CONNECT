@@ -4,7 +4,6 @@ import { Navbar, Nav, Button} from "react-bootstrap"
 import getFirebase from "../components/firebase"
 import SEADSConnectLogo from "../images/SEADSConnectLogo.png"
 
-
 export default () => (
     <NavBarHandler />
 )

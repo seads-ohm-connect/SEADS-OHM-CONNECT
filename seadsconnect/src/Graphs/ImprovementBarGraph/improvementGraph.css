@@ -1,0 +1,49 @@
+.graph{
+  text-items: center;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+  font: 12px sans-serif;
+}
+
+
+.n_group{
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+
+.label{
+  order: 0;
+  text-align: center;
+}
+
+
+.total{
+  order: 2;
+  text-align: center;
+}
+
+.bars{
+  position: relative;
+	width: 15px;
+  outline-style: solid; 
+  outline-width: thin;
+	order: 2;
+}
+
+.bars:hover{
+  opacity: 0.5;
+}
+
+.n_bordered{
+  margin-left: 40%;
+  display: inline-block;
+  outline-style: solid;
+  outline-width: thin;
+  background-color: rgba(210, 210, 210, 0.6);
+}

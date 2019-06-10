@@ -1,4 +1,4 @@
-import getFirebase from '../firebase'
+import getFirebase from '../Firebase'
 import React, { Component } from "react"
 
 
@@ -30,7 +30,7 @@ class GetDevice {
         return 'TEST';
       }
       else {
-        var ref = getFirebase().database().ref('users/' + userID + '/seadsDevice/seadsID' );
+        var ref = getFirebase().database().ref('users/' + userID + '/seadsDevice/seadsID 0' );
         return ref.once("value").then(function(snapshot) {
           if(snapshot.exists()) {
             if(snapshot.val() === ''){
@@ -125,6 +125,27 @@ class GetDevice {
             });
             emailList = emailList.slice(0, -1);
             return emailList;
+          }
+        });
+      }
+    }
+
+    //Getter method that retrieves all of the phone numbers of the account from Firebase
+    //and puts them in a list seperated by a single space
+    async getUserPhone(userID){
+      if( !getFirebase().auth().currentUser) {
+        return 'NO EMAIL, MUST LOG IN';
+      }
+      else {
+        var ref = getFirebase().database().ref('users/' + userID + '/phoneAlerts' );
+        return ref.once("value").then(function(snapshot) {
+          if(snapshot.exists()) {
+            var phoneList = '';
+            snapshot.forEach(function(number) {
+              phoneList = phoneList + number.val() + ",";
+            });
+            phoneList = phoneList.slice(0, -1);
+            return phoneList;
           }
         });
       }
