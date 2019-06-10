@@ -49,6 +49,7 @@ class NavBarHandler extends Component {
         <Nav className="mr-auto">
           <Nav.Link href="/dv-hub/">Metrics</Nav.Link>
           <Nav.Link href="/training-module/">Training</Nav.Link>
+          <Nav.Link href="/ohmDemo/">Demo</Nav.Link>
         </Nav>
         <Nav>
           {this.getSignedIn() ? <Nav.Link href="/" onClick={this.toSignOut}>Sign Out</Nav.Link> :

@@ -207,7 +207,8 @@ export default class Training extends Component {
 			  </Col>
   		</Row>
 
-
+      <div style={{height: '150px'}}>
+      </div>
   		</div>
    		);
     }
