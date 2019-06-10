@@ -90,7 +90,11 @@ class SignUpFormBase extends Component {
     });
 
     db.ref('users/' + userId + "/seadsDevice").set({
-      seadsID: n_seadsID
+      "seadsID 0": n_seadsID
+    });
+
+    db.ref('users/' + userId + "/phoneAlerts").set({
+      phone: n_phone
     });
 
   }

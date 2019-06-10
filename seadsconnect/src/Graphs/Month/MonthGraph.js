@@ -40,6 +40,7 @@ export default class MonthGraph {
         .data([data])
         .attr("fill", "blue")
         .attr("class", "line")
+        .style("stroke", "rgba(101, 102, 98, 1.0)")
         .attr("d", areaFill)
         .attr("stroke", "blue")
         .attr("stroke-width", "2px")
