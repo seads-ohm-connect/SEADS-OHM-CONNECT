@@ -1,3 +1,8 @@
+/*
+  This module manages the side bar of the profile page.
+
+*/
+
 import React, { Component } from "react"
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'

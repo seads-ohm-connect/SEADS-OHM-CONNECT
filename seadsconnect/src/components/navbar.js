@@ -86,8 +86,13 @@ class NavBarHandler extends Component {
         <img
           src={SEADSConnectLogo}
           alt="SEADSConnect Logo"
-          height="30"
-          width="30"
+          style={{
+            height: "30px",
+            width: "30px",
+            left: "0px",
+            top: "10px",
+            position: "relative"
+          }}
         />
         SEADSConnect</Navbar.Brand> 
         <Nav className="mr-auto">
@@ -95,8 +100,8 @@ class NavBarHandler extends Component {
           <Nav.Link href="/training-module/">Training</Nav.Link>
         </Nav>
         <Nav>
-          <Button variant="info" onClick={this.toSignOut}> Login Button For Ari to fix</Button>
-          <Button variant="info" onClick={this.getProfile}> Profile Button for Ari to fix </Button>
+          <Nav.Link onClick={this.toSignOut}>{this.isSignedIn()}</Nav.Link>
+          <Nav.Link onClick={this.getProfile}>{this.getProfile()} </Nav.Link>
         </Nav>
       </Navbar> 
 
