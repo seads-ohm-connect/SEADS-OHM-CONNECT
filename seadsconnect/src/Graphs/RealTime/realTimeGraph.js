@@ -58,21 +58,14 @@ export default class RealTimeGraph {
 
     y.domain([lBound / 2, rBound * 2]);
 		
-		/* This is used to remove the current graph before replacing with updated graph */
-		//d3.selectAll("svg").remove()
-      //d3.selectAll("path").remove();
-      //if (path) path.remove();
-		  
-      //
+
+
 		var areaFill = d3.line()
         .curve(d3.curveCatmullRom) //curveLinear, curveStep, curveCardinal, curveMonotoneX, d3.curveCatmullRom work
 		  .x(function(d) { return x(d.Second === null ? 0 : d.Second); })
 		  .y(function(d) { return y(d.Energy === null ? 0 : d.Energy); })
-		  //.y1(height); if you want to use d3.area() instead of d3.line(). Area doesn't work too well with transitions though.
 
-	
-      //declare svg
-      //the line of the graph
+
 
     var path;
     if (svg.select("path").empty()) {
@@ -89,7 +82,7 @@ export default class RealTimeGraph {
 			.attr("fill", "none")
 			.attr("class", "line")
       .attr("d", areaFill)
-			.attr("stroke", lineColor)
+			.style("stroke", lineColor)
 			.attr("stroke-width", "2px")
 			.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
       .attr("stroke-linejoin", "round")
@@ -99,7 +92,7 @@ export default class RealTimeGraph {
       //x axis placement
 		var xaxis = svg.append("g")
 		  .attr("transform", "translate(" + margin.left + "," + (margin.top+height) + ")")
-		    .call(d3.axisBottom(x));
+		  .call(d3.axisBottom(x));
 		  
       //y axis placement
 		var yaxis = svg.append("g")

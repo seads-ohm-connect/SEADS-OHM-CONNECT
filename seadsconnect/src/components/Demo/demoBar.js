@@ -1,3 +1,9 @@
+/*
+	The bar used in the dema
+	Uses the threshold bar.
+
+*/
+
 import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../layout"

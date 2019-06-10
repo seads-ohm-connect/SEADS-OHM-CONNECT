@@ -1,3 +1,8 @@
+/*
+  This module manages the side bar of the profile page.
+
+*/
+
 import React, { Component } from "react"
 import Card from 'react-bootstrap/Card'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -9,7 +14,6 @@ import Tab from 'react-bootstrap/Tab'
 import PastData from './pastDataTab'
 import AccountSettings from './accountSettings'
 import EnterRates from './enterRatesTab'
-
 
 export default class ProfileSideBar extends Component {
 	constructor(props) {
@@ -23,7 +27,6 @@ export default class ProfileSideBar extends Component {
 			<Row>
 			<Col sm={4.1}>
 			  <Card style={{ width: '18rem' }}>
-                <Card.Img variant="top" src="holder.js/100px180?text=Image cap" />
                 <Card.Body>
                   <Card.Title>Profile</Card.Title>
                   <Card.Text>

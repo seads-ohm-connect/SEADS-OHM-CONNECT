@@ -101,7 +101,7 @@ export default class EnterRates extends Component {
         var ref = db.ref('/users/' + userId + '/appliances/' + name + "/watts").once("value",snapshot => {
           if (snapshot.exists()) {
             document.getElementById(name).placeholder = snapshot.val();
-            document.getElementById(name + '1').innerHTML = Math.round(snapshot.val() / 9.09090909 * 100) / 100;
+            document.getElementById(name + '1').innerHTML = '$' + (Math.round(snapshot.val() / 9.09090909 * 100) / 100);
           }
         });
       })(name);
