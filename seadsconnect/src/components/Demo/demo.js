@@ -111,8 +111,6 @@ export default class Demo extends Component {
                     var email = this.state.email;
                     var phone = this.state.number;
 
-                    console.log(phone);
-
                     db.ref('/users/' + userId).once('value').then(function(snapshot) {
                         var tracker = new TrackAppliance()
                         guess = tracker.guessAppliance(snapshot, dif);

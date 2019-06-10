@@ -24,11 +24,10 @@ app.get('/sendWarning', function(req, res) {
 });
 
 app.get('/sendPhoneAlert', function(req, res) {
-	console.log(req.query.numbers);
     phone.sendPhoneAlert(req.query.numbers, req.query.appliance);
 });
 
-//send email from server to notify when the user has an upcoming ohm hour
+//send sms from server to notify when the user has an upcoming ohm hour
 app.get('/sendPhoneWarning', function(req, res) {
     phone.sendPhoneWarning(req.query.numbers, req.query.hr, req.query.min);
 });

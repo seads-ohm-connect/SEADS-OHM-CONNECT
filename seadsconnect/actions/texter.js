@@ -6,25 +6,23 @@ const authToken = '7652429c131d90652f8a6ee163bffd12';
 const client = require('twilio')(accountSid, authToken);
 
 
-function sendPhoneAlert(phone) {
-	client.messages.create(
-	  {
+function sendPhoneAlert(phone, appliance) {
+	client.messages
+	.create({
+	  	body: 'Your Ohm Hour is coming up on ___ at ____!',
 	    to: phone,
-	    from: '+18312160330',
-	    body: 'Your Ohm Hour is coming up on ___ at ____!',
-	  }
-	).then(message => console.log(message.sid));
+	    from: '+18312160330'
+	}).then(message => console.log(message.sid));
 }
 
 function sendPhoneWarning(phone, hr, min) {
 	console.log(phone);
-	client.messages.create(
-	  {
+	client.messages
+	.create({
+	  	body: 'You\'re over your threshold!',
 	    to: phone,
-	    from: '+18312160330',
-	    body: 'You\'re over your threshold!',
-	  }
-	).then(message => console.log(message.sid));
+	    from: '+18312160330'
+	}).then(message => console.log(message.sid));
 }
 
 module.exports = {sendPhoneWarning, sendPhoneAlert};

@@ -284,7 +284,7 @@ export default class AccountSettings extends Component {
   		return phones;
   	}
 
-    //'
+    
   	setUpAlertsForm() {
 
   		let emails = this.addEmail();
@@ -443,7 +443,7 @@ export default class AccountSettings extends Component {
     var db = getFirebase().database();
     var userId = getFirebase().auth().currentUser.uid;
 
-    this.setState({activeTime: eventKey});
+    this.setState({activeTimeEmail: eventKey});
 
     var mins = parseInt(eventKey) * 30;
 
@@ -460,7 +460,7 @@ export default class AccountSettings extends Component {
     var db = getFirebase().database();
     var userId = getFirebase().auth().currentUser.uid;
 
-    this.setState({activeTime: eventKey});
+    this.setState({activeTimePhone: eventKey});
 
     var mins = parseInt(eventKey) * 30;
 

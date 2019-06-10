@@ -5,7 +5,6 @@ export default function sendPhoneAlert(phone, appliance) {
 	if (phone === "")
 		return;
 
-	console.log(phone);
 	if (appliance === "")
 		appliance = "undefined";
 
