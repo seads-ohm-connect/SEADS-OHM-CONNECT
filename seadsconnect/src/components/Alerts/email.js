@@ -1,7 +1,10 @@
 import axios from 'axios' 
 
-    
+//functions called from adminupDater to send emails    
 export default function sendMailAlert(emails, appliance) {
+	if (emails === "")
+		return;
+
 	if (appliance === "")
 		appliance = "undefined";
 
@@ -12,6 +15,9 @@ export default function sendMailAlert(emails, appliance) {
 }
 
 export function sendEmailWarning(emails, hr, min) {
+	if (emails === "")
+		return;
+	
 	var _url = 'http://localhost:5000/sendWarning?email=' + emails + '&hr=' + hr + '&min=' + min;
 	axios({ 
         url: _url 

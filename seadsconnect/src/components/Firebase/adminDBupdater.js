@@ -1,7 +1,14 @@
+/*
+    This component updates the power usage for all of the users on firebase.
+    An admin must be logged into the home page for it to update.
+    Admin keys need to be given to an account from firebase.
+
+*/
 import React, { Component } from "react"
 import getFirebase from '../Firebase'
 import GetDevice from "../Profile/getDeviceID"
 import sendMailAlert, { sendEmailWarning } from "../Alerts/email"
+import sendPhoneAlert, { sendPhoneWarning } from "../Alerts/sms"
 import TrackAppliance from "../training/trackAppliance"
 import Keys from '../../../keys'
 
@@ -13,7 +20,7 @@ export default class Updater extends Component {
     	super(props);
 
     	this.state = {
-    		time: 30000, //updates every 30 seconds
+    		time: 1500, //updates every 30 seconds
             liveData: 0,
             liveTime: 0
     	}
@@ -24,6 +31,7 @@ export default class Updater extends Component {
         this.appliance = "";
     }
 
+    //call the update every time interval 
 	componentDidMount() {
         this.interval = setInterval(() => this.updateServer(), this.state.time);
     }
@@ -33,6 +41,7 @@ export default class Updater extends Component {
         clearInterval(this.interval);
     }
 
+    //takes care of updated power usage and sending emails.
     updateServer() {
 
     	if (!getFirebase().auth().currentUser)
@@ -46,17 +55,18 @@ export default class Updater extends Component {
             return;
 
         var self = this;
-
         //admin will be able to read ever userId
         db.ref('/users/').once('value').then(function(snapshot){
+
         	if (snapshot.exists()) {
         		//for each userid write the current watt data.
         		//will need to update this function to only  write if they have a seads device.
-        		snapshot.forEach((_child) =>{
+        		snapshot.forEach((_child) => {
             		var _userId = _child.key;
             		d3.json(liveUpdateURL).then( (liveDataa) => {
                         var device = new GetDevice();
                         device.getSeadsData(_userId).then((powTime) => {
+
                             if(powTime){
                                 device.liveData = powTime[0];
                                 device.liveTime = powTime[1];
@@ -91,16 +101,29 @@ export default class Updater extends Component {
         });
     }
 
+
+    //sends an alert if energy usage for a specific user is over a threshold
     overThreshold(device, snapshot, db, userId, currentWatt, previousPower) {
         if (snapshot.child('isOhmHour').val() === true) {
             //check to see if their current watt is above their threshold.
             var threshold = snapshot.child('threshold').val();
             if (threshold < currentWatt) {
+                //send email
                 device.getUserEmail(userId).then((emails) => {
                     this.appliance = this.tracker.guessAppliance(snapshot, currentWatt - previousPower);
-                    console.log(this.appliance);
                     sendMailAlert(emails, this.appliance);
                     //instead of updating ohm hour we will update a timestamp on last email sent
+                    db.ref('/users/' + userId).update({
+                        isOhmHour: false,
+                        applianceOver: this.appliance
+                    });
+                });
+
+                //send sms
+                device.getUserPhone(userId).then((numbers) => {
+                    this.appliance = this.tracker.guessAppliance(snapshot, currentWatt - previousPower);
+                    sendPhoneAlert(numbers, this.appliance);
+                    //instead of updating ohm hour we will update a timestamp on last sms sent
                     db.ref('/users/' + userId).update({
                         isOhmHour: false,
                         applianceOver: this.appliance
@@ -110,6 +133,7 @@ export default class Updater extends Component {
         }
     }
 
+    //sends an alert if an OhmHour is approaching for a specific user.
     ohmHourApproaching(device, snapshot, db, userId) {
         var notifyTime = snapshot.child('notifyInAdvanceEmail').val();
         if (notifyTime > 0) {

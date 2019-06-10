@@ -1,3 +1,8 @@
+/*
+  The main UI for the training model
+
+*/
+
 import React, { Component } from 'react'
 import Appliances from '../../Graphs/DragGraph/appliances'
 import Dropdown from 'react-bootstrap/Dropdown'
@@ -106,6 +111,7 @@ export default class Training extends Component {
         }); 
     }
 
+    //initialize the real-time graphs here.
     componentDidMount() {
 
       this.interval = setInterval(() => this.updatePower(), 1000);

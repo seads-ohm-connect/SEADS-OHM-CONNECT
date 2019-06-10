@@ -350,35 +350,73 @@ export default class AccountSettings extends Component {
   	addSEADSForm() {
 
   		let SEADS = [];
-  		for (var i = 1; i < this.state.numberOfSEADS; ++i) {
+
+      if (!getFirebase().auth().currentUser)
+        return;
+
+      var db = getFirebase().database();
+      var userId = getFirebase().auth().currentUser.uid;
+
+      var setState = this.setState;
+      var state = this.state;
+      var self = this;
+
+      var path = '/seadsDevice';
+
+      var ref = db.ref('/users/' + userId + path); 
+
+      var confirm = this.state.confirmToken;
+      var remove = this.state.removeToken;
+
+  		var createForm = (function (ind, setState, state) {
   			SEADS.push(
   				<Card.Body>
             <InputGroup className="mb-3">
               <FormControl
+                id={(`seadsID ${ind}`) + 1}
                 placeholder="SEADS ID #"
-                onChange={(e) => this.handleChange(e, i)}
               />
               <InputGroup.Append>
-                <Button variant="outline-danger" onClick={() => {this.setState({numberOfSEADS: this.state.numberOfSEADS - 1})}} >-</Button>
+                <Button 
+                id={`seadsID ${ind}`} 
+                variant="outline-success" 
+                size='sm' 
+                onClick={(e) => {
+                  var keys = [(`seadsID ${ind}`) + 1, (`seadsID ${ind}`) + 2, (`seadsID ${ind}`) + 3];
+                  if (document.getElementById(`seadsID ${ind}`).innerHTML === confirm) {
+                    console.log('confirm clicked ' + ind)
+                    self.saveToDB(keys, path, `seadsID ${ind}`);
+                    self.setState({numberOfSEADS: self.state.numberOfPhone + 1})
+                  }
+                  else {
+                    self.removeFromDB(path, `seadsID ${ind}`)
+                    self.setState({numberOfSEADS: self.state.numberOfPhone - 1})
+                  }
+                }} 
+              >{confirm}
+              </Button>
               </InputGroup.Append>
             </InputGroup>
             </Card.Body>
   			);
-  		}
+  		});
 
-  		SEADS.push(
-  		  <Card.Body>
-          <InputGroup className="mb-3">
-            <FormControl
-              placeholder="SEADS ID #"
-              onChange={(e) => this.handleChange(e, 0)}
-            />
-            <InputGroup.Append>
-              <Button variant="outline-success" onClick={() => {this.setState({numberOfSEADS: this.state.numberOfSEADS + 1})}} >+</Button>
-            </InputGroup.Append>
-          </InputGroup>
-          </Card.Body>
-  	    );
+      for (var i = 0; i < 5; ++i) {
+        createForm(i, setState, state);
+      }
+
+      ref.once("value").then(function(snapshot) {
+        if (snapshot.exists()) {
+          var ind = 0
+          snapshot.forEach(function(child) {
+            var address = child.val();
+            document.getElementById(`seadsID ${ind}`).innerHTML = remove;
+            document.getElementById((`seadsID ${ind}`) + 1).setAttribute("value", address);
+            ind++;
+          });
+        }
+      });
+
   		return SEADS;
   	}
 

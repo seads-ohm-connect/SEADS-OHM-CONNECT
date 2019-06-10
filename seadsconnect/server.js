@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const mail = require("./actions/mailer");
+const phone = require("./actions/texter")
 const app = express();
 
 const PORT = 5000;
@@ -20,6 +21,16 @@ app.get('/sendAlert', function(req, res) {
 //send email from server to notify when the user has an upcoming ohm hour
 app.get('/sendWarning', function(req, res) {
     mail.sendEmailWarning(req.query.email, req.query.hr, req.query.min);
+});
+
+app.get('/sendPhoneAlert', function(req, res) {
+	console.log(req.query.numbers);
+    phone.sendPhoneAlert(req.query.numbers, req.query.appliance);
+});
+
+//send email from server to notify when the user has an upcoming ohm hour
+app.get('/sendPhoneWarning', function(req, res) {
+    phone.sendPhoneWarning(req.query.numbers, req.query.hr, req.query.min);
 });
 
 app.listen(PORT, () => console.log('server started...'));

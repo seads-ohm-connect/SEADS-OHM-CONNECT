@@ -1,6 +1,8 @@
+/*
+    This file sets up the emailer to send through gmail.
+*/
 const Keys = require('../keys');
 const nodemailer = require('nodemailer');
-//const config = require('../config/keys');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',

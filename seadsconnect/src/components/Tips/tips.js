@@ -1,3 +1,8 @@
+/*
+  This component contains tips (currently on the homepage)
+
+*/
+
 import React, { Component } from 'react'
 import Jumbotron from 'react-bootstrap/Jumbotron'
 import Media from 'react-bootstrap/Media'
@@ -58,6 +63,12 @@ export default class Tips extends Component {
   			    <p>
   			      Hover your mouse over the difference appliances to the right to view the different power usage and cost for each.
   			    </p>
+
+            <p> 
+              More general tips should be added to this page to fill it out more completely.
+              Maybe we can add information about price per hour pricing and how the SEADS device
+              will be benefictial for calculating your power bill.
+            </p>
   			  </Media.Body>
 
   			  <Media.Body>
