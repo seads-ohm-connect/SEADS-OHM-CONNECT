@@ -1,14 +1,16 @@
 import React, { Component } from "react"
 import { Link } from "gatsby"
 import Layout from "../components/layout"
-import Thresholdbar from "../components/ThresholdBar/thresholdbar.js"
-import { Button, Jumbotron, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container, Spinner} from "react-bootstrap"
+import Thresholdbar from "../components/Thresholdbar/thresholdbar"
+import 'bootstrap/dist/css/bootstrap.css';
+import { Alert, Button, CardGroup, Row, Form , ToggleButton, Col, ButtonToolbar, ButtonGroup, Card, Container} from "react-bootstrap"
 import Appliances from "../Graphs/DragGraph/appliances"
 import GetDevice from "../components/Profile/getDeviceID"
 import GetOhmData from "../components/Profile/OhmConnect"
-import TrackAppliance from "../components/Training/trackAppliance"
 
-import getFirebase from '../components/Firebase'
+
+import getFirebase from '../components/firebase'
+
 var d3 = require("d3");
 
 //Main metrics page for the webApp, labled as Metrics in the navigation bar.
@@ -23,151 +25,42 @@ var d3 = require("d3");
 //can be TESTED in the updatePower function as it is always running when on metrics page.
 //However, no other functions or components should be executed from this function unless
 //they are directly involved in giving information to the metrics page itself.
-//ALl new work and componets should have their own page tho keep with modularity. 
+//ALl new work and componets should have their own page tho keep with modularity.
 class DvHub extends Component {
 	constructor(props) {
     	super(props);
+			this.state = {
+				val: 0,
+				m: 100,
+				liveData: 0,
+				liveTime: new Date().toLocaleString(),
+				targetThreshold: 0,
+				ohmHourDate: new Date().toString(),
+				ohmHourStart: 0,
+				ohmHourEnd: 0,
+				washerToggleOn: true,
+				dryerToggleOn: true,
+				ovenToggleOn: true,
+				fridgeToggleOn: true,
+				dishwasherToggleOn: true,
+				computerToggleOn: true
+			}
 
-		this.state = {
-			val: 0,
-			m: 100,
-			liveData: null,
-			liveTime: new Date().toLocaleString(),
-			washerToggleOn: true,
-			dryerToggleOn: true,
-			ovenToggleOn: true,
-			fridgeToggleOn: true,
-			dishwasherToggleOn: true,
-			computerToggleOn: true
-		}
-
-	  this.device = new GetDevice()
+			this.device = new GetDevice()
       this.ohmData = new GetOhmData()
-      this.tracker = new TrackAppliance()
+
 	}
 
-	//queries the data base to see if there is a value enetered for the appliance.
-	//if not it uses the static database values
-	setValue(req, toggle) {
-
-		var watts = req.watts;
-		//if user not signed in just use values from database
-		if (!getFirebase().auth().currentUser) {
-			if (toggle)
-				this.setState({val: this.state.val + watts});
-			else
-				this.setState({val: this.state.val - watts});
-		}
-		else {
-
-			var userId = getFirebase().auth().currentUser.uid;
-			var ref = getFirebase().database().ref('users/' + userId + '/appliances/' + req.name + '/watts');
-			ref.once("value",snapshot => {
-				if (snapshot.exists()) {
-					if (toggle)
-						this.setState({val: this.state.val + parseFloat(snapshot.val())});
-					else
-						this.setState({val: this.state.val - parseFloat(snapshot.val())});
-				}
-				else {
-					if (toggle)
-						this.setState({val: this.state.val + watts});
-					else
-						this.setState({val: this.state.val - watts});
-				}
-			});
-		}
-    }
-
-
-	toggleWasher = () => {
-
-		if(this.state.washerToggleOn){
-			this.setValue(Appliances.washingMachineHot, true);
-		}
-		else{
-			this.setValue(Appliances.washingMachineHot, false);
-		}
-	}
-
-	changeColorWasher = () => {
-		this.setState({washerToggleOn: !this.state.washerToggleOn})
-	}
-
-	toggleDryer = () => {
-		if(this.state.dryerToggleOn){
-			this.setValue(Appliances.dryer, true);
-		}
-		else{
-			this.setValue(Appliances.dryer, false);
-		}
-	}
-
-	changeColorDryer = () => {
-		this.setState({dryerToggleOn: !this.state.dryerToggleOn})
-	}
-
-	toggleOven = () => {
-		if(this.state.ovenToggleOn){
-			this.setValue(Appliances.oven, true);
-		}
-		else{
-			this.setValue(Appliances.oven, false);
-		}
-	}
-
-
-	changeColorOven = () => {
-		this.setState({ovenToggleOn: !this.state.ovenToggleOn})
-	}
-
-	toggleFridge = () => {
-		if(this.state.fridgeToggleOn){
-			this.setValue(Appliances.fridge, true);
-		}
-		else{
-			this.setValue(Appliances.fridge, false);
-		}
-	}
-
-	changeColorFridge = () => {
-		this.setState({fridgeToggleOn: !this.state.fridgeToggleOn})
-	}
-
-	toggleDishwasher = () => {
-		if(this.state.dishwasherToggleOn){
-			this.setValue(Appliances.dishwasher, true);
-		}
-		else{
-			this.setValue(Appliances.dishwasher, false);
-		}
-	}
-
-	changeColorDishwasher = () => {
-		this.setState({dishwasherToggleOn: !this.state.dishwasherToggleOn})
-	}
-
-	toggleComputer = () => {
-		if(this.state.computerToggleOn){
-			this.setValue(Appliances.computer, true);
-		}
-		else{
-			this.setValue(Appliances.computer, false);
-		}
-	}
-
-	changeColorComputer = () => {
-		this.setState({computerToggleOn: !this.state.computerToggleOn})
-	}
 
 	componentDidMount() {
-        this.interval = setInterval(() => this.updatePower(), 1000);
+		this.interval = setInterval(() => this.updatePower(), 500);
+		console.log("go to jbaskin 316 and look for the turkey picture on the whiteboard ")
+		console.log("austin was an onion ring back in 3012")
     }
 
-
-    componentWillUnmount() {
+  componentWillUnmount() {
         clearInterval(this.interval);
-    }
+	}
 
 	updatePower = () => {
 
@@ -182,92 +75,124 @@ class DvHub extends Component {
 
 			this.setState({liveData: this.device.liveData});
 			this.setState({liveTime: this.device.liveTime});
-
-      this.tracker.startTracking(this.state.liveData);
-      var t = this.tracker.track(this.state.liveData);
-
 		}
 		else {
 			var currentTime = new Date().toLocaleString();
 			this.setState({liveTime: currentTime});
 		}
+		this.ohmTargetDate();
 	}
 
-	isLoading() {
-
-		let content = [];
-		if (this.state.liveData === null || this.state.liveData === undefined) {
-			//change this to a loading circle from react-bootstrap.
-			//I couldn't import the spinner library from bootstrap... maybe need to update?
-			content.push(
-				<div>
-					Loading...
-				</div>
-			);
+	ohmTargetDate() {
+		if (getFirebase().auth().currentUser) {
+			var userID = getFirebase().auth().currentUser.uid;
+			this.ohmData.getOhmHourThreshold(userID).then((thresholdValue) => {
+				if(thresholdValue){
+					this.ohmData.threshold = thresholdValue;
+				}
+			});
+			this.ohmData.getOhmDate(userID).then((ohmDate) => {
+				if(ohmDate){
+					this.ohmData.ohmHourDate = ohmDate;
+				}
+			});
+			this.ohmData.getOhmStartTime(userID).then((ohmStartTime) => {
+				if(ohmStartTime) {
+					this.ohmData.startTime = ohmStartTime;
+				}
+			});
+			this.ohmData.getOhmEndTime(userID).then((ohmEndTime) => {
+				if(ohmEndTime) {
+					this.ohmData.endTime = ohmEndTime;
+				}
+			});
+			this.setState({targetThreshold: this.ohmData.threshold});
+			this.setState({ohmHourDate: this.ohmData.ohmHourDate});
+			this.setState({ohmHourStart: this.ohmData.startTime});
+			this.setState({ohmHourEnd: this.ohmData.endTime});
 		}
-		else {
-
-			let washerColor = this.state.washerToggleOn ? "outline-success" : "success";
-			let dryerColor = this.state.dryerToggleOn ? "outline-success" : "success";
-			let ovenColor = this.state.ovenToggleOn ? "outline-success" : "success";
-			let fridgeColor = this.state.fridgeToggleOn ? "outline-success" : "success";
-			let dishwasherColor = this.state.dishwasherToggleOn ? "outline-success" : "success";
-			let computerColor = this.state.computerToggleOn ? "outline-success" : "success";
-
-			content.push(
-				<div>
-				<Jumbotron>
-					<h1 align="center">Current Power Usage: { this.state.liveData } watts</h1>
-					<h2 align="center">Current Date: { this.state.liveTime }</h2>
-				</Jumbotron>
-
-  				<Thresholdbar value={(this.state.val + parseFloat(this.state.liveData)).toFixed(2)} max={this.state.m} threshold1={50} threshold2={90} threshold3={100}/>
-					<div align="center">
-						<ButtonGroup>
-							<ButtonToolbar>
-								<Button variant={washerColor} onClick={() => {this.toggleWasher(); this.changeColorWasher()}} >Washer</Button>
-								<Button variant={dryerColor} onClick={() => {this.toggleDryer(); this.changeColorDryer()}} >Dryer</Button>
-								<Button variant={ovenColor} onClick={() => {this.toggleOven(); this.changeColorOven()}} >Oven</Button>
-								<Button variant={fridgeColor} onClick={() => {this.toggleFridge(); this.changeColorFridge()}} >Fridge</Button>
-								<Button variant={dishwasherColor} onClick={() => {this.toggleDishwasher(); this.changeColorDishwasher()}} >Dishwasher</Button>
-								<Button variant={computerColor} onClick={() => {this.toggleComputer(); this.changeColorComputer()}} >Computer</Button>
-							</ButtonToolbar>
-						</ButtonGroup>
-					</div>
-				</div>
-			);
-		}
-		return content
 	}
 
 
 	render() {
 
-		var contents = this.isLoading();
 		return (
-			<Layout>
-			{contents}
-  			</Layout>
-		);
+		<Layout>
+			  <Container>
+					<Card className="text-center" border="info" bg="info" text="white">
+						<Card.Body>
+							<h3>The information below gives you real time updates on your power usage as well as any upcoming OhmHours</h3>
+						</Card.Body>
+					</Card>
+					<Card className="text-center" border="info">
+						<Card.Header as={Card} bg="success" text="white" style={ohmHourHeaderStyle}><h1>Your Upcoming OhmHour</h1></Card.Header>
+						<Card.Body>
+							<Alert variant="primary">
+								<h3> {this.state.ohmHourDate} </h3>
+							</Alert>
+							<Alert variant="primary">
+								<h3> {this.state.ohmHourStart} - {this.state.ohmHourEnd} </h3>
+							</Alert>
+						</Card.Body>
+					</Card>
+					<CardGroup>
+								<Card className="text-center" border="info">
+								<Card.Header as={Card} bg="info" text="white" style={dataHeaderStyle}><h1>Current Usage</h1></Card.Header>
+								<Card.Body>
+								<Container>
+									<Row>
+										<Col/>
+										<Col>
+											<div class="dot" class="p-3 mb-2 bg-info text-white" style={liveWattsCircle} align="center">
+												<h1 style={liveDataStyle}>{ this.state.liveData }</h1>
+												<h1>watts</h1>
+											</div>
+										</Col>
+										<Col/>
+									</Row>
+								</Container>
+								</Card.Body>
+							</Card>
+								<Card className="text-center" border="info">
+									<Card.Header as={Card} bg="warning" text="white" style={dataHeaderStyle}><h1>Target</h1></Card.Header>
+									<Card.Body>
+									<Container>
+										<Row>
+											<Col></Col>
+											<Col>
+												<div class="dot" class="p-3 mb-2 bg-warning text-white" style={liveWattsCircle} align="center">
+													<h1 style={liveDataStyle}>{ this.state.targetThreshold }</h1>
+													<h1>watts</h1>
+												</div>
+											</Col>
+											<Col></Col>
+										</Row>
+									</Container>
+									</Card.Body>
+								</Card>
+					</CardGroup>
+				</Container>
+  	</Layout>
+		)
 	}
 }
 
-const CardStyle = {
-	width: '25rem',
-	color: 'white'
+const dataHeaderStyle = {
+	fontSize: 40
 }
 
-const liveWattsBox = {
-	top: 15,
-	height: 250,
-	width: 325,
-};
+const ohmHourHeaderStyle = {
+	fontSize: 15
+}
 
 const liveWattsCircle = {
 	height: 200,
 	width: 200,
-	borderRadius: 95,
-	fontSize: 65,
+	borderRadius: 100,
+}
+
+const liveDataStyle = {
+	fontSize: 70
 }
 
 export default DvHub

@@ -38,6 +38,13 @@ class GetOhmData {
           if(snapshot.exists()) {
             return snapshot.val();
           }
+          else{
+            var date = new Date();
+            var month = date.getUTCMonth() + 1; //months from 1-12
+            var day = date.getUTCDate();
+            var year = date.getUTCFullYear();
+            return month + "/" + day + "/" + year;
+          }
         });
       }
     }

@@ -1,3 +1,8 @@
+/*
+  The main UI for the training model
+
+*/
+
 import React, { Component } from 'react'
 import Appliances from '../../Graphs/DragGraph/appliances'
 import Dropdown from 'react-bootstrap/Dropdown'
@@ -9,7 +14,6 @@ import Card from 'react-bootstrap/Card'
 import Container from 'react-bootstrap/Container'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Form from 'react-bootstrap/Form'
-
 
 import RealTimeGraph from "../../Graphs/RealTime/realTimeGraph"
 import getFirebase from '../Firebase'
@@ -110,12 +114,16 @@ export default class Training extends Component {
           return;
 
         //write appliance values to realtime database
+        if (!this.average)
+          this.average = 0;
+
         db.ref('/users/' + userId + '/appliances/' + this.state.currentAppliance.name).set({
           watts: this.average,
           price: (Math.round(this.average / 9.09090909 * 100) / 100)
         });
     }
 
+    //initialize the real-time graphs here.
     componentDidMount() {
 
       this.interval = setInterval(() => this.updatePower(), 1000);
@@ -158,7 +166,7 @@ export default class Training extends Component {
           svg2.style("opacity", 1)
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.left + margin.right);
-          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#200000", true, false, "live");
+          dg2.drawGraph(svg2, dimensions, TooltipValues, this, this.state.liveDataAppliance, 'savedData2', "#20b2b2", "#44c63b", true, false, "live");
         }
         else {
           svg2.style("opacity", 0)
@@ -170,9 +178,7 @@ export default class Training extends Component {
 
 
     render() {
-
     	const dropDown = this.appList.map(appliance => <Dropdown.Item as="button" onClick={e => this.handleDropDownClick(appliance)}>{appliance.name}</Dropdown.Item>);
-
 
    		return(
    		<div>
@@ -211,7 +217,8 @@ export default class Training extends Component {
 			  </Col>
   		</Row>
 
-
+      <div style={{height: '150px'}}>
+      </div>
   		</div>
    		);
     }
