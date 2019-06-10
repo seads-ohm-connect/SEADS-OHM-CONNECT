@@ -1,3 +1,10 @@
+/*
+	Component that contains the content for the home page.
+	**The admin update Component is called in this component. Make sure 
+	not to delete it or no accounts can be updated
+
+*/
+
 import React, { Component } from "react"
 import Card from 'react-bootstrap/Card'
 import CardColumns from 'react-bootstrap/CardColumns'
