@@ -5,7 +5,8 @@
 
 
 //need to get more accurate values...
-//we originally got the values in KwH then we decided to use watts so we just multiplied by 1000... seems to high
+//we originally got the values in KwH then we decided to use watts so we
+//just multiplied by 1000... seems to high
 class Appliances {
 
     static electricFurnace = {

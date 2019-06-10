@@ -5,8 +5,13 @@ var d3 = require("d3");
 
 
 //Class to track the energy usage of a single appliance when prompted by the user.
-//When button is pressed on the on training page, energy difference will be tracked
-//and atributed to the appliance selected by the user in the dropdown menue
+//Tracking is done by taing a snapshot of current usage when startTracking is called
+//track function is put into a constant update function and is called repeatedly
+//untill endTracking is called, and the tracker is stopped.
+//variable this.tracking is used to determine if the tracker is in tracking mode or not
+//
+//guessAppliance is used when energy usage is over durring an OhmHour. This function
+//will be called to determine which device was the cause of the overage
 class TrackAppliance {
     constructor(props){
 

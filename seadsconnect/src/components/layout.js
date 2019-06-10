@@ -11,6 +11,14 @@ import firebase from '../components/Firebase'
 
 import getFirebase, { FirebaseContext } from '../components/Firebase'
 
+//Layout form that can be used in each of the pages.
+//This can be altered to have any webApp background desired.
+//If changed, each page that has layout included in its render will see the
+//effect of the change.
+
+//Any UI changes that are intended to be applied to all pages in the app,
+//i.e the navigation bar, should be included and placed inside the render.
+
 const Layout = ({ children }) => (
   <StaticQuery
     query={graphql`

@@ -4,6 +4,12 @@ import { Navbar, Nav, Button} from "react-bootstrap"
 import getFirebase from "../components/firebase"
 import SEADSConnectLogo from "../images/SEADSConnectLogo.png"
 
+
+//Functions at top of file handle signIn/Signout functions. When a user signs in,
+//the NavBar will change its styling on the right side. This is done in isSignedIn,
+//as well as toSignOut
+
+//navbar is created using the react-bootstrap Nav and Navbar components.
 export default () => (
     <NavBarHandler />
 )
@@ -29,11 +35,10 @@ class NavBarHandler extends Component {
   }
 
   render() {
-
       return (
 
        <Navbar bg="dark" variant="dark" fixed="top">
-        <Navbar.Brand href="/"> 
+        <Navbar.Brand href="/">
         <img
           src={SEADSConnectLogo}
           alt="SEADSConnect Logo"
@@ -45,7 +50,7 @@ class NavBarHandler extends Component {
             position: "relative"
           }}
         />
-        SEADSConnect</Navbar.Brand> 
+        SEADSConnect</Navbar.Brand>
         <Nav className="mr-auto">
           <Nav.Link href="/dv-hub/">Metrics</Nav.Link>
           <Nav.Link href="/training-module/">Training</Nav.Link>
@@ -58,8 +63,8 @@ class NavBarHandler extends Component {
           {this.getSignedIn() ? <Nav.Link href="/profile">Profile</Nav.Link> :
                                     <Nav.Link href="/page-3/">Sign Up</Nav.Link>};
         </Nav>
-      </Navbar> 
-       
+      </Navbar>
+
       );
   }
 }

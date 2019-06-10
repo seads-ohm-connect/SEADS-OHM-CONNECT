@@ -15,6 +15,14 @@ import Nav  from 'react-bootstrap/Nav'
 
 import getFirebase from '../Firebase'
 
+
+//Component for both the functionality and the UI of the account settings bar.
+//UI allows of users to interact with it and imput information that can then
+//be stored in the useres Firebase user information.
+//If firebase storage layout is updated, then change the reference paths for
+//each of the setting adding functions here.
+//Reminder: use firebase .update function when writing to firebase outside
+//of this component as using the save functions can erase data. 
 export default class AccountSettings extends Component {
 	constructor(props) {
     	super(props);
@@ -61,11 +69,11 @@ export default class AccountSettings extends Component {
                   <Form.Group controlId="formGroupPassword">
                     <Form.Label>Enter Password</Form.Label>
                     <Form.Control type="password" placeholder="Password" />
-                  </Form.Group>  
+                  </Form.Group>
 
                   <Button variant="primary" type="submit">
                     Submit
-                  </Button>                
+                  </Button>
   			    </Form>
   			  </Col>
   			  </Card>
@@ -82,7 +90,7 @@ export default class AccountSettings extends Component {
       var userId = getFirebase().auth().currentUser.uid;
       var path = '/emailAlerts';
 
-      var ref = db.ref('/users/' + userId + path);     
+      var ref = db.ref('/users/' + userId + path);
 
       if (this.state.numberOfEmail === 0)
         this.state.numberOfEmail = 1;
@@ -103,9 +111,9 @@ export default class AccountSettings extends Component {
                   placeholder="Recipient's email"
                 />
                 <InputGroup.Append>
-                  <Button 
+                  <Button
                   id={`email ${ind}`}
-                  variant="outline-success" 
+                  variant="outline-success"
                   onClick={() => {
                     var keys = [`email ${ind}` + 1];
                     if (document.getElementById(`email ${ind}`).innerHTML === confirm) {
@@ -127,7 +135,7 @@ export default class AccountSettings extends Component {
   		let emails = [];
 
       emails.push(
-        <div>      
+        <div>
           <p1>Notify me of my OhmHour in advance by: </p1>
           <Card.Body>
           <Nav variant="pills" activeKey={this.state.activeTimeEmail} onSelect={k => this.handleSelectEmail(k)}>
@@ -175,7 +183,7 @@ export default class AccountSettings extends Component {
       var userId = getFirebase().auth().currentUser.uid;
       var path = '/phoneAlerts';
 
-      var ref = db.ref('/users/' + userId + path);     
+      var ref = db.ref('/users/' + userId + path);
 
       if (this.state.numberOfPhone === 0)
         this.state.numberOfPhone = 1;
@@ -214,10 +222,10 @@ export default class AccountSettings extends Component {
               maxlength={4}
             />
             <InputGroup.Append>
-              <Button 
-                id={`phone ${ind}`} 
-                variant="outline-success" 
-                size='sm' 
+              <Button
+                id={`phone ${ind}`}
+                variant="outline-success"
+                size='sm'
                 onClick={(e) => {
                   var keys = [(`phone ${ind}`) + 1, (`phone ${ind}`) + 2, (`phone ${ind}`) + 3];
                   if (document.getElementById(`phone ${ind}`).innerHTML === confirm) {
@@ -229,10 +237,10 @@ export default class AccountSettings extends Component {
                     self.removeFromDB(path, `phone ${ind}`)
                     self.setState({numberOfPhone: self.state.numberOfPhone - 1})
                   }
-                }} 
+                }}
               >{confirm}
               </Button>
-            </InputGroup.Append> 
+            </InputGroup.Append>
             </Row>
           </InputGroup>
         </Card.Body>
@@ -271,7 +279,7 @@ export default class AccountSettings extends Component {
       ref.once("value").then(function(snapshot) {
         if (snapshot.exists()) {
           snapshot.forEach(function(child) {
-            var number = child.val(); 
+            var number = child.val();
             document.getElementById(`phone ${ind}`).innerHTML = remove;
             document.getElementById((`phone ${ind}`) + 1).setAttribute("value", number.slice(0,3));
             document.getElementById((`phone ${ind}`) + 2).setAttribute("value", number.slice(3,6));
@@ -279,7 +287,7 @@ export default class AccountSettings extends Component {
             ind++;
           });
         }
-      }); 
+      });
 
   		return phones;
   	}
@@ -312,7 +320,7 @@ export default class AccountSettings extends Component {
             </Collapse>
     			</Card.Body>
   			  </Card>
-  			</Collapse>  			
+  			</Collapse>
   		)
   	}
 
@@ -335,11 +343,11 @@ export default class AccountSettings extends Component {
                 <Form.Group controlId="formGroupPassword">
                   <Form.Label>Enter Old Password</Form.Label>
                   <Form.Control type="password" placeholder="Password" />
-                </Form.Group>  
+                </Form.Group>
 
                 <Button variant="primary" type="submit">
                   Submit
-                </Button>                
+                </Button>
   			    </Form>
   			  </Col>
   			  </Card>
@@ -427,7 +435,7 @@ export default class AccountSettings extends Component {
     var userId = getFirebase().auth().currentUser.uid;
 
     //write values to realtime database
-    db.ref('/users/' + userId + '/phoneAlerts').update({ 
+    db.ref('/users/' + userId + '/phoneAlerts').update({
       [count]: event.target.value
     });
 
@@ -447,7 +455,7 @@ export default class AccountSettings extends Component {
 
     var mins = parseInt(eventKey) * 30;
 
-    db.ref('/users/' + userId).update({ 
+    db.ref('/users/' + userId).update({
       notifyInAdvanceEmail: mins
     });
   }
@@ -464,7 +472,7 @@ export default class AccountSettings extends Component {
 
     var mins = parseInt(eventKey) * 30;
 
-    db.ref('/users/' + userId).update({ 
+    db.ref('/users/' + userId).update({
       notifyInAdvancePhone: mins
     });
   }
@@ -482,13 +490,13 @@ export default class AccountSettings extends Component {
 
     var userInput = '';
     for (var x in input) {
-      if (document.getElementById(input[x])) 
+      if (document.getElementById(input[x]))
         userInput += document.getElementById(input[x]).value;
     }
 
 
     console.log(buttonId);
-    db.ref('/users/' + userId + path).update({ 
+    db.ref('/users/' + userId + path).update({
       [buttonId]: userInput
     });
 
@@ -530,7 +538,7 @@ export default class AccountSettings extends Component {
 			    <Card.Title><h2>Account Settings</h2></Card.Title>
 			    <ListGroup>
 
-			      <ListGroupItem action variant="secondary" 
+			      <ListGroupItem action variant="secondary"
 			         onClick={() => {
 			         	this.setState({changeEmail: !this.state.changeEmail});
 			         }} >

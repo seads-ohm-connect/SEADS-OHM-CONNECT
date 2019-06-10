@@ -13,7 +13,19 @@ import getFirebase from '../components/firebase'
 
 var d3 = require("d3");
 
-//Thresholdbar: Change pass watts into value and change max to what ever you want.
+//Main metrics page for the webApp, labled as Metrics in the navigation bar.
+//Named DvHub as it is for the main data visualizations for realtime energy usage.
+//Consists of an updatePower function that is constantly updating durring while the
+//page is open. This retrieves the the data from the SEADS device and displayes it
+//in a simple format in the center of the page.
+//Color change functions and toggle functions are buton forms for changing button
+//styling for different appliances.
+
+//Any live updating functions/modules that are created in their own componets
+//can be TESTED in the updatePower function as it is always running when on metrics page.
+//However, no other functions or components should be executed from this function unless
+//they are directly involved in giving information to the metrics page itself.
+//ALl new work and componets should have their own page tho keep with modularity.
 class DvHub extends Component {
 	constructor(props) {
     	super(props);
@@ -83,7 +95,7 @@ class DvHub extends Component {
 				if(ohmDate){
 					this.ohmData.ohmHourDate = ohmDate;
 				}
-			}); 
+			});
 			this.ohmData.getOhmStartTime(userID).then((ohmStartTime) => {
 				if(ohmStartTime) {
 					this.ohmData.startTime = ohmStartTime;
@@ -100,7 +112,7 @@ class DvHub extends Component {
 			this.setState({ohmHourEnd: this.ohmData.endTime});
 		}
 	}
-	
+
 
 	render() {
 
@@ -116,7 +128,7 @@ class DvHub extends Component {
 						<Card.Header as={Card} bg="success" text="white" style={ohmHourHeaderStyle}><h1>Your Upcoming OhmHour</h1></Card.Header>
 						<Card.Body>
 							<Alert variant="primary">
-								<h3> {this.state.ohmHourDate} </h3> 
+								<h3> {this.state.ohmHourDate} </h3>
 							</Alert>
 							<Alert variant="primary">
 								<h3> {this.state.ohmHourStart} - {this.state.ohmHourEnd} </h3>
@@ -175,7 +187,7 @@ const ohmHourHeaderStyle = {
 
 const liveWattsCircle = {
 	height: 200,
-	width: 200, 
+	width: 200,
 	borderRadius: 100,
 }
 

@@ -7,6 +7,17 @@ import { withFirebase } from '../components/Firebase'
 import getFirebase from '../components/Firebase'
 import { Button, Col, Row, Form } from "react-bootstrap"
 
+//SignUp function for SEADSConnect. File consists of the UI for the SignUp
+//in the render function, and the functionality in the above that.
+//If all the entered forms ar written in sutch a way that validateForm() is
+//passed, then onSubmit() can occur. onSubmit() will take all the info
+//writen in each feild and create a user profile in the SEADSConnect Firebase
+//for the new user.
+
+//A current test user that has all the needed information for every
+//working component of SEADSConnect as of 6/11/2019 is:
+//username: pat@mantey.cool
+//password: 123456
 
 const INITIAL_STATE = {
     firstName: "",
@@ -39,10 +50,10 @@ class SignUpFormBase extends Component {
   }
 
   validateForm() {
-    return this.state.email.length > 0    && this.state.password.length > 0 && 
-	   this.state.phone.length > 0    && this.state.address.length > 0  && 
-           this.state.city.length > 0     && this.state.zip.length > 0      && 
-           this.state.firstName.length > 0       && this.state.lastName.length > 0; 
+    return this.state.email.length > 0    && this.state.password.length > 0 &&
+	   this.state.phone.length > 0    && this.state.address.length > 0  &&
+           this.state.city.length > 0     && this.state.zip.length > 0      &&
+           this.state.firstName.length > 0       && this.state.lastName.length > 0;
   }
 
   validatePassword() {
@@ -293,8 +304,8 @@ class SignUpFormBase extends Component {
 
                 <Form.Group as={Col} controlId="zip">
                   <Form.Label>Zip Code</Form.Label>
-                  
-                  <Form.Control 
+
+                  <Form.Control
                     placeholder="Zip"
                     value={zip}
                     onChange={this.handleChange}
