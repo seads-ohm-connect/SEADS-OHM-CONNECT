@@ -147,18 +147,27 @@ export default class PastData extends Component {
   			  <Media.Body>
   			    <h5>Show information about how much a user improves over the last week</h5>
   			    <p>
-  			      When they  typically occur and make estimates for when they will occur next.
-
+  			      This is a simple graph that can show how much better or worse a user saved energy compared to last week.
+              <p/>
               <p>
                 <ImprovementBarGraph data={improvementBarGraphData} />
-              </p>
-
-              <p>
-                <ClockHistogram data={clockGraphData} /> 
               </p>
   			    </p>
   			  </Media.Body>
   			</Media>
+
+        <Media as="li">
+          <Media.Body>
+            <h5>A chart that shows a breakdown of the past day</h5>
+            <p>
+              A mockup chart that shows how much enery is used over a 24 hour period. 
+              <p/>
+              <p>
+                <ClockHistogram data={clockGraphData} /> 
+              </p>
+            </p>
+          </Media.Body>
+        </Media>
   			</ul>
 		    </div>
 		)
