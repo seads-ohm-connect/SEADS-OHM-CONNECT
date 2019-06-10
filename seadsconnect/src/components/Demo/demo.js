@@ -89,7 +89,6 @@ export default class Demo extends Component {
         	    var min = this.state.alertTime % 60;
         	    this.notified = true;
         	    sendEmailWarning(this.state.email, hr, min);
-                sendPhoneWarning(this.state.number, hr, min);
     		}
     		this.setState({status: Math.floor(totalTime - this.age - ohmHourLength) + " minutes before your Ohm Hour"});
     	}
@@ -100,7 +99,6 @@ export default class Demo extends Component {
 
                 if (!getFirebase().auth().currentUser) {
                     sendMailAlert(this.state.email, "");
-                    sendPhoneAlert(this.state.number, "");
                 }
                 else {
 
@@ -109,13 +107,11 @@ export default class Demo extends Component {
 
                     var dif = this.power - this.previousPower;
                     var email = this.state.email;
-                    var phone = this.state.number;
 
                     db.ref('/users/' + userId).once('value').then(function(snapshot) {
                         var tracker = new TrackAppliance()
                         guess = tracker.guessAppliance(snapshot, dif);
                         sendMailAlert(email, guess);
-                        sendPhoneAlert(phone, guess);
                     });
                 }
     		}
@@ -200,17 +196,6 @@ export default class Demo extends Component {
                         <InputGroup.Text id="inputGroup-sizing-sm">Email(s)</InputGroup.Text>
                     </InputGroup.Prepend>
                     <FormControl aria-label="Small" value={this.state.email} placeholder="Enter email" aria-describedby="inputGroup-sizing-sm" onChange={(e) => {this.setState({email: e.target.value});}}/>
-                  </InputGroup>
-                </Row>
-              </Col>
-
-              <Col>
-                <Row>
-                  <InputGroup className="mb-3">
-                    <InputGroup.Prepend>
-                        <InputGroup.Text id="inputGroup-sizing-sm">Phone number</InputGroup.Text>
-                    </InputGroup.Prepend>
-                    <FormControl aria-label="Small" value={this.state.number} placeholder="Phone #" aria-describedby="inputGroup-sizing-sm" onChange={(e) => {this.setState({number: e.target.value});}}/>
                   </InputGroup>
                 </Row>
               </Col>
