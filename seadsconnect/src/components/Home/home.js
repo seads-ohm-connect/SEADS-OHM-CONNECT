@@ -1,20 +1,26 @@
+/*
+	Component that contains the content for the home page.
+	**The admin update Component is called in this component. Make sure 
+	not to delete it or no accounts can be updated
+
+*/
+
 import React, { Component } from "react"
 import Card from 'react-bootstrap/Card'
 import CardColumns from 'react-bootstrap/CardColumns'
 import Button from 'react-bootstrap/Button'
 import SeadsBanner from '../../images/seads-logotest.png'
 import OhmBanner from '../../images/ohmconnecttest.png'
+import Updater from "../Firebase/adminDBupdater"
 
 
 export default class HomeCard extends Component {
 
 	render() {
 		return (
-
 		<CardColumns>
+				<Updater />
 		   <Card border="primary" bg="info" text="white">
-						<Card.Img variant='top'/>
-		      
 					<Card.Body>
 		        <Card.Title>SEADS</Card.Title>
 		        <Card.Text>
@@ -27,19 +33,19 @@ export default class HomeCard extends Component {
 					
 		    </Card>
 
-		    <Card bg="primary" text="white" className="text-center p-3">
-              <blockquote className="blockquote mb-0 card-body">
-                <p>
-                  Sign up with SEADSConnect to receive realtime power consumption analytics.
-                </p>
-                <small className="text-muted">
-                   <Button variant="outline-light" href="/page-3/">Sign Up</Button>
-                </small>
-              </blockquote>
+		    <Card border="primary" bg="info" text="white">
+					<Card.Body>
+		        <Card.Title>SEADSConnect</Card.Title>
+		        <Card.Text>
+		          Sign up with SEADSConnect to get real time power consumption analytics 
+		        </Card.Text>
+		      </Card.Body> 
+					<Card.Footer> 
+						<Button variant="outline-light" href="/page-3/"> Sign Up </Button> 
+					</Card.Footer>
   			</Card>
 
   			<Card border="primary" bg="info" text="white">
-		      <Card.Img variant="top" />
 		      <Card.Body>
 		        <Card.Title>OhmConnect</Card.Title>
 		        <Card.Text>
@@ -51,7 +57,7 @@ export default class HomeCard extends Component {
 		      </Card.Footer>
 					
 		    </Card>
-		</ CardColumns>
+		</CardColumns>
 		)
 	}
 

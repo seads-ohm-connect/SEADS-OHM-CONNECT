@@ -7,7 +7,7 @@ import "./layout.css"
 import NavBar from "./navbar"
 
 
-import firebase from '../components/firebase'
+import firebase from '../components/Firebase'
 
 import getFirebase, { FirebaseContext } from '../components/Firebase'
 
@@ -25,17 +25,19 @@ const Layout = ({ children }) => (
     render={data => (
       <>
       <FirebaseContext.Provider value={getFirebase()}>
-        <Header siteTitle={data.site.siteMetadata.title} />
+        {/* <Header siteTitle={data.site.siteMetadata.title} /> */}
 
         <NavBar />
+        <div style={{backgroundColor: "aliceblue"}}>
         <div
           style={{
-            margin: `0 auto`,
+            margin: '0 auto',
             maxWidth: 960,
             padding: `0px 1.0875rem 1.45rem`,
-            paddingTop: 0,
+            paddingTop: 100,
           }}
         >
+        
           <main>{children}</main>
           <footer>
             © {new Date().getFullYear()}, Built by
@@ -43,8 +45,9 @@ const Layout = ({ children }) => (
             <a href="https://www.soe.ucsc.edu/people/mantey">The Mantey Gang</a>
           </footer>
         </div>
+        </div>
         </FirebaseContext.Provider>
-      </>
+    </>
     )}
   />
 )
