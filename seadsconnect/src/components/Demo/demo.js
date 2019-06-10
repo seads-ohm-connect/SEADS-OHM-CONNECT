@@ -14,8 +14,10 @@ import Overlay from 'react-bootstrap/Overlay'
 import Form from 'react-bootstrap/Form'
 
 import DemoBar from './demoBar'
-import sendMailAlert, { sendEmailWarning } from "../Alerts/email"
+import sendMailAlert, { sendEmailWarning } from '../Alerts/email'
 import Keys from '../../../keys'
+import TrackAppliance from '../training/trackAppliance'
+import getFirebase from '../Firebase'
 
 
 export default class Demo extends Component {
@@ -40,12 +42,17 @@ export default class Demo extends Component {
     	this.notified = false;
     	this.warned = false;
     	this.power = 0;
+        this.previousPower = 0;
+
+        this.tracker = new TrackAppliance();
+
 	}
 
     //function that calls the update age every second.
     //setting the state to be running is to force the render update to be called. It does nothing else.
 	componentDidMount() {
     	this.interval = setInterval(() => this.updateAge(), 1000);
+        //used to force a render call
         this.interval = setInterval(() => {this.setState({running: this.state.running})}, 100);
     }
 
@@ -67,7 +74,8 @@ export default class Demo extends Component {
     }
 
     //changes the status depending on how far along in the sim it is.
-    updateStatus(timeBeforeAlert, ohmHourLength, alertTime) {   	
+    updateStatus(timeBeforeAlert, ohmHourLength, alertTime) { 
+ 	
     	var totalTime = timeBeforeAlert + ohmHourLength + alertTime;
 
     	if (this.age >= 100) {
@@ -83,10 +91,27 @@ export default class Demo extends Component {
     		this.setState({status: Math.floor(totalTime - this.age - ohmHourLength) + " minutes before your Ohm Hour"});
     	}
     	else {
-    		if (this.power > this.state.threshold + this.state.target && !this.warned)
-    		{
+    		if (this.power > this.state.threshold + this.state.target && !this.warned) {
     			this.warned = true;
-    			sendMailAlert(this.state.email, "");
+                var guess;
+
+                if (!getFirebase().auth().currentUser) {
+                    sendMailAlert(this.state.email, "");
+                }
+                else {
+
+                    var db = getFirebase().database();
+                    var userId = getFirebase().auth().currentUser.uid;
+
+                    var dif = this.power - this.previousPower;
+                    var email = this.state.email;
+
+                    db.ref('/users/' + userId).once('value').then(function(snapshot) {
+                        var tracker = new TrackAppliance()
+                        guess = tracker.guessAppliance(snapshot, dif);
+                        sendMailAlert(email, guess);
+                    });
+                }
     		}
 
     		this.setState({status: "It is your Ohm Hour!"});
