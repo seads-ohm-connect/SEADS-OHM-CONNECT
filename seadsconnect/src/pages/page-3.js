@@ -82,7 +82,12 @@ class SignUpFormBase extends Component {
       city: n_city,
       state: n_stateLoc,
       zip: n_zip,
-      email: n_email
+      email: n_email,
+      ohmHourDate: "5/10/2019",
+      ohmHourEnd: "20:00:00",
+      ohmHourPoints: 400,
+      ohmHourStart: "19:00:00",
+      threshold: 200
     });
 
     db.ref('users/' + userId + "/emailAlerts").set({
