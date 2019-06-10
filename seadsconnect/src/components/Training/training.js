@@ -15,7 +15,6 @@ import Container from 'react-bootstrap/Container'
 import ButtonGroup from 'react-bootstrap/ButtonGroup'
 import Form from 'react-bootstrap/Form'
 
-
 import RealTimeGraph from "../../Graphs/RealTime/realTimeGraph"
 import getFirebase from '../Firebase'
 import GetDevice from "../Profile/getDeviceID"
@@ -169,9 +168,7 @@ export default class Training extends Component {
 
 
     render() {
-
     	const dropDown = this.appList.map(appliance => <Dropdown.Item as="button" onClick={e => this.handleDropDownClick(appliance)}>{appliance.name}</Dropdown.Item>);
-
 
    		return(
    		<div>

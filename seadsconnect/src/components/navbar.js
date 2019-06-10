@@ -38,8 +38,8 @@ class NavBarHandler extends Component {
           src={SEADSConnectLogo}
           alt="SEADSConnect Logo"
           style={{
-            height: "30px",
-            width: "30px",
+            height: "40px",
+            width: "40px",
             left: "0px",
             top: "10px",
             position: "relative"

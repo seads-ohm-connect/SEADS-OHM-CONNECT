@@ -28,8 +28,7 @@ const Layout = ({ children }) => (
         {/* <Header siteTitle={data.site.siteMetadata.title} /> */}
 
         <NavBar />
-
-
+        <div style={{backgroundColor: "aliceblue"}}>
         <div
           style={{
             margin: '0 auto',
@@ -38,6 +37,7 @@ const Layout = ({ children }) => (
             paddingTop: 100,
           }}
         >
+        
           <main>{children}</main>
           <footer>
             © {new Date().getFullYear()}, Built by
@@ -45,8 +45,9 @@ const Layout = ({ children }) => (
             <a href="https://www.soe.ucsc.edu/people/mantey">The Mantey Gang</a>
           </footer>
         </div>
+        </div>
         </FirebaseContext.Provider>
-      </>
+    </>
     )}
   />
 )

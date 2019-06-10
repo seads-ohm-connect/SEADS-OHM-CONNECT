@@ -19,14 +19,14 @@ export default class Tips extends Component {
 	render() {
 		return (
 		<div>	
-			<Card className="text-center" border="warning"> 
-				<Card.Header as={Card} bg="warning" text="white">
+			<Card className="text-center" border="secondary"> 
+				<Card.Header as={Card} bg="secondary" text="white">
 					<h3>What is a Peak Hour</h3>
 				</Card.Header>
-				<Card.Body>
+				<Card.Body> 
 					<Card.Text>
-					Peak hours are times of day when demand for energy is high. Demand is influenced by varius factors such as weather, holidays, the specific time of day.
-  			  Not only will reducing energy consumption during these time periods reduce one's enviornmental impact but can also lead to earning credits and prizes through "Ohm Connect."
+					Peak hours are times of day when demand for energy is high. Demand is influenced by various factors such as weather, holidays, the specific time of day.
+  			  Not only will reducing energy consumption during these time periods reduce one's enviornmental impact but can also lead to earning credits and prizes through "OhmConnect."
 					</Card.Text>
 				</Card.Body>
 			</Card>
@@ -34,7 +34,7 @@ export default class Tips extends Component {
 			<Card className="text-center" border="success">
 				<Card.Header as={Card} bg="success" text="white"> <h3>Tips</h3> </Card.Header>
 
-				<Card.Title> Spread energy usage out accross the day </Card.Title>
+				<Card.Title style={{paddingTop: 20}}> Spread energy usage out accross the day </Card.Title>
 					<Card.Body>Avoid using high energy consuming appliances during peak hours. Using energy during peak hour 
   			      forces energy companies to buy power from expensive and inefficient power plants called, "peaker plants." 
 					</Card.Body>
